@@ -31,25 +31,16 @@ const item = {
 export default function HeroSection() {
   return (
     <section className="relative flex min-h-screen items-end overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-20">
-      {/* Background Pattern/Gradient */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: `
-            linear-gradient(135deg, 
-              var(--color-primary-dark) 0%, 
-              var(--color-primary) 35%, 
-              var(--color-primary-light) 100%
-            )
-          `,
-        }}
-      >
-        {/* Animated overlay pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 h-64 w-64 animate-pulse rounded-full bg-white blur-3xl" />
-          <div className="absolute bottom-20 right-10 h-96 w-96 animate-pulse rounded-full bg-secondary blur-3xl animation-delay-2000" />
-          <div className="absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-accent blur-3xl animation-delay-4000" />
-        </div>
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          src="https://res.cloudinary.com/ac74hfe9/video/upload/v1787605608/watermark-removed-Create_a_high_end_cinematic_ma.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover"
+        />
       </div>
 
       {/* Dark overlay for text contrast */}
