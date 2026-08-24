@@ -38,6 +38,15 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
         display: ['Poppins', 'sans-serif'],
       },
+      keyframes: {
+        'cert-scroll': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        'cert-scroll': 'cert-scroll 28s linear infinite',
+      },
       container: {
         center: true,
         padding: {
