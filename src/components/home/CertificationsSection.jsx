@@ -22,11 +22,18 @@ export default function CertificationsSection() {
           <p className="mb-2 font-heading text-[12px] font-bold uppercase tracking-[2px] text-primary-light">
             MANUFACTURED IN FACILITIES BUILT TO GLOBAL STANDARDS
           </p>
-          <h2 className="mb-4 font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px]">
-            Quality is not a department at Zeovus.
-            <br />
-            It's our DNA.
-          </h2>
+          <div className="mb-4 flex flex-col items-center gap-4">
+            <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px]">
+              Quality is not a department at Zeovus.
+              <br />
+              It's our DNA.
+            </h2>
+            <img
+              src="/zqa/seal5.png"
+              alt="Zeovus Quality Assurance Seal"
+              className="h-20 w-20 object-contain opacity-90 sm:h-24 sm:w-24"
+            />
+          </div>
           <p className="mx-auto max-w-3xl text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
             Every product is manufactured through facilities built to global quality,
             safety and regulatory standards — verified through our proprietary ZQA
