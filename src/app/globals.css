@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary-dark: #1F4015;
+  --color-primary: #1A475C;
+  --color-primary-light: #15A859;
+  --color-secondary: #9CCD62;
+  --color-secondary-dark: #B4BD62;
+  --color-accent: #FFD374;
+  --color-accent-light: #FFEF98;
+  --color-accent-pale: #FFF5D1;
+  
+  --font-heading: 'Poppins', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  
+  --background: #ffffff;
+  --foreground: #1F4015;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+p, li, blockquote {
+  line-height: 1.75;
+}
+
+.uppercase {
+  letter-spacing: 0.02em;
+  word-spacing: 0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1A475C;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1F4015;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Section padding */
+.section-py {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 768px) {
+  .section-py {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-primary text-white px-6 py-3 rounded-lg font-medium transition-all duration-300;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-dark shadow-lg;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-primary-dark px-6 py-3 rounded-lg font-medium transition-all duration-300;
+}
+
+.btn-secondary:hover {
+  @apply bg-secondary-dark shadow-lg;
+}
+
+.btn-outline {
+  @apply border-2 border-primary text-primary px-6 py-3 rounded-lg font-medium transition-all duration-300;
+}
+
+.btn-outline:hover {
+  @apply bg-primary text-white;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-300;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #1A475C 0%, #15A859 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Container override for larger screens */
+.container {
+  max-width: 1400px;
+}
