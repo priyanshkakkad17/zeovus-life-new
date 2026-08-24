@@ -58,11 +58,20 @@ export default function OurCompany() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center bg-gradient-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-white blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-secondary blur-3xl"></div>
-        </div>
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="https://res.cloudinary.com/ac74hfe9/video/upload/v1787608494/ourCompanyHero.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/80 via-primary/70 to-primary-light/60"></div>
         
         <div className="container relative z-10 pt-24 pb-16">
           <motion.div
@@ -73,7 +82,7 @@ export default function OurCompany() {
             <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
               Built to be trusted with wellness.
             </h1>
-            <p className="text-xl text-white/80 max-w-3xl">
+            <p className="text-xl text-white/90 max-w-3xl">
               Leading B2B nutraceutical and cosmetic manufacturer with decades of expertise in formulation science and manufacturing excellence.
             </p>
           </motion.div>
@@ -81,21 +90,53 @@ export default function OurCompany() {
       </section>
 
       {/* Our Purpose */}
-      <section className="section-py bg-white">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
+      <section className="relative py-20 md:py-28 bg-gradient-to-br from-neutral-50 via-white to-neutral-50/30 overflow-hidden">
+        {/* Subtle decorative elements */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-light/[0.02] rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/[0.03] rounded-full blur-3xl"></div>
+        
+        {/* Subtle organic line decoration */}
+        <div className="absolute top-1/4 left-0 w-32 h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent"></div>
+        <div className="absolute bottom-1/3 right-0 w-40 h-px bg-gradient-to-l from-transparent via-primary-light/20 to-transparent"></div>
+        
+        <div className="container relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 xl:gap-20 items-center max-w-7xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:pr-8"
             >
-              <p className="text-primary-light font-medium mb-4">OUR PURPOSE</p>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-dark mb-6">
+              <p className="text-primary-light font-semibold text-xs tracking-[0.2em] uppercase mb-6 letter-spacing-wide">OUR PURPOSE</p>
+              <h2 className="text-3xl md:text-4xl xl:text-5xl font-display font-bold text-primary-dark mb-8 leading-[1.15] tracking-tight">
                 To make everyday wellness products accessible, trusted and affordable.
               </h2>
-              <p className="text-neutral-600 text-lg">
+              <p className="text-neutral-600 text-lg md:text-xl leading-relaxed font-light">
                 We help brands bring high-quality nutrition, wellness and personal care products to market through thoughtful formulations, reliable sourcing and manufacturing.
               </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="relative lg:pl-4"
+            >
+              {/* Subtle accent decoration behind image */}
+              <div className="absolute -top-6 -right-6 w-full h-full border border-primary-light/10 rounded-3xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-secondary/5 rounded-full blur-xl"></div>
+              
+              <div className="relative">
+                <img
+                  src="https://res.cloudinary.com/ac74hfe9/image/upload/v1787609180/our_purpose.png"
+                  alt="Ingredient macro photography"
+                  className="w-full h-auto rounded-[20px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative z-10"
+                />
+                {/* Subtle inner glow effect */}
+                <div className="absolute inset-0 rounded-[20px] ring-1 ring-black/5 z-20 pointer-events-none"></div>
+              </div>
             </motion.div>
           </div>
         </div>
