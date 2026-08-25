@@ -34,7 +34,7 @@ export default function HeroSection() {
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
-          src="https://res.cloudinary.com/ac74hfe9/video/upload/v1787605608/watermark-removed-Create_a_high_end_cinematic_ma.mp4"
+          src="https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4"
           autoPlay
           loop
           muted
