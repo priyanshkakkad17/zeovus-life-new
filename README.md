@@ -148,7 +148,7 @@ Open [http://localhost:3000](http://localhost:3000)
 - **Tablet**: 640px - 1024px
 - **Desktop**: 1024px - 1500px
 - **Wide**: > 1500px
-
+ 
 ## 🔗 Related Projects
 
 - **Zeovus Food Website** - Sister brand (food manufacturing)
