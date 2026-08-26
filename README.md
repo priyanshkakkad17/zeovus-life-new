@@ -15,6 +15,7 @@ Based on `Zeovus-life-Website/design.md`:
 - **Accent Light**: `#FFEF98`
 - **Accent Pale**: `#FFF5D1`
 
+
 ### Typography
 - **Headings**: Poppins (bold, uppercase for major headings)
 - **Body**: Inter (clean, readable)
