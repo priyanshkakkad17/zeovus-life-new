@@ -836,67 +836,89 @@ export default function OurCompany() {
       {/* Sustainability */}
       <section className="section-py bg-primary-dark text-white">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <p className="text-primary-light font-medium mb-4">SUSTAINABILITY</p>
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                Committed to the preservation and protection of the global environment.
-              </h2>
-              <div className="space-y-4 text-neutral-300">
-                <p>
-                  We manufacture nutraceutical and cosmetic formulations that promote the health and well-being of consumers in an environmentally positive manner.
-                </p>
-                <p>
-                  That commitment starts with our ingredient suppliers — we work with partners who take sourcing, sustainable harvesting and fair trade as seriously as we do. Across our manufacturing operations, we hold ourselves to material and energy practices that reduce our footprint at every stage, from packaging through to production.
-                </p>
-                <p>
-                  Sustainability isn't a claim we make once. It's a standard we hold our suppliers, our facilities and our formulations to — consistently.
-                </p>
-              </div>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <p className="text-primary-light font-medium mb-4">SUSTAINABILITY</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
+              Committed to the preservation and protection of the global environment.
+            </h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="max-w-3xl mx-auto space-y-4 text-neutral-300 mt-6"
+          >
+            <p>
+              We manufacture nutraceutical and cosmetic formulations that promote the health and well-being of consumers in an environmentally positive manner.
+            </p>
+            <p>
+              That commitment starts with our ingredient suppliers — we work with partners who take sourcing, sustainable harvesting and fair trade as seriously as we do. Across our manufacturing operations, we hold ourselves to material and energy practices that reduce our footprint at every stage, from packaging through to production.
+            </p>
+            <p>
+              Sustainability isn't a claim we make once. It's a standard we hold our suppliers, our facilities and our formulations to — consistently.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white/5 rounded-2xl p-8"
-            >
-              <h3 className="text-xl font-display font-semibold mb-4">Beyond Manufacturing</h3>
-              <p className="text-neutral-300 mb-6">
-                We commit 1% of our profits to programs supporting child nutrition, education, and stronger communities because the places we source from and the world we manufacture for have always been the same world.
-              </p>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-neutral-400">Child Nutrition</p>
+      {/* Beyond Manufacturing */}
+      <section className="section-py bg-[#f5f9f6]">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <p className="text-primary-light font-medium mb-4">SOCIAL IMPACT</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-primary-dark">
+              Beyond Manufacturing
+            </h2>
+            <p className="text-neutral-600 mb-10">
+              We commit 1% of our profits to programs supporting child nutrition, education, and stronger communities because the places we source from and the world we manufacture for have always been the same world.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+            className="max-w-2xl mx-auto"
+          >
+            <div className="grid grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-14 h-14 bg-secondary/15 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
                 </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-neutral-400">Education</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-neutral-400">Communities</p>
-                </div>
+                <p className="text-sm font-medium text-primary-dark">Child Nutrition</p>
               </div>
-            </motion.div>
-          </div>
+              <div className="text-center">
+                <div className="w-14 h-14 bg-secondary/15 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-primary-dark">Education</p>
+              </div>
+              <div className="text-center">
+                <div className="w-14 h-14 bg-secondary/15 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-primary-dark">Communities</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

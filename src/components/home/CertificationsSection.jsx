@@ -25,19 +25,20 @@ const certifications = [
 ];
 
 const metrics = [
-  { value: '12', label: 'Steps' },
-  { value: '825+', label: 'Tested Parameters' },
-  { value: '3', label: 'Triple-Layer Checks' },
+  { value: '12', suffix: '', label: 'Quality Steps' },
+  { value: '825', suffix: '+', label: 'Tested Parameters' },
+  { value: '3', suffix: '×', label: 'Layer Verification' },
 ];
 
 export default function CertificationsSection() {
   return (
-    <section className="relative overflow-hidden bg-[#f5f9f6] py-16 sm:py-20 lg:py-28">
+    <section className="relative overflow-hidden bg-[#f5f9f6] py-20 sm:py-26 lg:py-30">
 
       {/* Molecular grid background */}
       <svg
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.035]"
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.03]"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <defs>
           <pattern id="hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
@@ -45,120 +46,123 @@ export default function CertificationsSection() {
               points="30,2 56,16 56,36 30,50 4,36 4,16"
               fill="none"
               stroke="#1F4015"
-              strokeWidth="1"
+              strokeWidth="0.8"
             />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#hex-grid)" />
       </svg>
 
-      <div className="relative mx-auto max-w-[1100px] px-5 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
 
-        {/* Eyebrow + Headline + Body */}
+        {/* Eyebrow + Headline — tightened hierarchy */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 text-center"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 text-center"
         >
-          <p className="mb-4 font-heading text-[12px] font-bold uppercase tracking-[3px] text-primary-light">
+          <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-primary-light">
             Manufactured in facilities built to global standards
           </p>
-          <h2 className="mb-5 font-heading text-[40px] font-bold uppercase leading-[1.05] tracking-[-1.5px] text-primary-dark sm:text-[52px] md:text-[60px]">
-            Quality is not a department at Zeovus.
+          <h2 className="mb-5 font-heading text-[36px] font-bold uppercase leading-[1.02] tracking-[-1.5px] text-primary-dark sm:text-[48px] md:text-[56px]">
+            Quality is not a department.
             <br />
-            It's our DNA.
+            <span className="text-primary-light">It's our DNA.</span>
           </h2>
-          <p className="mx-auto max-w-[720px] text-[17px] leading-relaxed text-neutral-600 sm:text-[19px]">
-            Every product is manufactured through facilities built to global quality,
-            safety and regulatory standards — verified through our proprietary ZQA
+          <p className="mx-auto max-w-[680px] text-[16px] leading-relaxed text-neutral-600 sm:text-[18px]">
+            Every product passes through facilities verified to global quality,
+            safety and regulatory standards — anchored by our proprietary ZQA
             framework.
           </p>
         </motion.div>
 
-        {/* ZQA seal — standalone, centered between heading and card */}
+        {/* ZQA seal — overlaps the metrics card */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-[-90px] flex justify-center"
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 mb-[-80px] flex justify-center"
         >
           <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="relative z-10 flex h-[180px] w-[180px] items-center justify-center rounded-full border border-primary-light/30 bg-white shadow-[0_8px_40px_rgba(31,64,21,0.16)]"
+            whileHover={{ scale: 1.04, rotate: 1 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-primary-light/25 bg-white shadow-[0_8px_48px_rgba(31,64,21,0.14)] sm:h-[180px] sm:w-[180px]"
           >
             <img
               src="/zqa/seal5.png"
               alt="Zeovus Quality Assurance Seal"
-              className="h-[156px] w-[156px] object-contain"
+              className="h-[132px] w-[132px] object-contain sm:h-[152px] sm:w-[152px]"
             />
           </motion.div>
         </motion.div>
 
-        {/* Metrics card */}
+        {/* Metrics card — refined with editorial number styling */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65, delay: 0.15 }}
-          className="relative mb-12"
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mb-14"
         >
-          {/* Card */}
-          <div className="overflow-hidden rounded-[24px] bg-white pt-[104px] shadow-[0_2px_32px_rgba(31,64,21,0.08)] ring-1 ring-primary-dark/5">
-            <div className="grid divide-y divide-neutral-100 sm:divide-x sm:divide-y-0 md:grid-cols-3">
+          <div className="overflow-hidden rounded-[20px] bg-white pt-[96px] shadow-[0_2px_40px_rgba(31,64,21,0.07)] ring-1 ring-primary-dark/[0.04]">
+            <div className="grid divide-y divide-neutral-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               {metrics.map((m, i) => (
                 <motion.div
                   key={m.label}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-                  className="flex flex-col items-center px-8 py-8 text-center"
+                  transition={{ duration: 0.5, delay: 0.25 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col items-center px-6 py-8 text-center sm:px-8"
                 >
-                  <span className="font-heading text-[48px] font-bold leading-none tracking-[-2px] text-primary-light sm:text-[52px]">
+                  <span className="editorial-number font-heading text-[52px] font-bold leading-none text-primary-light sm:text-[56px] lg:text-[64px]">
                     {m.value}
+                    {m.suffix && (
+                      <span className="text-[32px] text-primary-light/60 lg:text-[36px]">{m.suffix}</span>
+                    )}
                   </span>
-                  <span className="mt-2 font-heading text-[11px] font-semibold uppercase tracking-[2px] text-neutral-500">
+                  <span className="mt-3 font-heading text-[11px] font-semibold uppercase tracking-[2px] text-neutral-500">
                     {m.label}
                   </span>
                 </motion.div>
               ))}
             </div>
-            <p className="border-t border-neutral-100 px-8 py-4 text-center text-[13px] text-neutral-500">
-              From raw materials to finished goods, ZQA adds an additional layer of verification.
-            </p>
+            <div className="border-t border-neutral-100 px-8 py-4">
+              <p className="text-center text-[13px] text-neutral-500">
+                From raw materials to finished goods — ZQA adds a verification layer at every stage.
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* Certification carousel */}
-        <div className="relative mt-2 overflow-hidden">
-          {/* Left fade */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#f5f9f6] to-transparent" />
-          {/* Right fade */}
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#f5f9f6] to-transparent" />
+        {/* Certification carousel — refined cards */}
+        <div className="relative overflow-hidden">
+          {/* Fade edges */}
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-[#f5f9f6] to-transparent sm:w-28" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-[#f5f9f6] to-transparent sm:w-28" />
 
-          <div className="flex w-max animate-cert-scroll items-center gap-5 py-3">
+          <div className="flex w-max animate-cert-scroll items-center gap-4 py-3">
             {[...certifications, ...certifications].map((cert, i) => (
               <div
                 key={i}
-                className="inline-flex flex-shrink-0 flex-col items-center justify-center gap-2 rounded-2xl border border-primary-light/20 bg-white px-6 py-4 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary-light/50 hover:shadow-md"
-                style={{ minWidth: '110px', minHeight: '88px' }}
+                className="inline-flex flex-shrink-0 flex-col items-center justify-center gap-2.5 rounded-xl border border-primary-dark/[0.06] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/30 hover:shadow-[0_4px_16px_rgba(21,168,89,0.08)]"
+                style={{ minWidth: '105px', minHeight: '84px' }}
               >
                 {cert.logo ? (
                   <img
                     src={cert.logo}
                     alt={cert.label}
-                    className="h-10 w-auto max-w-[80px] object-contain"
+                    className="h-9 w-auto max-w-[72px] object-contain"
                   />
                 ) : (
-                  <span className="flex h-10 items-center font-heading text-[15px] font-bold tracking-[-0.5px] text-primary-dark">
+                  <span className="flex h-9 items-center font-heading text-[14px] font-bold tracking-[-0.3px] text-primary-dark">
                     {cert.label}
                   </span>
                 )}
-                <span className="font-heading text-[10px] font-semibold uppercase tracking-[1px] text-neutral-400">
+                <span className="font-heading text-[9px] font-semibold uppercase tracking-[1.2px] text-neutral-400">
                   {cert.label}
                 </span>
               </div>
@@ -166,18 +170,18 @@ export default function CertificationsSection() {
           </div>
         </div>
 
-        {/* Standards footer CTA */}
+        {/* Standards footer CTA — refined */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-14 border-t border-primary-dark/10 pt-10 text-center"
+          className="mt-16 border-t border-primary-dark/[0.06] pt-10 text-center"
         >
-          <p className="mb-1 font-heading text-[13px] font-semibold uppercase tracking-[2px] text-neutral-500">
+          <p className="mb-2 font-heading text-[12px] font-semibold uppercase tracking-[2px] text-neutral-500">
             Held to standards you can verify.
           </p>
-          <p className="mx-auto mb-5 max-w-[520px] text-[14px] leading-relaxed text-neutral-500">
+          <p className="mx-auto mb-6 max-w-[500px] text-[14px] leading-relaxed text-neutral-500">
             Explore every certification, audit protocol, and compliance framework
             behind Zeovus manufacturing.
           </p>
@@ -187,7 +191,7 @@ export default function CertificationsSection() {
           >
             <span className="relative">
               View Manufacturing Standards
-              <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-300 group-hover:w-full" />
+              <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
             </span>
             <svg
               className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"

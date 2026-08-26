@@ -49,7 +49,7 @@ export default function Header() {
           <Link
             href="/"
             onClick={() => setIsMenuOpen(false)}
-            className="flex shrink-0 items-center lg:translate-y-[10px]"
+            className="flex shrink-0 items-center"
           >
             <Image
               src="/logo.png"
@@ -57,7 +57,7 @@ export default function Header() {
               width={160}
               height={60}
               priority
-              className="h-auto w-[140px] object-contain lg:w-[160px]"
+              className="h-[60px] w-auto max-w-[140px] object-contain lg:h-[65px] lg:max-w-[160px]"
             />
           </Link>
 

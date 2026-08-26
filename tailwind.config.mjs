@@ -37,15 +37,36 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         display: ['Poppins', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
       },
       keyframes: {
         'cert-scroll': {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'draw-line': {
+          from: { strokeDashoffset: '100' },
+          to: { strokeDashoffset: '0' },
+        },
       },
       animation: {
         'cert-scroll': 'cert-scroll 28s linear infinite',
+        'float': 'float 5s ease-in-out infinite',
+        'draw-line': 'draw-line 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+      },
+      transitionTimingFunction: {
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'out-quint': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       container: {
         center: true,
