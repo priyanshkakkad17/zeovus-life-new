@@ -532,26 +532,27 @@ export default function OurCompany() {
         </div>
       </section>
 
-      {/* Slogan Statement - Editorial Light Style */}
-      <section className="relative py-4 md:py-6 bg-white overflow-hidden">
+      {/* Slogan Statement — Centered, Prominent */}
+      <section className="relative py-16 md:py-24 bg-white overflow-hidden">
         {/* Thin top border */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/30 to-transparent"></div>
         {/* Thin bottom border */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/30 to-transparent"></div>
 
         <div className="container relative z-10">
-          <div className="max-w-6xl mx-auto px-4 overflow-hidden">
+          <div className="max-w-5xl mx-auto px-4 overflow-hidden">
 
-            {/* Both lines in one overflow-hidden wrapper so they animate as one block */}
             <motion.div
               initial={{ y: '100%', opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="text-center"
             >
-              <p className="text-[20px] sm:text-[24px] md:text-[30px] lg:text-[36px] font-display font-bold text-primary-dark uppercase leading-[1.2] tracking-[-0.5px]">
-                If your business runs on trust,{' '}
-                <span style={{ WebkitTextStroke: '2px #15A859', color: 'transparent' }} className="whitespace-nowrap">
+              <p className="text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-display font-bold text-primary-dark uppercase leading-[1.15] tracking-[-1px]">
+                If your business runs on trust,
+                <br />
+                <span className="text-primary-light">
                   we're already built for it.
                 </span>
               </p>
