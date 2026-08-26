@@ -66,7 +66,7 @@ export default function Header() {
 
           {/* Tagline */}
           <p className="ml-4 hidden max-w-[200px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-none md:whitespace-nowrap md:text-[13px] lg:ml-5 lg:text-[15px]">
-            WELLNESS INSIDE & OUTSIDE
+            Committed to better tomorrow
           </p>
         </div>
 

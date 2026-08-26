@@ -89,61 +89,6 @@ export default function OurCompany() {
         </div>
       </section>
 
-      {/* Our Purpose */}
-      <section className="relative py-20 md:py-28 bg-gradient-to-br from-neutral-50 via-white to-neutral-50/30 overflow-hidden">
-        {/* Subtle decorative elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-light/[0.02] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/[0.03] rounded-full blur-3xl"></div>
-        
-        {/* Subtle organic line decoration */}
-        <div className="absolute top-1/4 left-0 w-32 h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent"></div>
-        <div className="absolute bottom-1/3 right-0 w-40 h-px bg-gradient-to-l from-transparent via-primary-light/20 to-transparent"></div>
-        
-        <div className="container relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 xl:gap-20 items-center max-w-7xl mx-auto">
-            {/* Image on LEFT */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative lg:pr-4 order-2 lg:order-1"
-            >
-              {/* Subtle accent decoration behind image */}
-              <div className="absolute -top-6 -left-6 w-full h-full border border-primary-light/10 rounded-3xl"></div>
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-secondary/5 rounded-full blur-xl"></div>
-              
-              <div className="relative">
-                <img
-                  src="https://res.cloudinary.com/ac74hfe9/image/upload/v1787701789/our_purpose.png"
-                  alt="Ingredient macro photography"
-                  className="w-full h-auto rounded-[20px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative z-10"
-                />
-                {/* Subtle inner glow effect */}
-                <div className="absolute inset-0 rounded-[20px] ring-1 ring-black/5 z-20 pointer-events-none"></div>
-              </div>
-            </motion.div>
-
-            {/* Text on RIGHT */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:pl-8 order-1 lg:order-2"
-            >
-              <p className="text-primary-light font-semibold text-[15px] md:text-[16px] tracking-[0.25em] uppercase mb-6">OUR PURPOSE</p>
-              <h2 className="text-3xl md:text-4xl xl:text-5xl font-display font-bold text-primary-dark mb-8 leading-[1.15] tracking-tight">
-                To make everyday wellness products accessible, trusted and affordable.
-              </h2>
-              <p className="text-neutral-600 text-lg md:text-xl leading-relaxed font-light">
-                We help brands bring high-quality nutrition, wellness and personal care products to market through thoughtful formulations, reliable sourcing and manufacturing.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Our Story */}
       <section className="relative py-20 md:py-28 bg-gradient-to-br from-neutral-100 via-neutral-50 to-neutral-100/50 overflow-hidden">
         {/* Subtle decorative elements */}
@@ -363,92 +308,153 @@ export default function OurCompany() {
         </div>
       </section>
 
-      {/* Vision & Mission - Premium Dark Card Style */}
-      <section className="relative py-8 md:py-10 bg-gradient-to-br from-[#2C3E2C] via-[#354535] to-[#2C3E2C] overflow-hidden">
-        {/* Subtle decorative background elements */}
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-primary-light/[0.05] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-primary-light/[0.03] rounded-full blur-3xl"></div>
-        
-        {/* Subtle texture overlay */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #7FAF7F 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-        
+      {/* Vision & Mission - Refined Premium Design */}
+      <section className="relative py-20 md:py-28 bg-white overflow-hidden">
+
         <div className="container relative z-10">
-          <div className="max-w-6xl mx-auto px-4">
-            
+          <div className="max-w-[1080px] mx-auto px-4">
+
             {/* Section Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mb-12 md:mb-16"
+              className="text-center mb-14"
             >
-              <p className="text-primary-light/70 font-semibold text-[11px] tracking-[0.2em] uppercase mb-3">
+              <p className="text-primary-light font-semibold text-[11px] tracking-[0.25em] uppercase mb-3.5">
                 WHAT GUIDES US
               </p>
-              <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-display font-bold text-white leading-[1.1] tracking-tight">
+              <h2 className="text-[36px] md:text-[44px] font-display font-bold text-primary-dark leading-[1.1] tracking-tight">
                 Vision & Mission
               </h2>
             </motion.div>
-            
-            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+
+            {/* Cards Container with Connector */}
+            <div className="relative">
               
-              {/* Vision Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative"
-              >
-                <div className="relative bg-[#1a251a]/60 backdrop-blur-sm border border-white/[0.08] rounded-[20px] p-10 md:p-12 lg:p-14 min-h-[280px] flex flex-col overflow-hidden transition-all duration-500 hover:bg-[#1a251a]/80 hover:border-primary-light/20">
-                  
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-light/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[20px]"></div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10">
-                    <h3 className="text-[32px] md:text-[36px] lg:text-[40px] font-display font-bold text-white mb-6 leading-[1.1] tracking-tight uppercase">
+              {/* Subtle Connector Line */}
+              <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-px z-0">
+                <div className="relative w-full h-full">
+                  <div className="absolute inset-0 bg-primary-light/15"></div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary-light/25"></div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-7 lg:gap-8 items-stretch relative z-10">
+
+                {/* Vision Card */}
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative"
+                >
+                  <div className="relative h-full min-h-[320px] bg-gradient-to-br from-primary-dark to-[#2C4A2C] rounded-[24px] p-10 md:p-11 overflow-hidden flex flex-col transition-all duration-400 hover:-translate-y-1">
+
+                    {/* Scientific Rings - Bottom Right */}
+                    <div className="absolute -bottom-16 -right-16 opacity-[0.10] group-hover:opacity-[0.14] transition-opacity duration-500 pointer-events-none">
+                      <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+                        <circle cx="90" cy="90" r="75" stroke="white" strokeWidth="1.5" fill="none"/>
+                        <circle cx="90" cy="90" r="55" stroke="white" strokeWidth="1.5" fill="none"/>
+                        <circle cx="90" cy="90" r="35" stroke="white" strokeWidth="1.5" fill="none"/>
+                        <circle cx="90" cy="90" r="15" stroke="white" strokeWidth="1.5" fill="none"/>
+                        {/* Radiating lines */}
+                        <line x1="90" y1="90" x2="40" y2="40" stroke="white" strokeWidth="1" opacity="0.6"/>
+                        <line x1="90" y1="90" x2="140" y2="40" stroke="white" strokeWidth="1" opacity="0.6"/>
+                        <line x1="90" y1="90" x2="40" y2="140" stroke="white" strokeWidth="1" opacity="0.6"/>
+                        <line x1="90" y1="90" x2="140" y2="140" stroke="white" strokeWidth="1" opacity="0.6"/>
+                        {/* Small nodes */}
+                        <circle cx="40" cy="40" r="3" fill="white" opacity="0.8"/>
+                        <circle cx="140" cy="40" r="3" fill="white" opacity="0.8"/>
+                        <circle cx="40" cy="140" r="3" fill="white" opacity="0.8"/>
+                        <circle cx="140" cy="140" r="3" fill="white" opacity="0.8"/>
+                      </svg>
+                    </div>
+
+                    {/* Top accent line */}
+                    <div className="w-10 h-0.5 bg-primary-light rounded-full mb-8 group-hover:w-[70px] transition-all duration-400"></div>
+
+                    {/* Number with line */}
+                    <div className="flex items-center gap-3 mb-7">
+                      <p className="text-primary-light/60 text-[13px] font-medium tracking-[0.15em] uppercase">01</p>
+                      <div className="w-8 h-px bg-primary-light/30"></div>
+                    </div>
+
+                    {/* Heading */}
+                    <h3 className="text-[42px] md:text-[44px] font-display font-bold text-white mb-6 leading-[1.05] tracking-tight uppercase">
                       Vision
                     </h3>
-                    <p className="text-neutral-300 text-[16px] md:text-[17px] leading-[1.65] max-w-[400px]">
+
+                    {/* Body */}
+                    <p className="text-white/80 text-[17px] md:text-[18px] leading-[1.7] max-w-[380px]">
                       To make everyday wellness products accessible, trusted and affordable.
                     </p>
                   </div>
-                  
-                  {/* Bottom subtle accent */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-              </motion.div>
+                </motion.div>
 
-              {/* Mission Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-                className="group relative"
-              >
-                <div className="relative bg-[#1a251a]/60 backdrop-blur-sm border border-white/[0.08] rounded-[20px] p-10 md:p-12 lg:p-14 min-h-[280px] flex flex-col overflow-hidden transition-all duration-500 hover:bg-[#1a251a]/80 hover:border-primary-light/20">
-                  
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-light/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[20px]"></div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10">
-                    <h3 className="text-[32px] md:text-[36px] lg:text-[40px] font-display font-bold text-white mb-6 leading-[1.1] tracking-tight uppercase">
+                {/* Mission Card */}
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                  className="group relative"
+                >
+                  <div className="relative h-full min-h-[320px] bg-white border border-neutral-200/80 rounded-[24px] p-10 md:p-11 overflow-hidden flex flex-col shadow-[0_2px_24px_rgba(0,0,0,0.06)] transition-all duration-400 hover:-translate-y-1 hover:border-primary-light/30">
+
+                    {/* Molecular Network - Bottom Right (Never overlaps text) */}
+                    <div className="absolute -bottom-12 -right-12 opacity-[0.06] group-hover:opacity-[0.09] transition-opacity duration-500 pointer-events-none">
+                      <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        {/* Flowing connected nodes */}
+                        <path d="M20 80 Q50 60, 80 80 T140 80" stroke="#4CAF50" strokeWidth="1.5" fill="none"/>
+                        <path d="M30 50 Q60 40, 90 55 T130 60" stroke="#4CAF50" strokeWidth="1.5" fill="none"/>
+                        <path d="M25 110 Q55 100, 85 110 T135 115" stroke="#4CAF50" strokeWidth="1.5" fill="none"/>
+                        
+                        {/* Nodes */}
+                        <circle cx="20" cy="80" r="4" fill="#4CAF50" opacity="0.8"/>
+                        <circle cx="80" cy="80" r="5" fill="#4CAF50" opacity="0.9"/>
+                        <circle cx="140" cy="80" r="4" fill="#4CAF50" opacity="0.8"/>
+                        
+                        <circle cx="30" cy="50" r="3" fill="#4CAF50" opacity="0.7"/>
+                        <circle cx="90" cy="55" r="4" fill="#4CAF50" opacity="0.8"/>
+                        <circle cx="130" cy="60" r="3" fill="#4CAF50" opacity="0.7"/>
+                        
+                        <circle cx="25" cy="110" r="3" fill="#4CAF50" opacity="0.7"/>
+                        <circle cx="85" cy="110" r="4" fill="#4CAF50" opacity="0.8"/>
+                        <circle cx="135" cy="115" r="3" fill="#4CAF50" opacity="0.7"/>
+                        
+                        {/* Small connecting lines */}
+                        <line x1="80" y1="80" x2="90" y2="55" stroke="#4CAF50" strokeWidth="1" opacity="0.5"/>
+                        <line x1="80" y1="80" x2="85" y2="110" stroke="#4CAF50" strokeWidth="1" opacity="0.5"/>
+                      </svg>
+                    </div>
+
+                    {/* Top accent line */}
+                    <div className="w-10 h-0.5 bg-primary-light rounded-full mb-8 group-hover:w-[70px] transition-all duration-400"></div>
+
+                    {/* Number with line */}
+                    <div className="flex items-center gap-3 mb-7">
+                      <p className="text-primary-light/70 text-[13px] font-medium tracking-[0.15em] uppercase">02</p>
+                      <div className="w-8 h-px bg-primary-light/30"></div>
+                    </div>
+
+                    {/* Heading */}
+                    <h3 className="text-[42px] md:text-[44px] font-display font-bold text-primary-dark mb-6 leading-[1.05] tracking-tight uppercase">
                       Mission
                     </h3>
-                    <p className="text-neutral-300 text-[16px] md:text-[17px] leading-[1.65] max-w-[400px]">
+
+                    {/* Body */}
+                    <p className="text-neutral-600 text-[17px] md:text-[18px] leading-[1.7] max-w-[380px]">
                       To help brands bring high-quality nutrition, wellness and personal care products to market through thoughtful formulations, reliable sourcing and manufacturing.
                     </p>
                   </div>
-                  
-                  {/* Bottom subtle accent */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-              </motion.div>
+                </motion.div>
+
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -486,6 +492,7 @@ export default function OurCompany() {
                 { num: '02', title: 'Distributors', desc: 'Need consistent products you can take to new markets.' },
                 { num: '03', title: 'Private Label Brands', desc: 'Need quality products built for your brand.' },
                 { num: '04', title: 'Emerging & D2C Brands', desc: 'Need the right partner to turn ideas into products.' },
+                { num: '05', title: 'Purpose-Led Founders', desc: 'Turned a personal problem into a brand because the product they needed didn\'t exist yet.' },
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -526,7 +533,7 @@ export default function OurCompany() {
       </section>
 
       {/* Slogan Statement - Editorial Light Style */}
-      <section className="relative py-12 md:py-16 bg-white overflow-hidden">
+      <section className="relative py-4 md:py-6 bg-white overflow-hidden">
         {/* Thin top border */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/30 to-transparent"></div>
         {/* Thin bottom border */}

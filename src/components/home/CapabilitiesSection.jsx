@@ -40,12 +40,6 @@ export default function CapabilitiesSection() {
               Formulation science, proven at manufacturing scale.
             </h2>
 
-            <p className="mb-10 max-w-[480px] text-[15px] leading-relaxed text-neutral-300 sm:text-[16px]">
-              Formulation R&D and manufacturing run under one roof at Zeovus
-              Life. Every formula is developed and refined by our team before it
-              reaches the production line.
-            </p>
-
             {/* Feature rows */}
             <div className="space-y-6">
               {FEATURES.map((feature, i) => {
