@@ -1,455 +1,676 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
+gsap.registerPlugin(ScrollTrigger);
+
+const nutraceuticalFormats = [
+  { name: 'Capsules', desc: 'Hard-shell and softgel capsules with various fill types' },
+  { name: 'Tablets', desc: 'Compressed tablets including chewable and effervescent' },
+  { name: 'Gummies', desc: 'Chewable gummies in various shapes and flavors' },
+  { name: 'Softgels', desc: 'Oil-based formulations in softgel shells' },
+  { name: 'Powder Sachets', desc: 'Stick packs and sachets for easy consumption' },
+  { name: 'Oral Dissolving Strips', desc: 'Fast-dissolving strips for quick absorption' },
+  { name: 'Transdermal Patches', desc: 'Patches for controlled release delivery' },
+  { name: 'Liquid Shots', desc: 'Ready-to-drink ampoules and shots' },
+];
+
+const cosmeticsFormats = [
+  { name: 'Creams & Lotions', desc: 'Emulsions for skin application' },
+  { name: 'Serums', desc: 'High-concentration active formulations' },
+  { name: 'Sun Care', desc: 'SPF formulations and after-sun products' },
+  { name: 'Hair Care', desc: 'Shampoos, conditioners, and treatments' },
+  { name: 'Body Care', desc: 'Body lotions, butters, and oils' },
+  { name: 'Facial Masks', desc: 'Sheet masks and wash-off formulations' },
+  { name: 'Topical Oils', desc: 'Essential oil blends and massage oils' },
+  { name: 'Soaps', desc: 'Liquid and solid soap formulations' },
+];
+
+const processSteps = [
+  { step: 1, title: 'Consultation', description: "Goal, audience and format. We start by understanding what the product needs to do, who it's for, and what format is to be built." },
+  { step: 2, title: 'Formulation', description: "In-house R&D builds an evidence-based formula with particle engineering when standard raw materials won't do the job." },
+  { step: 3, title: 'Ingredient Selection', description: 'Choosing which ingredients and forms meet our potency and bioavailability standards.' },
+  { step: 4, title: 'PO & Kickoff', description: 'Production begins once the order is confirmed. Procurement, scheduling and production planning all start at the same time.' },
+  { step: 5, title: 'Procurement', description: 'Ordering and shipping the ingredients chosen, including made-to-order and temperature-sensitive actives.' },
+  { step: 6, title: 'Manufacturing', description: 'The production run itself, across the chosen format — granulating, encapsulating, or emulsifying.' },
+  { step: 7, title: 'QC & Testing', description: 'Every batch is tested against the original formula and for long-term stability, through ZQA.' },
+  { step: 8, title: 'Packaging & Delivery', description: 'The final step is labelling, packaging and shipping the finished product ready for shelf.' },
+];
+
+const formulationScience = [
+  'In-house formulation team working from clinical literature',
+  'Liposomal, nanoemulsion and microencapsulation systems',
+  'Biomimetic emulsion design and sensory/texture optimisation',
+  'Continuous evaluation of next-generation delivery technology',
+];
+
+const testingValidation = [
+  'Compatibility and accelerated-ageing studies',
+  'Particle size and encapsulation efficiency testing',
+  'Pilot-batch trials before any scale-up',
+  'Release-profile testing at every stage',
+];
+
+const regulatoryScience = [
+  'Formulated in line with global compliance frameworks',
+  'Every claim backed by measurable, label-ready specificity',
+  "Built to meet the requirements of its target market",
+];
+
+const innovationFacts = [
+  'Formulation and regulatory science developed together, not sequentially',
+  'Pilot-batch validation before every scale-up',
+  'Continuous evaluation of next-generation delivery technology',
+];
+
+const manufacturingFacts = [
+  'Multiple production lines running in parallel across both divisions',
+  'Pilot-to-commercial scale-up without changing manufacturing partners',
+  'GMP-certified, allergen-controlled, machine-vision quality control',
+];
+
+const certifications = [
+  { label: 'GMP', logo: '/logo/gmp.png' },
+  { label: 'ISO', logo: null },
+  { label: 'HACCP', logo: '/logo/haccp.png' },
+  { label: 'FSSC 22000', logo: '/logo/iso22000.png' },
+  { label: 'BRCGS', logo: '/logo/brcgs.png' },
+  { label: 'IFS', logo: null },
+  { label: 'US FDA', logo: '/logo/usfda.png' },
+  { label: 'ISO 22716', logo: null },
+  { label: 'COSMOS', logo: null },
+  { label: 'HALAL', logo: '/logo/halal.png' },
+  { label: 'KOSHER', logo: '/logo/kosher.png' },
+  { label: 'ORGANIC', logo: '/logo/organic.png' },
+  { label: 'NON-GMO', logo: null },
+  { label: 'VEGAN', logo: '/logo/vegan.webp' },
+  { label: 'FSSAI', logo: '/logo/fssai.png' },
+];
+
+function ArrowLink({ href, children }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light"
+    >
+      <span className="relative">
+        {children}
+        <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
+      </span>
+      <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17L17 7" />
+        <path d="M7 7h10v10" />
+      </svg>
+    </Link>
+  );
+}
 
 export default function Capabilities() {
-  const [activeTab, setActiveTab] = useState('innovation');
+  const [activeSection, setActiveSection] = useState('innovation');
+  const innovationRef = useRef(null);
+  const manufacturingRef = useRef(null);
 
-  const certifications = [
-    'GMP', 'ISO', 'HACCP', 'FSSC 22000', 'BRCGS', 'IFS', 'FDA', 
-    'ISO 22716', 'COSMOS', 'HALAL', 'KOSHER', 'ORGANIC', 
-    'NON-GMO', 'REACH', 'NSF', 'LEAPING BUNNY', 'VEGAN'
-  ];
+  const horizontalStageRef = useRef(null);
+  const trackRef = useRef(null);
+  const progressRef = useRef(null);
 
-  const nutraceuticalFormats = [
-    { name: 'Capsules', desc: 'Hard-shell and softgel capsules with various fill types' },
-    { name: 'Tablets', desc: 'Compressed tablets including chewable and effervescent' },
-    { name: 'Gummies', desc: 'Chewable gummies in various shapes and flavors' },
-    { name: 'Softgels', desc: 'Oil-based formulations in softgel shells' },
-    { name: 'Powder Sachets', desc: 'Stick packs and sachets for easy consumption' },
-    { name: 'Oral Dissolving Strips', desc: 'Fast-dissolving strips for quick absorption' },
-    { name: 'Transdermal Patches', desc: 'Patches for controlled release delivery' },
-    { name: 'Liquid Shots', desc: 'Ready-to-drink ampoules and shots' },
-  ];
+  // Sticky index nav — highlight active pillar as user scrolls
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+    if (innovationRef.current) observer.observe(innovationRef.current);
+    if (manufacturingRef.current) observer.observe(manufacturingRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-  const cosmeticsFormats = [
-    { name: 'Creams & Lotions', desc: 'Emulsions for skin application' },
-    { name: 'Serums', desc: 'High-concentration active formulations' },
-    { name: 'Sun Care', desc: 'SPF formulations and after-sun products' },
-    { name: 'Hair Care', desc: 'Shampoos, conditioners, and treatments' },
-    { name: 'Body Care', desc: 'Body lotions, butters, and oils' },
-    { name: 'Facial Masks', desc: 'Sheet masks and wash-off formulations' },
-    { name: 'Topical Oils', desc: 'Essential oil blends and massage oils' },
-    { name: 'Soaps', desc: 'Liquid and solid soap formulations' },
-  ];
+  // GSAP horizontal-scroll storytelling for the process — desktop + motion-safe only
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
 
-  const processSteps = [
-    {
-      step: 1,
-      title: 'Consultation',
-      description: 'Goal, audience and format. We start by understanding what the product needs to do, who it\'s for, and what format is to be built.'
-    },
-    {
-      step: 2,
-      title: 'Formulation',
-      description: 'In-house R&D builds an evidence-based formula with particle engineering when standard raw materials won\'t do the job.'
-    },
-    {
-      step: 3,
-      title: 'Ingredient Selection',
-      description: 'Choosing which ingredients and forms meet our potency and bioavailability standards.'
-    },
-    {
-      step: 4,
-      title: 'PO & Kickoff',
-      description: 'Production begins once the order is confirmed. Procurement, scheduling and production planning all start at the same time.'
-    },
-    {
-      step: 5,
-      title: 'Procurement',
-      description: 'Ordering and shipping the ingredients chosen, including made-to-order and temperature-sensitive actives.'
-    },
-    {
-      step: 6,
-      title: 'Manufacturing',
-      description: 'The production run itself, across the chosen format — granulating, encapsulating, or emulsifying.'
-    },
-    {
-      step: 7,
-      title: 'QC & Testing',
-      description: 'Every batch is tested against the original formula and for long-term stability, through ZQA.'
-    },
-    {
-      step: 8,
-      title: 'Packaging & Delivery',
-      description: 'The final step is labelling, packaging and shipping the finished product ready for shelf.'
-    },
-  ];
+    mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+      const track = trackRef.current;
+      const stage = horizontalStageRef.current;
+      if (!track || !stage) return;
 
-  const capabilityStrips = [
-    'Formulation and regulatory science developed together, not sequentially',
-    'Pilot-batch validation before every scale-up',
-    'Continuous evaluation of next-generation delivery technology',
-    'Multiple production lines running in parallel across both divisions',
-    'Pilot-to-commercial scale-up without changing manufacturing partners',
-    'GMP-certified, allergen-controlled, machine-vision quality control',
-  ];
+      gsap.set(track, { overflowX: 'visible' });
+
+      const getScrollLength = () => track.scrollWidth - stage.clientWidth;
+
+      const tween = gsap.to(track, {
+        x: () => -getScrollLength(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top top',
+          end: () => `+=${getScrollLength()}`,
+          scrub: true,
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (progressRef.current) {
+              progressRef.current.style.transform = `scaleX(${self.progress})`;
+            }
+          },
+        },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(track, { clearProps: 'overflowX' });
+      };
+    });
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center bg-gradient-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-white blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-secondary blur-3xl"></div>
-        </div>
-        
-        <div className="container relative z-10 pt-24 pb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
-              Proven in research. Built to scale.
-            </h1>
-            <p className="text-xl text-white/80 max-w-3xl mb-4">
-              Trusted by nutraceutical and cosmetic brands across the global markets to turn formulations into shelf-ready, certified products.
-            </p>
-            <p className="text-lg text-white/60 max-w-2xl">
-              Whether you're launching your first product or scaling an established line, Zeovus Life brings the formulation expertise, manufacturing capacity and regulatory know-how to get it right.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="bg-white">
+      {/* ============ HERO ============ */}
+      <section className="relative overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+          <defs>
+            <pattern id="cap-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+              <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#cap-hex-grid)" />
+        </svg>
 
-      {/* Tab Navigation */}
-      <section className="bg-neutral-100 sticky top-[72px] z-40">
-        <div className="container">
-          <div className="flex">
-            <button
-              onClick={() => setActiveTab('innovation')}
-              className={`flex-1 py-4 px-6 font-medium text-center transition-colors ${
-                activeTab === 'innovation'
-                  ? 'text-primary-dark border-b-2 border-primary-light'
-                  : 'text-neutral-500 hover:text-primary-dark'
-              }`}
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-                Innovation
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab('manufacturing')}
-              className={`flex-1 py-4 px-6 font-medium text-center transition-colors ${
-                activeTab === 'manufacturing'
-                  ? 'text-primary-dark border-b-2 border-primary-light'
-                  : 'text-neutral-500 hover:text-primary-dark'
-              }`}
+              <p className="mb-5 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/70">
+                Capabilities
+              </p>
+              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+                Proven in research.
+                <br />
+                <span className="text-secondary">Built to scale.</span>
+              </h1>
+              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                Trusted by nutraceutical and cosmetic brands across global markets to
+                turn formulations into shelf-ready, certified products — from first
+                sample to full commercial volume, without ever changing partners.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link href="/contact">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-block cursor-pointer rounded-[2px] bg-secondary px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-primary-dark transition-colors hover:bg-secondary-dark"
+                  >
+                    ENQUIRE NOW
+                  </motion.span>
+                </Link>
+                <a href="#process">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-block cursor-pointer rounded-[2px] border border-white/25 bg-white/[0.04] px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-white backdrop-blur-sm transition-colors hover:bg-white/[0.08]"
+                  >
+                    SEE OUR PROCESS
+                  </motion.span>
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Stat column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
             >
-              <span className="flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-                Manufacturing
-              </span>
-            </button>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">8</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Step Process</span>
+              </div>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">17</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Certifications</span>
+              </div>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">2</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Divisions</span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Tab Content */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'innovation' && (
-          <motion.section
-            key="innovation"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="section-py bg-white"
-          >
-            <div className="container">
-              <div className="max-w-4xl mx-auto">
+      {/* ============ TWO-PILLAR EDITORIAL LAYOUT ============ */}
+      <section className="relative bg-white py-20 sm:py-26 lg:py-30">
+        <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-16">
+
+            {/* Sticky index nav — desktop only */}
+            <div className="hidden lg:block">
+              <div className="sticky top-32 space-y-10">
+                <a href="#innovation" className="group block">
+                  <span className={`font-heading text-[11px] font-semibold uppercase tracking-[2px] transition-colors duration-300 ${activeSection === 'innovation' ? 'text-primary-light' : 'text-neutral-400'}`}>
+                    01
+                  </span>
+                  <h4 className={`mt-1 font-heading text-[18px] font-bold uppercase transition-colors duration-300 ${activeSection === 'innovation' ? 'text-primary-dark' : 'text-neutral-400'}`}>
+                    Innovation
+                  </h4>
+                </a>
+                <a href="#manufacturing" className="group block">
+                  <span className={`font-heading text-[11px] font-semibold uppercase tracking-[2px] transition-colors duration-300 ${activeSection === 'manufacturing' ? 'text-primary-light' : 'text-neutral-400'}`}>
+                    02
+                  </span>
+                  <h4 className={`mt-1 font-heading text-[18px] font-bold uppercase transition-colors duration-300 ${activeSection === 'manufacturing' ? 'text-primary-dark' : 'text-neutral-400'}`}>
+                    Manufacturing
+                  </h4>
+                </a>
+                <div className="border-t border-neutral-100 pt-6">
+                  <p className="text-[13px] leading-relaxed text-neutral-500">
+                    Two disciplines. One quality standard.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content column */}
+            <div className="space-y-24 lg:space-y-32">
+
+              {/* ---- 01 Innovation ---- */}
+              <div id="innovation" ref={innovationRef} className="[scroll-margin-top:110px]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-dark mb-6">
+                  <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
+                    01 — Innovation
+                  </p>
+                  <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
                     Where formulation science meets real-world performance.
                   </h2>
-                  <p className="text-neutral-600 text-lg mb-8">
-                    Zeovus Life's in-house formulation team is adept at turning ideas into expertly formulated nutraceutical and cosmetic products. We specialise in custom formulation across gummies, softgels and tablets, alongside serums, lotions and other topical formats, each developed with the same clinical rigour, whatever the format.
+                  <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                    Zeovus Life's in-house formulation team is adept at turning ideas
+                    into expertly formulated nutraceutical and cosmetic products. We
+                    specialise in custom formulation across gummies, softgels and
+                    tablets, alongside serums, lotions and other topical formats,
+                    each developed with the same clinical rigour, whatever the format.
                   </p>
+
+                  {/* At-a-glance facts */}
+                  <div className="mt-8 grid gap-x-8 gap-y-3 border-t border-neutral-100 pt-6 sm:grid-cols-3">
+                    {innovationFacts.map((fact, i) => (
+                      <p key={i} className="text-[12px] leading-relaxed text-neutral-500">
+                        <span className="text-primary-light">— </span>{fact}
+                      </p>
+                    ))}
+                  </div>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-8 mt-12">
+                {/* Formulation Design & Testing — side-by-side spec lists */}
+                <div className="mt-14 grid gap-12 sm:grid-cols-2 sm:gap-10">
                   <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="bg-neutral-100 rounded-xl p-6"
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h3 className="text-xl font-display font-semibold text-primary-dark mb-4">
-                      Formulation Design & Delivery Science
+                    <h3 className="mb-4 font-heading text-[13px] font-bold uppercase tracking-[1.5px] text-primary-dark">
+                      Formulation Design &amp; Delivery Science
                     </h3>
-                    <ul className="space-y-3 text-neutral-600">
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>In-house formulation team working from clinical literature</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Liposomal, nanoemulsion and microencapsulation systems</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Biomimetic emulsion design and sensory/texture optimisation</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Continuous evaluation of next-gen actives</span>
-                      </li>
+                    <ul>
+                      {formulationScience.map((line, i) => (
+                        <li key={i} className="flex gap-3 border-b border-neutral-100 py-3 last:border-b-0">
+                          <span className="mt-[2px] text-primary-light">—</span>
+                          <span className="text-[14px] leading-relaxed text-neutral-600">{line}</span>
+                        </li>
+                      ))}
                     </ul>
                   </motion.div>
 
                   <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="bg-neutral-100 rounded-xl p-6"
+                    transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h3 className="text-xl font-display font-semibold text-primary-dark mb-4">
-                      Testing & Validation
+                    <h3 className="mb-4 font-heading text-[13px] font-bold uppercase tracking-[1.5px] text-primary-dark">
+                      Testing &amp; Validation
                     </h3>
-                    <ul className="space-y-3 text-neutral-600">
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Compatibility and accelerated-ageing studies</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Particle size and encapsulation efficiency testing</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Pilot-batch trials before any scale-up</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-primary-light">✓</span>
-                        <span>Release-profile testing at every stage</span>
-                      </li>
+                    <ul>
+                      {testingValidation.map((line, i) => (
+                        <li key={i} className="flex gap-3 border-b border-neutral-100 py-3 last:border-b-0">
+                          <span className="mt-[2px] text-primary-light">—</span>
+                          <span className="text-[14px] leading-relaxed text-neutral-600">{line}</span>
+                        </li>
+                      ))}
                     </ul>
                   </motion.div>
                 </div>
 
+                {/* Pull-quote break */}
+                <motion.blockquote
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="mt-14 border-l-2 border-primary-light pl-6 font-heading text-[20px] font-semibold leading-snug text-primary-dark sm:text-[24px]"
+                >
+                  Every format is developed with the same clinical rigour.
+                </motion.blockquote>
+
+                {/* Regulatory Science inset */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-primary-dark text-white rounded-xl p-6 mt-8"
+                  transition={{ duration: 0.5 }}
+                  className="mt-14 border-l-2 border-primary-dark/20 bg-[#f5f9f6] px-6 py-7 sm:px-8 sm:py-8"
                 >
-                  <h3 className="text-xl font-display font-semibold mb-4">Regulatory Science</h3>
-                  <ul className="space-y-3 text-neutral-300">
-                    <li className="flex gap-3">
-                      <span className="text-secondary">✓</span>
-                      <span>Formulated in line with global compliance frameworks</span>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="text-secondary">✓</span>
-                      <span>Every claim backed by measurable, label-ready specificity</span>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="text-secondary">✓</span>
-                      <span>Built to meet the requirements of its target market</span>
-                    </li>
+                  <h4 className="mb-4 font-heading text-[13px] font-bold uppercase tracking-[2px] text-primary-dark">
+                    Regulatory Science
+                  </h4>
+                  <ul className="space-y-3">
+                    {regulatoryScience.map((line, i) => (
+                      <li key={i} className="flex gap-3">
+                        <span className="mt-[2px] text-primary-light">—</span>
+                        <span className="text-[14px] leading-relaxed text-neutral-600">{line}</span>
+                      </li>
+                    ))}
                   </ul>
                 </motion.div>
-
-                {/* Capability Strip */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="mt-12"
-                >
-                  <div className="flex flex-wrap justify-center gap-4">
-                    {capabilityStrips.slice(0, 3).map((item, index) => (
-                      <span key={index} className="px-4 py-2 bg-neutral-100 rounded-full text-sm text-neutral-700">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
               </div>
-            </div>
-          </motion.section>
-        )}
 
-        {activeTab === 'manufacturing' && (
-          <motion.section
-            key="manufacturing"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="section-py bg-white"
-          >
-            <div className="container">
-              <div className="max-w-4xl mx-auto">
+              {/* ---- 02 Manufacturing ---- */}
+              <div id="manufacturing" ref={manufacturingRef} className="[scroll-margin-top:110px]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-dark mb-6">
+                  <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
+                    02 — Manufacturing
+                  </p>
+                  <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
                     Manufacturing built for every format, at scale.
                   </h2>
-                  <p className="text-neutral-600 text-lg mb-8">
-                    Zeovus Life manufactures nutraceuticals and cosmetics across every major format on the market today — from hard-shell and softgel capsules to gummies, oral dissolving strips and transdermal patches; from creams and serums to soaps and sun care — inside GMP, ISO- and HACCP-certified, allergen-controlled facilities, with capacity that scales from first sample to full commercial volume without ever changing partners.
+                  <p className="mt-5 max-w-[680px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                    Zeovus Life manufactures nutraceuticals and cosmetics across every
+                    major format on the market today, inside GMP, ISO- and
+                    HACCP-certified, allergen-controlled facilities — with capacity
+                    that scales from first sample to full commercial volume without
+                    ever changing partners.
                   </p>
-                </motion.div>
 
-                {/* Nutraceutical Formats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="mb-12"
-                >
-                  <h3 className="text-2xl font-display font-semibold text-primary-dark mb-6">Nutraceutical Formats</h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {nutraceuticalFormats.map((format, index) => (
-                      <div key={index} className="bg-neutral-100 rounded-lg p-4 hover:bg-primary-light/10 transition-colors">
-                        <h4 className="font-semibold text-primary-dark mb-1">{format.name}</h4>
-                        <p className="text-sm text-neutral-600">{format.desc}</p>
-                      </div>
+                  <div className="mt-8 grid gap-x-8 gap-y-3 border-t border-neutral-100 pt-6 sm:grid-cols-3">
+                    {manufacturingFacts.map((fact, i) => (
+                      <p key={i} className="text-[12px] leading-relaxed text-neutral-500">
+                        <span className="text-primary-light">— </span>{fact}
+                      </p>
                     ))}
                   </div>
-                  <Link href="/nutraceuticals" className="inline-flex items-center gap-2 mt-4 text-primary-light font-medium hover:gap-3 transition-all">
-                    Explore Nutraceuticals
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
                 </motion.div>
 
-                {/* Cosmetics Formats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="mb-12"
-                >
-                  <h3 className="text-2xl font-display font-semibold text-primary-dark mb-6">Cosmetics Formats</h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {cosmeticsFormats.map((format, index) => (
-                      <div key={index} className="bg-neutral-100 rounded-lg p-4 hover:bg-primary-light/10 transition-colors">
-                        <h4 className="font-semibold text-primary-dark mb-1">{format.name}</h4>
-                        <p className="text-sm text-neutral-600">{format.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <Link href="/cosmetics" className="inline-flex items-center gap-2 mt-4 text-primary-light font-medium hover:gap-3 transition-all">
-                    Explore Cosmetics
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
-                </motion.div>
-
-                {/* Certifications */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="bg-neutral-100 rounded-xl p-6 mb-8"
-                >
-                  <h3 className="text-xl font-display font-semibold text-primary-dark mb-4">Certifications</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {certifications.map((cert) => (
-                      <span key={cert} className="px-3 py-1 bg-white rounded-full text-sm font-medium text-primary-dark">
-                        {cert}
+                {/* Formats directory — spec-sheet lists, not cards */}
+                <div className="mt-14 grid gap-14 lg:grid-cols-2 lg:gap-16">
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="mb-5 flex items-baseline justify-between">
+                      <h3 className="font-heading text-[13px] font-bold uppercase tracking-[1.5px] text-primary-dark">
+                        Nutraceutical Formats
+                      </h3>
+                      <span className="font-heading text-[11px] text-neutral-400">
+                        {nutraceuticalFormats.length} formats
                       </span>
-                    ))}
-                  </div>
-                </motion.div>
+                    </div>
+                    <div className="border-t border-neutral-100">
+                      {nutraceuticalFormats.map((f, i) => (
+                        <div
+                          key={i}
+                          className="group relative flex flex-col gap-1 border-b border-neutral-100 py-4 pl-4 -ml-4 transition-colors duration-300 hover:bg-[#f5f9f6]/70 sm:flex-row sm:items-baseline sm:gap-4"
+                        >
+                          <div className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-primary-light transition-transform duration-400 ease-out-quint group-hover:scale-y-100" />
+                          <span className="flex-shrink-0 font-heading text-[14px] font-semibold text-primary-dark sm:w-[160px]">
+                            {f.name}
+                          </span>
+                          <span className="text-[13px] leading-relaxed text-neutral-500">
+                            {f.desc}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-6">
+                      <ArrowLink href="/nutraceuticals">Explore Nutraceuticals</ArrowLink>
+                    </div>
+                  </motion.div>
 
-                {/* Capability Strip */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex flex-wrap justify-center gap-4">
-                    {capabilityStrips.slice(3).map((item, index) => (
-                      <span key={index} className="px-4 py-2 bg-neutral-100 rounded-full text-sm text-neutral-700">
-                        {item}
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="mb-5 flex items-baseline justify-between">
+                      <h3 className="font-heading text-[13px] font-bold uppercase tracking-[1.5px] text-primary-dark">
+                        Cosmetics Formats
+                      </h3>
+                      <span className="font-heading text-[11px] text-neutral-400">
+                        {cosmeticsFormats.length} formats
                       </span>
-                    ))}
-                  </div>
-                </motion.div>
+                    </div>
+                    <div className="border-t border-neutral-100">
+                      {cosmeticsFormats.map((f, i) => (
+                        <div
+                          key={i}
+                          className="group relative flex flex-col gap-1 border-b border-neutral-100 py-4 pl-4 -ml-4 transition-colors duration-300 hover:bg-[#f5f9f6]/70 sm:flex-row sm:items-baseline sm:gap-4"
+                        >
+                          <div className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-primary-light transition-transform duration-400 ease-out-quint group-hover:scale-y-100" />
+                          <span className="flex-shrink-0 font-heading text-[14px] font-semibold text-primary-dark sm:w-[160px]">
+                            {f.name}
+                          </span>
+                          <span className="text-[13px] leading-relaxed text-neutral-500">
+                            {f.desc}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-6">
+                      <ArrowLink href="/cosmetics">Explore Cosmetics</ArrowLink>
+                    </div>
+                  </motion.div>
+                </div>
+
+                <p className="mt-10 text-[13px] text-neutral-500">
+                  Every line operates under GMP, ISO, HACCP and 14 additional
+                  certifications —{' '}
+                  <a href="#certifications" className="text-primary-light underline decoration-primary-light/30 hover:decoration-primary-light">
+                    see them all below
+                  </a>.
+                </p>
               </div>
-            </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
 
-      {/* How We Work */}
-      <section className="section-py bg-neutral-100">
-        <div className="container">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PROCESS — GSAP horizontal scroll ============ */}
+      <section id="process" className="relative bg-[#f5f9f6]">
+        <div className="mx-auto max-w-[1500px] px-5 pt-20 sm:px-8 sm:pt-26 lg:px-12 lg:pt-30">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12 max-w-[640px] lg:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-dark mb-4">
+            <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
+              How we work
+            </p>
+            <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px]">
               From brief to shelf, in eight steps.
             </h2>
-            <p className="text-neutral-600 max-w-2xl mx-auto">
-              Our streamlined process ensures every product gets the attention it deserves.
+            <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+              Scroll to move through our process — from first consultation to the
+              finished product ready for shelf.
             </p>
           </motion.div>
+        </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {processSteps.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl p-5 card-hover"
-              >
-                <div className="w-10 h-10 bg-primary-light/20 rounded-full flex items-center justify-center mb-3">
-                  <span className="text-primary-light font-bold">{item.step}</span>
+        <div ref={horizontalStageRef} className="relative lg:h-screen lg:overflow-hidden">
+          <div className="flex h-full items-center">
+            <div
+              ref={trackRef}
+              className="flex gap-6 overflow-x-auto px-5 pb-10 snap-x snap-mandatory sm:gap-8 sm:px-8 lg:snap-none lg:overflow-visible lg:px-12 lg:pb-0"
+            >
+              {processSteps.map((item) => (
+                <div
+                  key={item.step}
+                  className="group relative w-[260px] flex-shrink-0 snap-start border-t-2 border-neutral-200 pt-6 transition-colors duration-500 hover:border-primary-light sm:w-[300px] lg:w-[360px] lg:pt-8"
+                >
+                  <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[76px]">
+                    {String(item.step).padStart(2, '0')}
+                  </span>
+                  <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
+                    {item.title}
+                  </h4>
+                  <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-neutral-600">
+                    {item.description}
+                  </p>
                 </div>
-                <h4 className="font-semibold text-primary-dark mb-2">{item.title}</h4>
-                <p className="text-sm text-neutral-600">{item.description}</p>
-              </motion.div>
+              ))}
+              {/* trailing spacer for pinned desktop track */}
+              <div className="hidden w-[8vw] flex-shrink-0 lg:block" />
+            </div>
+          </div>
+
+          {/* Progress bar — desktop pinned mode only */}
+          <div className="absolute bottom-10 left-12 right-12 hidden h-[2px] bg-neutral-200 lg:block">
+            <div ref={progressRef} className="h-full origin-left scale-x-0 bg-primary-light" />
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CERTIFICATIONS MARQUEE ============ */}
+      <section id="certifications" className="relative overflow-hidden border-t border-neutral-100 bg-white py-16 sm:py-20 [scroll-margin-top:90px]">
+        <div className="mx-auto mb-8 max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <p className="font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
+            Certified excellence
+          </p>
+          <h3 className="mt-2 font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
+            Every certification behind Zeovus manufacturing.
+          </h3>
+        </div>
+
+        <div className="relative overflow-hidden">
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent sm:w-28" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent sm:w-28" />
+
+          <div className="flex w-max animate-cert-scroll items-center gap-4 py-3">
+            {[...certifications, ...certifications].map((cert, i) => (
+              <div
+                key={i}
+                className="inline-flex flex-shrink-0 flex-col items-center justify-center gap-2.5 rounded-xl border border-primary-dark/[0.06] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/30 hover:shadow-[0_4px_16px_rgba(21,168,89,0.08)]"
+                style={{ minWidth: '105px', minHeight: '84px' }}
+              >
+                {cert.logo ? (
+                  <img src={cert.logo} alt={cert.label} className="h-9 w-auto max-w-[72px] object-contain" />
+                ) : (
+                  <span className="flex h-9 items-center font-heading text-[14px] font-bold tracking-[-0.3px] text-primary-dark">
+                    {cert.label}
+                  </span>
+                )}
+                <span className="font-heading text-[9px] font-semibold uppercase tracking-[1.2px] text-neutral-400">
+                  {cert.label}
+                </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Closing CTA */}
-      <section className="section-py bg-primary-dark text-white">
-        <div className="container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-              Bring us a formulation brief or bring us a problem.
-            </h2>
-            <p className="text-neutral-300 mb-8 max-w-2xl mx-auto">
-              We'll work with you to develop the right formulation and bring it to market.
-            </p>
-            <Link href="/contact" className="btn-primary bg-secondary text-primary-dark hover:bg-secondary-dark">
-              Enquire Now
-            </Link>
-          </motion.div>
+      {/* ============ CLOSING CTA ============ */}
+      <section className="relative overflow-hidden bg-primary-dark py-20 text-white sm:py-26 lg:py-30">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(21,168,89,0.08) 0%, transparent 70%)' }}
+        />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full border border-white/[0.03]" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-[200px] w-[200px] rounded-full border border-white/[0.02]" />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-center lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-10 max-w-[640px] text-center lg:mb-0 lg:text-left"
+            >
+              <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/60">
+                Bring us the brief
+              </p>
+              <h2 className="mb-5 font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] sm:text-[40px] lg:text-[46px]">
+                Bring us a formulation brief —
+                <br className="hidden sm:block" /> or bring us a problem.
+              </h2>
+              <p className="max-w-[480px] text-[15px] leading-relaxed text-neutral-300 sm:text-[16px] lg:mx-0 mx-auto">
+                We'll work with you to develop the right formulation and bring it to market.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-end"
+            >
+              <Link href="/contact">
+                <motion.span
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex cursor-pointer items-center gap-3 rounded-[3px] bg-secondary px-7 py-4 font-heading text-[12px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:bg-secondary-dark sm:px-8"
+                >
+                  Enquire Now
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 17L17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                </motion.span>
+              </Link>
+              <Link href="/nutraceuticals">
+                <motion.span
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex cursor-pointer items-center gap-3 rounded-[3px] border border-white/20 bg-white/[0.04] px-7 py-4 font-heading text-[12px] font-semibold uppercase tracking-[1.5px] text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/[0.08] sm:px-8"
+                >
+                  View Portfolio
+                </motion.span>
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>
