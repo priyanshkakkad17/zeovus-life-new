@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 const products = [
-  { name: 'Omega-3 EPA + DHA', benefit: 'Cardiovascular support', category: 'Heart' },
+  { name: 'Omega-3 EPA + DHA', benefit: 'Cardiovascular support', category: 'Heart', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787775498/IMG-20260207-WA0017.jpg' },
   { name: 'CoQ10 100mg', benefit: 'Cellular energy production', category: 'Energy' },
   { name: 'Collagen Peptides', benefit: 'Skin elasticity & joint mobility', category: 'Beauty' },
   { name: 'Probiotic 50B CFU', benefit: 'Gut microbiome balance', category: 'Gut' },
@@ -80,6 +80,17 @@ export default function PortfolioHighlights() {
 
                 {/* Middle: product info */}
                 <div className="flex-1">
+                  {item.image && (
+                    <div className={`mb-5 overflow-hidden rounded-[4px] bg-neutral-50 ${
+                      index === 0 ? 'h-[140px] lg:h-[180px]' : 'h-[100px]'
+                    }`}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-full w-full object-contain p-3"
+                      />
+                    </div>
+                  )}
                   <h3 className={`mb-3 font-heading font-semibold text-primary-dark ${
                     index === 0
                       ? 'text-[22px] sm:text-[24px] lg:text-[28px]'
