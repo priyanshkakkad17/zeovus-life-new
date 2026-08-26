@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -71,38 +71,40 @@ function CategoryCard({ category, index, onClick }) {
   return (
     <motion.button
       type="button"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: (index % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
-      className="group relative flex flex-col text-left"
+      className="group relative flex w-full snap-start flex-col justify-center gap-8 px-5 py-10 sm:flex-row sm:items-center sm:gap-12 sm:px-8 lg:px-12"
+      style={{ height: 'var(--card-height, 100%)' }}
     >
-      <div className="relative overflow-hidden rounded-[6px]">
+      {/* Image left — fills half */}
+      <div className="relative flex-1 overflow-hidden rounded-[8px]">
         <PlaceholderPhoto
           colorFrom={category.color_from}
           colorTo={category.color_to}
           icon={IconComponent}
-          className="aspect-[5/4] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
+          className="h-full min-h-[250px] w-full sm:min-h-[400px] lg:min-h-[500px] transition-transform duration-700 ease-out-quint group-hover:scale-[1.02]"
         />
-        {/* Count badge */}
-        <div className="absolute right-3 top-3 rounded-full bg-white/85 px-3 py-1 backdrop-blur-sm">
-          <span className="font-heading text-[11px] font-bold text-primary-dark">
+        <div className="absolute right-4 top-4 rounded-full bg-white/85 px-4 py-1.5 backdrop-blur-sm">
+          <span className="font-heading text-[12px] font-bold text-primary-dark">
             {category.product_count} formulations
           </span>
         </div>
       </div>
 
-      <div className="pt-4">
-        <h3 className="font-heading text-[16px] font-semibold leading-snug text-primary-dark transition-colors duration-300 group-hover:text-primary-light">
+      {/* Text right */}
+      <div className="flex-1 text-left">
+        <h3 className="font-heading text-[28px] font-bold leading-tight text-primary-dark transition-colors duration-300 group-hover:text-primary-light sm:text-[36px] lg:text-[42px]">
           {category.name}
         </h3>
-        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500 line-clamp-2">
+        <p className="mt-4 max-w-[480px] text-[15px] leading-relaxed text-neutral-500 sm:text-[17px]">
           {category.description}
         </p>
-        <div className="mt-3 flex items-center gap-2 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-primary-light">
+        <div className="mt-6 flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light">
           <span>Explore</span>
-          <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </div>
@@ -119,73 +121,84 @@ function ProductCard({ product, category, index }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: (index % 9) * 0.04, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      className="group flex flex-col overflow-hidden rounded-xl border border-neutral-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-neutral-200/60 hover:border-neutral-200"
     >
-      <div className="overflow-hidden rounded-[6px]">
+      {/* Top gradient accent bar */}
+      <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${colorFrom}, ${colorTo})` }} />
+
+      <div className="overflow-hidden">
         <PlaceholderPhoto
           colorFrom={colorFrom}
           colorTo={colorTo}
           icon={IconComponent}
-          className="aspect-[4/3] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
+          className="aspect-[5/3] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
         />
       </div>
 
-      <div className="pt-4">
+      <div className="flex flex-1 flex-col p-5">
+        {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <h4 className="font-heading text-[15px] font-semibold leading-tight text-primary-dark">{product.name}</h4>
+          <h4 className="font-heading text-[16px] font-bold leading-tight text-primary-dark">{product.name}</h4>
           {product.brand_line && (
-            <span className="flex-shrink-0 whitespace-nowrap font-heading text-[10px] font-semibold uppercase tracking-[0.5px] text-primary-light">
+            <span className="flex-shrink-0 whitespace-nowrap rounded-full bg-primary-light/10 px-2.5 py-1 font-heading text-[10px] font-bold uppercase tracking-[0.5px] text-primary-light">
               {product.brand_line}
             </span>
           )}
         </div>
-        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{product.primary_benefit}</p>
+        <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">{product.primary_benefit}</p>
 
+        {/* Key Actives */}
         {product.key_actives && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {product.key_actives.split(',').slice(0, expanded ? 100 : 3).map((a, i) => (
-              <span key={i} className="rounded-sm border border-neutral-200 px-2 py-0.5 text-[11px] font-medium text-neutral-600">
-                {a.trim()}
-              </span>
-            ))}
-            {!expanded && product.key_actives.split(',').length > 3 && (
-              <button
-                onClick={() => setExpanded(true)}
-                className="rounded-sm px-2 py-0.5 text-[11px] font-semibold text-primary-light transition-colors hover:bg-primary-light/10"
-              >
-                +{product.key_actives.split(',').length - 3}
-              </button>
-            )}
+          <div className="mt-4">
+            <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Key Actives</span>
+            <div className="flex flex-wrap gap-1.5">
+              {product.key_actives.split(',').slice(0, expanded ? 100 : 3).map((a, i) => (
+                <span key={i} className="rounded-full border border-primary-light/20 bg-primary-light/5 px-2.5 py-1 text-[11px] font-medium text-primary-dark">
+                  {a.trim()}
+                </span>
+              ))}
+              {!expanded && product.key_actives.split(',').length > 3 && (
+                <button
+                  onClick={() => setExpanded(true)}
+                  className="rounded-full bg-primary-light/10 px-2.5 py-1 text-[11px] font-bold text-primary-light transition-colors hover:bg-primary-light/20"
+                >
+                  +{product.key_actives.split(',').length - 3} more
+                </button>
+              )}
+            </div>
           </div>
         )}
 
+        {/* Expanded details */}
         <AnimatePresence>
           {expanded && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
               {product.secondary_benefits && (
-                <p className="mt-3 border-t border-neutral-100 pt-3 text-[12px] leading-relaxed text-neutral-500">
-                  <span className="font-semibold text-neutral-600">Also supports — </span>{product.secondary_benefits}
-                </p>
+                <div className="mt-4 rounded-lg bg-neutral-50 p-3.5">
+                  <span className="mb-1.5 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Also Supports</span>
+                  <p className="text-[12px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
+                </div>
               )}
               {product.manufacturing_formats && (
-                <div className="mt-3 border-t border-neutral-100 pt-3">
-                  <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Formats</span>
-                  <div className="mt-1.5 flex flex-wrap gap-1.5">
+                <div className="mt-4">
+                  <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Formats</span>
+                  <div className="flex flex-wrap gap-1.5">
                     {product.manufacturing_formats.split('|').map((f, i) => (
-                      <span key={i} className="rounded-sm bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">{f.trim()}</span>
+                      <span key={i} className="rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-medium text-neutral-700">{f.trim()}</span>
                     ))}
                   </div>
                 </div>
               )}
               {product.dds_delivery_tech && (
-                <div className="mt-3 border-t border-neutral-100 pt-3">
-                  <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Delivery Technology</span>
-                  <div className="mt-1.5 flex flex-wrap gap-1.5">
+                <div className="mt-4">
+                  <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Delivery Technology</span>
+                  <div className="flex flex-wrap gap-1.5">
                     {product.dds_delivery_tech.split('|').map((d, i) => (
-                      <span key={i} className="rounded-sm bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">{d.trim()}</span>
+                      <span key={i} className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-[11px] font-medium text-neutral-600 shadow-sm">{d.trim()}</span>
                     ))}
                   </div>
                 </div>
@@ -194,12 +207,13 @@ function ProductCard({ product, category, index }) {
           )}
         </AnimatePresence>
 
+        {/* Toggle button */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-400 transition-colors hover:text-primary-light"
+          className="mt-4 inline-flex items-center gap-1.5 self-start rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500 transition-all duration-300 hover:border-primary-light hover:bg-primary-light/5 hover:text-primary-light"
         >
           {expanded ? 'Show less' : 'View details'}
-          <svg className={`h-3 w-3 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`h-3 w-3 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -217,6 +231,36 @@ function NutraceuticalsContent() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeSubcategory, setActiveSubcategory] = useState(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const scrollRef = useRef(null);
+  const [cardHeight, setCardHeight] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const scrollTop = container.scrollTop;
+    const h = cardHeight || container.clientHeight;
+    const index = Math.round(scrollTop / h);
+    setActiveCardIndex(index);
+  }, [cardHeight]);
+
+  const scrollToCard = useCallback((index) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const h = cardHeight || container.clientHeight;
+    container.scrollTo({ top: index * h, behavior: 'smooth' });
+  }, [cardHeight]);
+
+  // Measure scroll container height for cards
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const measure = () => setCardHeight(container.clientHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [selectedCategory]);
 
   useEffect(() => { if (categoryParam) setSelectedCategory(categoryParam); }, [categoryParam]);
   useEffect(() => { fetch('/api/categories').then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) setCategories(data); }).catch(() => {}); }, []);
@@ -236,14 +280,14 @@ function NutraceuticalsContent() {
   return (
     <>
       {!selectedCategory && (
-        <section className="relative bg-white py-20 sm:py-26 lg:py-30">
-          <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+        <section className="relative flex h-[calc(100vh-90px)] flex-col bg-white">
+          <div className="mx-auto w-full max-w-[1500px] flex-shrink-0 px-5 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-14 max-w-[640px] lg:mb-16"
+              className="mb-10 max-w-[640px]"
             >
               <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
                 The Full Range
@@ -256,8 +300,16 @@ function NutraceuticalsContent() {
                 lines. Select one to see the formulations inside it.
               </p>
             </motion.div>
+          </div>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="relative min-h-0 flex-1">
+            {/* Scroll container */}
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="h-full snap-y snap-mandatory overflow-y-auto"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', '--card-height': cardHeight ? `${cardHeight}px` : '100%' }}
+            >
               {categories.map((cat, i) => (
                 <CategoryCard
                   key={cat.slug || i}
@@ -267,7 +319,29 @@ function NutraceuticalsContent() {
                 />
               ))}
             </div>
-          </div>
+
+            {/* Side dot navigation */}
+            <div className="absolute right-4 top-1/2 z-10 -translate-y-1/2 flex flex-col gap-2.5 sm:right-6">
+                {categories.map((cat, i) => (
+                  <button
+                    key={cat.slug || i}
+                    onClick={() => scrollToCard(i)}
+                    aria-label={cat.name}
+                    title={cat.name}
+                    className={`group relative h-3 w-3 rounded-full border-2 transition-all duration-300 ${
+                      activeCardIndex === i
+                        ? 'scale-125 border-primary-light bg-primary-light'
+                        : 'border-neutral-300 bg-transparent hover:border-primary-light hover:bg-primary-light/30'
+                    }`}
+                  >
+                    {/* Tooltip on hover */}
+                    <span className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-primary-dark px-2.5 py-1 font-heading text-[11px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      {cat.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
         </section>
       )}
 
@@ -291,51 +365,35 @@ function NutraceuticalsContent() {
                 All Categories
               </button>
 
-              {/* Category Header — photo banner */}
-              <div className="mb-10 overflow-hidden rounded-[6px]">
-                <div className="relative">
-                  <PlaceholderPhoto
-                    colorFrom={selectedCat.color_from}
-                    colorTo={selectedCat.color_to}
-                    icon={Icons[selectedCat.icon] || Icons.pill}
-                    className="h-[160px] w-full sm:h-[200px]"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/35 via-black/0 to-black/0 p-6 sm:p-8">
-                    <h2 className="font-heading text-[24px] font-bold uppercase leading-[1.05] tracking-[-0.5px] text-white drop-shadow sm:text-[30px]">
-                      {selectedCat.name}
-                    </h2>
-                  </div>
-                  <div className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 backdrop-blur-sm sm:right-6 sm:top-6">
-                    <span className="font-heading text-[11px] font-bold text-primary-dark">
-                      {selectedCat.product_count} formulations
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-4 max-w-[600px] text-[14px] leading-relaxed text-neutral-500">
-                  {selectedCat.description}
-                </p>
-              </div>
+              {/* Category Heading */}
+              <h2 className="mb-10 font-heading text-[24px] font-bold uppercase leading-[1.05] tracking-[-0.5px] text-primary-dark sm:text-[30px]">
+                {selectedCat.name}
+              </h2>
 
-              {/* Subcategory tabs — underline style */}
+              {/* Subcategory tabs — pill style */}
               {selectedCat.subcategories?.length > 0 && (
-                <div className="mb-8 -mx-1 flex gap-6 overflow-x-auto border-b border-neutral-100 px-1">
+                <div className="mb-8 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => setActiveSubcategory(null)}
-                    className={`flex-shrink-0 whitespace-nowrap border-b-2 pb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-colors ${
-                      !activeSubcategory ? 'border-primary-light text-primary-dark' : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                    className={`rounded-full px-5 py-2.5 font-heading text-[12px] font-semibold tracking-[0.5px] transition-all duration-300 ${
+                      !activeSubcategory
+                        ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
                     }`}
                   >
-                    All ({selectedCat.product_count})
+                    All <span className="ml-1 opacity-70">({selectedCat.product_count})</span>
                   </button>
                   {selectedCat.subcategories.map((sub) => (
                     <button
                       key={sub.id}
                       onClick={() => setActiveSubcategory(sub.id.toString())}
-                      className={`flex-shrink-0 whitespace-nowrap border-b-2 pb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-colors ${
-                        activeSubcategory === sub.id.toString() ? 'border-primary-light text-primary-dark' : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                      className={`rounded-full px-5 py-2.5 font-heading text-[12px] font-semibold tracking-[0.5px] transition-all duration-300 ${
+                        activeSubcategory === sub.id.toString()
+                          ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20'
+                          : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
                       }`}
                     >
-                      {sub.name} ({sub.product_count})
+                      {sub.name} <span className="ml-1 opacity-70">({sub.product_count})</span>
                     </button>
                   ))}
                 </div>

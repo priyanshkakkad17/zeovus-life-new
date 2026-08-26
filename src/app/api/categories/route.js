@@ -52,3 +52,38 @@ export async function POST(request) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
+
+// PUT — manage subcategories (add/delete)
+export async function PUT(request) {
+  try {
+    const body = await request.json();
+    const { action } = body;
+
+    if (action === 'add_subcategory') {
+      const { category_id, name, description, sort_order } = body;
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+      const result = await query(`
+        INSERT INTO subcategories (category_id, name, slug, description, sort_order)
+        VALUES (?, ?, ?, ?, ?)
+      `, [category_id, name, slug, description || null, sort_order || 0]);
+
+      return Response.json({ success: true, id: result.insertId });
+    }
+
+    if (action === 'delete_subcategory') {
+      const { subcategory_id } = body;
+
+      // Unlink products from this subcategory first
+      await query(`UPDATE products SET subcategory_id = NULL WHERE subcategory_id = ?`, [subcategory_id]);
+      // Delete subcategory
+      await query(`DELETE FROM subcategories WHERE id = ?`, [subcategory_id]);
+
+      return Response.json({ success: true });
+    }
+
+    return Response.json({ error: 'Unknown action' }, { status: 400 });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+}

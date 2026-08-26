@@ -6,7 +6,6 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ categories: 0, products: 0, verified: 0 });
   const [categories, setCategories] = useState([]);
-  const [setupStatus, setSetupStatus] = useState('idle'); // idle, loading, success, error
 
   useEffect(() => {
     fetchData();
@@ -21,27 +20,7 @@ export default function AdminDashboard() {
         const totalProducts = data.reduce((sum, c) => sum + (c.product_count || 0), 0);
         setStats({ categories: data.length, products: totalProducts, verified: totalProducts });
       }
-    } catch (err) {
-      // DB might not be set up yet
-    }
-  }
-
-  async function handleSetup() {
-    setSetupStatus('loading');
-    try {
-      const res = await fetch('/api/setup', { method: 'POST' });
-      const data = await res.json();
-      if (data.success) {
-        setSetupStatus('success');
-        // Seed categories
-        await fetch('/api/seed', { method: 'POST' });
-        await fetchData();
-      } else {
-        setSetupStatus('error');
-      }
-    } catch (err) {
-      setSetupStatus('error');
-    }
+    } catch (err) {}
   }
 
   return (
@@ -51,28 +30,6 @@ export default function AdminDashboard() {
         <h1 className="text-2xl font-display font-bold text-neutral-900">Dashboard</h1>
         <p className="text-neutral-500 text-sm mt-1">Manage your nutraceutical product catalog</p>
       </div>
-
-      {/* Setup Banner */}
-      {stats.categories === 0 && (
-        <div className="mb-8 bg-gradient-to-r from-primary-dark to-primary rounded-xl p-6 text-white">
-          <h3 className="font-display font-semibold text-lg mb-2">Database Setup</h3>
-          <p className="text-white/70 text-sm mb-4">
-            Initialize the database tables and seed the category data. Run this once to get started.
-          </p>
-          <button
-            onClick={handleSetup}
-            disabled={setupStatus === 'loading'}
-            className="px-5 py-2.5 bg-secondary text-primary-dark rounded-lg font-semibold text-sm hover:bg-secondary-dark transition-all disabled:opacity-50"
-          >
-            {setupStatus === 'loading' ? 'Setting up...' :
-             setupStatus === 'success' ? '✓ Setup Complete' :
-             setupStatus === 'error' ? 'Retry Setup' : 'Initialize Database'}
-          </button>
-          {setupStatus === 'error' && (
-            <p className="text-red-300 text-xs mt-2">Setup failed. Check your database connection settings.</p>
-          )}
-        </div>
-      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
@@ -160,7 +117,7 @@ export default function AdminDashboard() {
               {categories.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-neutral-400">
-                    No categories yet. Run database setup to get started.
+                    No categories found.
                   </td>
                 </tr>
               )}

@@ -88,6 +88,11 @@ a {
   background: #1F4015;
 }
 
+/* Hide scrollbar on snap containers */
+.snap-y::-webkit-scrollbar {
+  display: none;
+}
+
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
