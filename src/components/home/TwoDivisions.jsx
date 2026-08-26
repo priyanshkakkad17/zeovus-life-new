@@ -1,8 +1,14 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Shield, Heart } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CARDS = [
   {
@@ -38,16 +44,69 @@ const CARDS = [
 ];
 
 export default function TwoDivisions() {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const cardsRef = useRef(null);
+
+  useGSAP(() => {
+    const cards = cardsRef.current?.children;
+    if (!cards) return;
+
+    // Staggered card reveal on scroll — offset timing between the two
+    gsap.fromTo(
+      cards,
+      { y: 60, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
+        stagger: 0.18,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: 'top 80%',
+          end: 'top 40%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Subtle parallax offset between cards on scroll (first card moves slightly slower)
+    if (cards[0] && cards[1]) {
+      gsap.to(cards[0], {
+        yPercent: -3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+      gsap.to(cards[1], {
+        yPercent: 3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
+  }, { scope: sectionRef });
+
   return (
-    <section className="relative overflow-hidden bg-[#f5f9f6] py-16 sm:py-20 lg:py-24">
+    <section ref={sectionRef} className="relative overflow-hidden bg-[#f5f9f6] py-16 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
         {/* Heading */}
         <motion.div
+          ref={headingRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-14 text-center lg:mb-16"
         >
           <h2 className="mb-4 font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px]">
             Two ways we care for you.
@@ -59,23 +118,18 @@ export default function TwoDivisions() {
           </p>
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {CARDS.map((card, index) => {
+        {/* Cards — GSAP scroll-stagger target */}
+        <div ref={cardsRef} className="grid gap-6 md:grid-cols-2 lg:gap-8">
+          {CARDS.map((card) => {
             const Icon = card.icon;
             return (
-              <motion.div
+              <div
                 key={card.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.65, delay: index * 0.12 }}
-                className="group relative min-h-[440px] overflow-hidden rounded-[22px] md:min-h-[460px]"
-                style={{ willChange: 'transform' }}
+                className="group relative min-h-[440px] overflow-hidden rounded-[22px] opacity-0 will-change-transform md:min-h-[480px]"
               >
                 {/* Background image with zoom */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]"
                   style={{ backgroundImage: `url('${card.image}')` }}
                 />
 
@@ -89,15 +143,15 @@ export default function TwoDivisions() {
                   style={{ background: card.hoverOverlay }}
                 />
 
-                {/* Subtle lift shadow on hover */}
-                <div className="absolute inset-0 rounded-[22px] shadow-[0_4px_24px_rgba(0,0,0,0.10)] transition-shadow duration-[600ms] group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.22)]" />
+                {/* Lift shadow on hover */}
+                <div className="absolute inset-0 rounded-[22px] shadow-[0_4px_24px_rgba(0,0,0,0.10)] transition-shadow duration-[600ms] group-hover:shadow-[0_16px_48px_rgba(0,0,0,0.24)]" />
 
                 {/* Content */}
-                <div className="relative flex h-full min-h-[440px] flex-col justify-between p-8 md:min-h-[460px] md:p-12">
+                <div className="relative flex h-full min-h-[440px] flex-col justify-between p-8 md:min-h-[480px] md:p-12">
                   {/* Top */}
                   <div>
                     {/* Icon badge */}
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm ring-1 ring-white/20">
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm ring-1 ring-white/20 transition-all duration-500 group-hover:bg-white/15 group-hover:ring-white/30">
                       <Icon className="h-5 w-5 text-white/90" strokeWidth={1.5} />
                     </div>
 
@@ -139,7 +193,7 @@ export default function TwoDivisions() {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

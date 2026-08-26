@@ -4,6 +4,7 @@ import PortfolioHighlights from '@/components/home/PortfolioHighlights';
 import CapabilitiesSection from '@/components/home/CapabilitiesSection';
 import CertificationsSection from '@/components/home/CertificationsSection';
 import WorkingTogether from '@/components/home/WorkingTogether';
+import CTASection from '@/components/home/CTASection';
 
 export const metadata = {
   title: 'Zeovus Life — Nutraceutical & Cosmetic Manufacturer',
@@ -28,6 +29,7 @@ export default function Home() {
       <CapabilitiesSection />
       <CertificationsSection />
       <WorkingTogether />
+      <CTASection />
     </>
   );
 }

@@ -62,7 +62,7 @@ export default function WorkingTogether() {
         </div>
 
         {/* Staggered list layout — numbered, with progressive reveal */}
-        <div className="grid gap-0 divide-y divide-neutral-100 lg:divide-y-0">
+        <div className="grid gap-0">
           {options.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -76,9 +76,9 @@ export default function WorkingTogether() {
                   delay: index * 0.1,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="group relative py-8 first:pt-0 last:pb-0 lg:py-10"
+                className="group relative border-b border-neutral-100 py-8 first:border-t lg:py-10"
               >
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-8 lg:gap-12">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8 lg:gap-12">
                   {/* Number + Icon block */}
                   <div className="flex items-center gap-4 sm:w-[200px] sm:flex-shrink-0 lg:w-[240px]">
                     <span className="font-heading text-[48px] font-bold leading-none tracking-[-3px] text-neutral-200 transition-colors duration-500 group-hover:text-primary-light/30 lg:text-[56px]">
@@ -103,11 +103,11 @@ export default function WorkingTogether() {
                   <div className="mt-4 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
                     <Link
                       href="/contact"
-                      className="group/link inline-flex items-center gap-2 font-heading text-[12px] font-medium uppercase tracking-[1px] text-neutral-400 transition-colors duration-300 hover:text-primary-light"
+                      className="group/link inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-medium uppercase tracking-[1px] text-neutral-500 transition-all duration-300 hover:border-primary-light/40 hover:text-primary-light"
                     >
                       Enquire
                       <svg
-                        className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-1"
+                        className="h-3 w-3 transition-transform duration-300 group-hover/link:translate-x-0.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -122,8 +122,8 @@ export default function WorkingTogether() {
                   </div>
                 </div>
 
-                {/* Hover reveal bar — bottom edge */}
-                <div className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-primary-light/60 to-transparent transition-transform duration-700 ease-out-quint group-hover:scale-x-100 lg:block" />
+                {/* Hover accent — left vertical bar */}
+                <div className="absolute left-0 top-0 h-full w-[3px] origin-top scale-y-0 bg-primary-light transition-transform duration-600 ease-out-quint group-hover:scale-y-100" />
               </motion.div>
             );
           })}
