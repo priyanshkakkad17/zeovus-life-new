@@ -5,22 +5,22 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Icons
+// Icons — monochrome, currentColor driven
 const Icons = {
-  dna: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M2 15c6.667-6 13.333 0 20-6M2 9c6.667 6 13.333 0 20 6M4 4v2M8 4v4M12 4v2M16 4v4M20 4v2M4 18v2M8 16v4M12 18v2M16 16v4M20 18v2" strokeLinecap="round" /></svg>,
-  pill: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  gut: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2M8 14c1.5 0 2-1 3-1s1.5 1 3 1M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  heart: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  shield: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  brain: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M12 2a7 7 0 00-7 7c0 2 .5 3.5 2 5l1 1.5V19a2 2 0 002 2h4a2 2 0 002-2v-3.5L17 14c1.5-1.5 2-3 2-5a7 7 0 00-7-7zM9 22h6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  'shield-plus': () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m3-9c-1.928 1.557-4.378 2.484-7 2.626V9.75c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622V5.626A12.015 12.015 0 0112 3z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  bone: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M18.5 5.5a2.121 2.121 0 113 3L8.5 21.5a2.121 2.121 0 11-3-3L18.5 5.5zM5.5 5.5a2.121 2.121 0 100 3l13 13a2.121 2.121 0 100-3l-13-13z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  'heart-pulse': () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M19.5 12.572l-7.5 7.428-7.5-7.428A5 5 0 1112 5.006a5 5 0 017.5 7.566z" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 12h4l2-3 4 6 2-3h6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  zap: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  scale: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M12 3v18M3 7l3 9h12l3-9M6 16a3 3 0 006 0M12 16a3 3 0 006 0" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  sparkles: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  baby: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M12 2a4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 014-4zM12 14c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  leaf: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7"><path d="M6 21c3-3 7-3 9-6 2-3 3-9 3-9s-6 1-9 3c-3 2-3 6-6 9M8.5 15.5L3 21" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  dna: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M2 15c6.667-6 13.333 0 20-6M2 9c6.667 6 13.333 0 20 6M4 4v2M8 4v4M12 4v2M16 4v4M20 4v2M4 18v2M8 16v4M12 18v2M16 16v4M20 18v2" strokeLinecap="round" /></svg>,
+  pill: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  gut: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2M8 14c1.5 0 2-1 3-1s1.5 1 3 1M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  heart: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  shield: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  brain: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 2a7 7 0 00-7 7c0 2 .5 3.5 2 5l1 1.5V19a2 2 0 002 2h4a2 2 0 002-2v-3.5L17 14c1.5-1.5 2-3 2-5a7 7 0 00-7-7zM9 22h6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  'shield-plus': () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m3-9c-1.928 1.557-4.378 2.484-7 2.626V9.75c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622V5.626A12.015 12.015 0 0112 3z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  bone: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M18.5 5.5a2.121 2.121 0 113 3L8.5 21.5a2.121 2.121 0 11-3-3L18.5 5.5zM5.5 5.5a2.121 2.121 0 100 3l13 13a2.121 2.121 0 100-3l-13-13z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  'heart-pulse': () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M19.5 12.572l-7.5 7.428-7.5-7.428A5 5 0 1112 5.006a5 5 0 017.5 7.566z" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 12h4l2-3 4 6 2-3h6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  zap: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  scale: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 3v18M3 7l3 9h12l3-9M6 16a3 3 0 006 0M12 16a3 3 0 006 0" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  sparkles: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  baby: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 2a4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 014-4zM12 14c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  leaf: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M6 21c3-3 7-3 9-6 2-3 3-9 3-9s-6 1-9 3c-3 2-3 6-6 9M8.5 15.5L3 21" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 };
 
 const staticCategories = [
@@ -40,115 +40,168 @@ const staticCategories = [
   { id: 14, slug: 'specialty', name: 'Specialty Care', description: 'Ayurvedic, botanical and condition-specific formulations.', icon: 'leaf', color_from: '#059669', color_to: '#1F4015', product_count: 24, subcategories: [] },
 ];
 
-function CategoryCard({ category, index, onClick }) {
-  const IconComponent = Icons[category.icon] || Icons.pill;
+// Placeholder visual — stands in for real product/category photography.
+// Swap for a real <img src={category.image} /> once photography is available.
+function PlaceholderPhoto({ colorFrom, colorTo, icon: IconComponent, className = '' }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      whileHover={{ y: -6, scale: 1.02, boxShadow: '0 20px 50px rgba(31,64,21,0.12)' }}
-      onClick={onClick}
-      className="group relative cursor-pointer"
-      style={{ transition: 'box-shadow 0.4s ease' }}
+    <div
+      className={`relative flex items-center justify-center overflow-hidden ${className}`}
+      style={{ background: `linear-gradient(135deg, ${colorFrom}1A, ${colorTo}2A)` }}
     >
-      <div className="relative h-full bg-white rounded-[20px] overflow-hidden border border-neutral-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.05)]">
-        {/* Left accent bar */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 group-hover:w-2 transition-all duration-500 rounded-l-[20px]" style={{ background: `linear-gradient(180deg, ${category.color_from}, ${category.color_to})` }} />
-        
-        <div className="pl-7 pr-6 py-7">
-          {/* Top row: icon + count */}
-          <div className="flex items-start justify-between mb-5">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-md" style={{ background: `linear-gradient(135deg, ${category.color_from}12, ${category.color_to}12)`, color: category.color_from }}>
-              <IconComponent />
-            </div>
-            <div className="text-right">
-              <span className="text-3xl font-display font-bold text-primary-dark editorial-number">{category.product_count}</span>
-              <p className="text-[10px] text-neutral-400 uppercase tracking-[0.15em] font-semibold mt-0.5">SKUs</p>
-            </div>
-          </div>
-
-          {/* Name */}
-          <h3 className="font-display font-bold text-[17px] text-primary-dark mb-2 leading-tight group-hover:text-primary-light transition-colors duration-300">
-            {category.name}
-          </h3>
-
-          {/* Description */}
-          <p className="text-[13px] text-neutral-500 leading-relaxed mb-5 line-clamp-2">
-            {category.description}
-          </p>
-
-          {/* Subcategory tags */}
-          {category.subcategories?.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-5">
-              {category.subcategories.slice(0, 2).map((sub, i) => (
-                <span key={i} className="text-[11px] px-2.5 py-1 rounded-full bg-neutral-100 text-neutral-600 font-medium">{sub.name}</span>
-              ))}
-              {category.subcategories.length > 2 && (
-                <span className="text-[11px] px-2.5 py-1 rounded-full bg-primary-light/10 text-primary-light font-medium">+{category.subcategories.length - 2}</span>
-              )}
-            </div>
-          )}
-
-          {/* CTA */}
-          <div className="flex items-center gap-2 text-[13px] font-semibold transition-all duration-300 group-hover:gap-3" style={{ color: category.color_from }}>
-            <span>Explore</span>
-            <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </div>
-        </div>
+      <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.15]" aria-hidden="true">
+        <defs>
+          <pattern id={`ph-${colorFrom.replace('#', '')}`} x="0" y="0" width="34" height="30" patternUnits="userSpaceOnUse">
+            <polygon points="17,1 32,9 32,21 17,29 2,21 2,9" fill="none" stroke={colorTo} strokeWidth="0.7" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#ph-${colorFrom.replace('#', '')})`} />
+      </svg>
+      <div
+        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm sm:h-16 sm:w-16"
+        style={{ color: colorFrom }}
+      >
+        {IconComponent && <IconComponent />}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-function ProductCard({ product, index }) {
+function CategoryCard({ category, index, onClick }) {
+  const IconComponent = Icons[category.icon] || Icons.pill;
+  return (
+    <motion.button
+      type="button"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: (index % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      onClick={onClick}
+      className="group relative flex flex-col text-left"
+    >
+      <div className="relative overflow-hidden rounded-[6px]">
+        <PlaceholderPhoto
+          colorFrom={category.color_from}
+          colorTo={category.color_to}
+          icon={IconComponent}
+          className="aspect-[5/4] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
+        />
+        {/* Count badge */}
+        <div className="absolute right-3 top-3 rounded-full bg-white/85 px-3 py-1 backdrop-blur-sm">
+          <span className="font-heading text-[11px] font-bold text-primary-dark">
+            {category.product_count} formulations
+          </span>
+        </div>
+      </div>
+
+      <div className="pt-4">
+        <h3 className="font-heading text-[16px] font-semibold leading-snug text-primary-dark transition-colors duration-300 group-hover:text-primary-light">
+          {category.name}
+        </h3>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500 line-clamp-2">
+          {category.description}
+        </p>
+        <div className="mt-3 flex items-center gap-2 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-primary-light">
+          <span>Explore</span>
+          <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </div>
+      </div>
+    </motion.button>
+  );
+}
+
+function ProductCard({ product, category, index }) {
   const [expanded, setExpanded] = useState(false);
+  const IconComponent = (category && Icons[category.icon]) || Icons.pill;
+  const colorFrom = category?.color_from || '#15A859';
+  const colorTo = category?.color_to || '#1A475C';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.02 }}
-      className="group bg-white rounded-2xl border border-neutral-200/60 shadow-sm overflow-hidden hover:shadow-md hover:border-neutral-300/60 transition-all duration-300"
+      transition={{ duration: 0.4, delay: (index % 9) * 0.04, ease: [0.22, 1, 0.36, 1] }}
+      className="group flex flex-col"
     >
-      <div className="p-5 md:p-6">
-        <div className="flex items-start justify-between gap-3 mb-2.5">
-          <h4 className="font-display font-semibold text-[15px] text-primary-dark leading-tight">{product.name}</h4>
-          {product.brand_line && <span className="shrink-0 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-primary-light/10 text-primary-light">{product.brand_line}</span>}
+      <div className="overflow-hidden rounded-[6px]">
+        <PlaceholderPhoto
+          colorFrom={colorFrom}
+          colorTo={colorTo}
+          icon={IconComponent}
+          className="aspect-[4/3] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
+        />
+      </div>
+
+      <div className="pt-4">
+        <div className="flex items-start justify-between gap-3">
+          <h4 className="font-heading text-[15px] font-semibold leading-tight text-primary-dark">{product.name}</h4>
+          {product.brand_line && (
+            <span className="flex-shrink-0 whitespace-nowrap font-heading text-[10px] font-semibold uppercase tracking-[0.5px] text-primary-light">
+              {product.brand_line}
+            </span>
+          )}
         </div>
-        <p className="text-[13px] text-neutral-500 mb-3 leading-relaxed">{product.primary_benefit}</p>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{product.primary_benefit}</p>
+
         {product.key_actives && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
+          <div className="mt-3 flex flex-wrap gap-1.5">
             {product.key_actives.split(',').slice(0, expanded ? 100 : 3).map((a, i) => (
-              <span key={i} className="text-[11px] px-2 py-0.5 rounded-md bg-neutral-50 text-neutral-600 border border-neutral-100 font-medium">{a.trim()}</span>
+              <span key={i} className="rounded-sm border border-neutral-200 px-2 py-0.5 text-[11px] font-medium text-neutral-600">
+                {a.trim()}
+              </span>
             ))}
             {!expanded && product.key_actives.split(',').length > 3 && (
-              <button onClick={() => setExpanded(true)} className="text-[11px] px-2 py-0.5 rounded-md bg-primary-light/10 text-primary-light font-semibold hover:bg-primary-light/20 transition-colors">+{product.key_actives.split(',').length - 3}</button>
+              <button
+                onClick={() => setExpanded(true)}
+                className="rounded-sm px-2 py-0.5 text-[11px] font-semibold text-primary-light transition-colors hover:bg-primary-light/10"
+              >
+                +{product.key_actives.split(',').length - 3}
+              </button>
             )}
           </div>
         )}
+
         <AnimatePresence>
           {expanded && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-              {product.secondary_benefits && <p className="text-[12px] text-neutral-400 mt-2 pt-2 border-t border-neutral-100"><span className="font-semibold text-neutral-500">Also supports:</span> {product.secondary_benefits}</p>}
+              {product.secondary_benefits && (
+                <p className="mt-3 border-t border-neutral-100 pt-3 text-[12px] leading-relaxed text-neutral-500">
+                  <span className="font-semibold text-neutral-600">Also supports — </span>{product.secondary_benefits}
+                </p>
+              )}
               {product.manufacturing_formats && (
-                <div className="mt-3 pt-3 border-t border-neutral-100">
-                  <span className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 font-semibold">Formats</span>
-                  <div className="flex flex-wrap gap-1 mt-1.5">{product.manufacturing_formats.split('|').map((f, i) => <span key={i} className="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-medium">{f.trim()}</span>)}</div>
+                <div className="mt-3 border-t border-neutral-100 pt-3">
+                  <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Formats</span>
+                  <div className="mt-1.5 flex flex-wrap gap-1.5">
+                    {product.manufacturing_formats.split('|').map((f, i) => (
+                      <span key={i} className="rounded-sm bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">{f.trim()}</span>
+                    ))}
+                  </div>
                 </div>
               )}
               {product.dds_delivery_tech && (
-                <div className="mt-3 pt-3 border-t border-neutral-100">
-                  <span className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 font-semibold">Delivery Technology</span>
-                  <div className="flex flex-wrap gap-1 mt-1.5">{product.dds_delivery_tech.split('|').map((d, i) => <span key={i} className="text-[10px] px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-medium">{d.trim()}</span>)}</div>
+                <div className="mt-3 border-t border-neutral-100 pt-3">
+                  <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Delivery Technology</span>
+                  <div className="mt-1.5 flex flex-wrap gap-1.5">
+                    {product.dds_delivery_tech.split('|').map((d, i) => (
+                      <span key={i} className="rounded-sm bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">{d.trim()}</span>
+                    ))}
+                  </div>
                 </div>
               )}
             </motion.div>
           )}
         </AnimatePresence>
-        <button onClick={() => setExpanded(!expanded)} className="mt-3 text-[12px] text-neutral-400 hover:text-primary-light font-semibold flex items-center gap-1 transition-colors">
+
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-3 flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-400 transition-colors hover:text-primary-light"
+        >
           {expanded ? 'Show less' : 'View details'}
-          <svg className={`w-3.5 h-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          <svg className={`h-3 w-3 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
       </div>
     </motion.div>
@@ -183,18 +236,35 @@ function NutraceuticalsContent() {
   return (
     <>
       {!selectedCategory && (
-        <section className="relative py-20 md:py-28 bg-gradient-to-br from-neutral-100 via-neutral-50 to-neutral-100/50 overflow-hidden">
-          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-primary/[0.02] rounded-full blur-3xl" />
-          <div className="container relative z-10">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-              <p className="text-primary-light font-semibold text-[11px] tracking-[0.25em] uppercase mb-4">14 Health Categories</p>
-              <h2 className="text-[36px] md:text-[48px] font-display font-bold text-primary-dark leading-[1.1] tracking-tight mb-5">268+ Proven Formulations</h2>
-              <p className="text-neutral-600 max-w-2xl mx-auto text-[16px] md:text-[17px] leading-[1.7]">Each developed with clinical rigor. Manufactured to international standards. Ready to scale for your brand.</p>
+        <section className="relative bg-white py-20 sm:py-26 lg:py-30">
+          <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-14 max-w-[640px] lg:mb-16"
+            >
+              <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
+                The Full Range
+              </p>
+              <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
+                Browse by health category.
+              </h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                Every category is formulated in-house and manufactured on certified
+                lines. Select one to see the formulations inside it.
+              </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {categories.map((cat, i) => (
-                <CategoryCard key={cat.slug || i} category={cat} index={i} onClick={() => { setSelectedCategory(cat.slug); setActiveSubcategory(null); setSearchTerm(''); }} />
+                <CategoryCard
+                  key={cat.slug || i}
+                  category={cat}
+                  index={i}
+                  onClick={() => { setSelectedCategory(cat.slug); setActiveSubcategory(null); setSearchTerm(''); }}
+                />
               ))}
             </div>
           </div>
@@ -203,64 +273,127 @@ function NutraceuticalsContent() {
 
       <AnimatePresence mode="wait">
         {selectedCategory && selectedCat && (
-          <motion.section key={selectedCategory} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative py-16 md:py-24 bg-white">
-            <div className="container">
-              <button onClick={() => { setSelectedCategory(null); setProducts([]); setSearchTerm(''); setActiveSubcategory(null); }} className="flex items-center gap-2 text-neutral-500 hover:text-primary-dark mb-10 transition-colors group">
-                <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                <span className="text-sm font-medium">All Categories</span>
+          <motion.section
+            key={selectedCategory}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="relative bg-white py-16 sm:py-20 lg:py-24"
+          >
+            <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+              <button
+                onClick={() => { setSelectedCategory(null); setProducts([]); setSearchTerm(''); setActiveSubcategory(null); }}
+                className="group mb-10 inline-flex items-center gap-2 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-neutral-500 transition-colors hover:text-primary-dark"
+              >
+                <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5m0 0l6-6m-6 6l6 6" />
+                </svg>
+                All Categories
               </button>
 
-              {/* Category Header */}
-              <div className="flex items-start gap-5 mb-10">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0" style={{ background: `linear-gradient(135deg, ${selectedCat.color_from}15, ${selectedCat.color_to}15)`, color: selectedCat.color_from }}>
-                  {Icons[selectedCat.icon] ? Icons[selectedCat.icon]() : null}
+              {/* Category Header — photo banner */}
+              <div className="mb-10 overflow-hidden rounded-[6px]">
+                <div className="relative">
+                  <PlaceholderPhoto
+                    colorFrom={selectedCat.color_from}
+                    colorTo={selectedCat.color_to}
+                    icon={Icons[selectedCat.icon] || Icons.pill}
+                    className="h-[160px] w-full sm:h-[200px]"
+                  />
+                  <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/35 via-black/0 to-black/0 p-6 sm:p-8">
+                    <h2 className="font-heading text-[24px] font-bold uppercase leading-[1.05] tracking-[-0.5px] text-white drop-shadow sm:text-[30px]">
+                      {selectedCat.name}
+                    </h2>
+                  </div>
+                  <div className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 backdrop-blur-sm sm:right-6 sm:top-6">
+                    <span className="font-heading text-[11px] font-bold text-primary-dark">
+                      {selectedCat.product_count} formulations
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-[28px] md:text-[36px] font-display font-bold text-primary-dark leading-[1.1] tracking-tight">{selectedCat.name}</h2>
-                  <p className="text-neutral-500 text-[15px] mt-2">{selectedCat.description}</p>
-                  <p className="text-primary-light font-semibold text-[13px] mt-2">{selectedCat.product_count} formulations available</p>
-                </div>
+                <p className="mt-4 max-w-[600px] text-[14px] leading-relaxed text-neutral-500">
+                  {selectedCat.description}
+                </p>
               </div>
 
-              {/* Subcategory Tabs */}
+              {/* Subcategory tabs — underline style */}
               {selectedCat.subcategories?.length > 0 && (
-                <div className="mb-8 overflow-x-auto -mx-4 px-4">
-                  <div className="flex gap-2 pb-2 min-w-max">
-                    <button onClick={() => setActiveSubcategory(null)} className={`px-5 py-2.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap border ${!activeSubcategory ? 'bg-primary-dark text-white border-primary-dark shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'}`}>
-                      All ({selectedCat.product_count})
+                <div className="mb-8 -mx-1 flex gap-6 overflow-x-auto border-b border-neutral-100 px-1">
+                  <button
+                    onClick={() => setActiveSubcategory(null)}
+                    className={`flex-shrink-0 whitespace-nowrap border-b-2 pb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-colors ${
+                      !activeSubcategory ? 'border-primary-light text-primary-dark' : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                    }`}
+                  >
+                    All ({selectedCat.product_count})
+                  </button>
+                  {selectedCat.subcategories.map((sub) => (
+                    <button
+                      key={sub.id}
+                      onClick={() => setActiveSubcategory(sub.id.toString())}
+                      className={`flex-shrink-0 whitespace-nowrap border-b-2 pb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-colors ${
+                        activeSubcategory === sub.id.toString() ? 'border-primary-light text-primary-dark' : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                      }`}
+                    >
+                      {sub.name} ({sub.product_count})
                     </button>
-                    {selectedCat.subcategories.map(sub => (
-                      <button key={sub.id} onClick={() => setActiveSubcategory(sub.id.toString())} className={`px-5 py-2.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap border ${activeSubcategory === sub.id.toString() ? 'bg-primary-dark text-white border-primary-dark shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'}`}>
-                        {sub.name} ({sub.product_count})
-                      </button>
-                    ))}
-                  </div>
+                  ))}
                 </div>
               )}
 
-              {/* Search */}
-              <div className="relative max-w-md mb-10">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                <input type="text" placeholder="Search products, actives, brands..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light/30 focus:border-primary-light transition-all" />
+              {/* Search — minimal underline field */}
+              <div className="relative mb-10 max-w-md">
+                <svg className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search products, actives, brands..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full border-b border-neutral-200 bg-transparent py-2.5 pl-7 text-[14px] text-primary-dark placeholder:text-neutral-400 focus:border-primary-light focus:outline-none"
+                />
               </div>
 
-              {/* Products Grid */}
+              {/* Products */}
               {loading ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">{[...Array(6)].map((_, i) => <div key={i} className="bg-neutral-100 rounded-2xl p-6 h-44 animate-pulse" />)}</div>
+                <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="aspect-[4/3] w-full rounded-[6px] bg-neutral-100" />
+                      <div className="mt-4 h-3 w-2/3 rounded-sm bg-neutral-100" />
+                      <div className="mt-2 h-3 w-1/2 rounded-sm bg-neutral-100" />
+                    </div>
+                  ))}
+                </div>
               ) : products.length > 0 ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+                <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                  {products.map((p, i) => (
+                    <ProductCard key={p.id} product={p} category={selectedCat} index={i} />
+                  ))}
                 </div>
               ) : (
-                <div className="text-center py-20">
-                  <div className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${selectedCat.color_from}10, ${selectedCat.color_to}10)`, color: selectedCat.color_from }}>
+                <div className="border-t border-neutral-100 py-16 text-center">
+                  <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-100 text-primary-dark">
                     {Icons[selectedCat.icon] ? Icons[selectedCat.icon]() : null}
                   </div>
-                  <h3 className="text-xl font-display font-bold text-neutral-800 mb-2">{selectedCat.product_count}+ Formulations</h3>
-                  <p className="text-neutral-500 max-w-md mx-auto mb-8">Contact us for the complete catalog with detailed specification sheets and customization options.</p>
-                  <Link href="/contact" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-semibold transition-all hover:shadow-lg" style={{ background: `linear-gradient(135deg, ${selectedCat.color_from}, ${selectedCat.color_to})` }}>
-                    Request Catalog
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  <h3 className="font-heading text-[18px] font-bold text-primary-dark">
+                    {selectedCat.product_count}+ Formulations
+                  </h3>
+                  <p className="mx-auto mt-2 mb-7 max-w-md text-[14px] leading-relaxed text-neutral-500">
+                    Contact us for the complete catalog with detailed specification sheets and customization options.
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light"
+                  >
+                    <span className="relative">
+                      Request Catalog
+                      <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
+                    </span>
+                    <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </Link>
                 </div>
               )}
@@ -274,33 +407,138 @@ function NutraceuticalsContent() {
 
 export default function Nutraceuticals() {
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative min-h-[70vh] flex items-center bg-gradient-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-white blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-secondary blur-3xl" />
-        </div>
-        <div className="container relative z-10 pt-24 pb-16">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">Formulated to Deliver.</h1>
-            <p className="text-xl text-white/80 max-w-3xl">268 clinically-backed formulations across 14 health categories. Engineered for bioavailability. Built for your brand.</p>
-          </motion.div>
+    <div className="bg-white">
+      {/* ============ HERO ============ */}
+      <section className="relative overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+          <defs>
+            <pattern id="nutra-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+              <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#nutra-hex-grid)" />
+        </svg>
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="mb-5 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/70">
+                Nutraceuticals
+              </p>
+              <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+                Formulated
+                <br />
+                <span className="text-secondary">to deliver.</span>
+              </h1>
+              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                268+ clinically-backed formulations across 14 health categories.
+                Engineered for bioavailability. Manufactured to certified standards.
+                Built for your brand.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link href="/contact">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-block cursor-pointer rounded-[2px] bg-secondary px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-primary-dark transition-colors hover:bg-secondary-dark"
+                  >
+                    ENQUIRE NOW
+                  </motion.span>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Stat column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+            >
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">268+</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Formulations</span>
+              </div>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">14</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Categories</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      <Suspense fallback={<div className="py-20"><div className="container"><div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">{[...Array(8)].map((_, i) => <div key={i} className="bg-white rounded-[20px] p-7 h-56 border border-neutral-200/60 animate-pulse" />)}</div></div></div>}>
+      <Suspense fallback={
+        <div className="bg-white py-20">
+          <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+            <div className="grid gap-x-12 lg:grid-cols-2">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="h-20 animate-pulse border-b border-neutral-100 py-5">
+                  <div className="h-3 w-2/3 rounded-sm bg-neutral-100" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      }>
         <NutraceuticalsContent />
       </Suspense>
 
-      {/* CTA */}
-      <section className="section-py bg-primary-dark text-white">
-        <div className="container text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Bring us a formulation brief or bring us a problem.</h2>
-            <p className="text-neutral-300 mb-8 max-w-2xl mx-auto">We'll work with you to develop the right formulation and bring it to market.</p>
-            <Link href="/contact" className="btn-primary bg-secondary text-primary-dark hover:bg-secondary-dark">Enquire Now</Link>
-          </motion.div>
+      {/* ============ CLOSING CTA ============ */}
+      <section className="relative overflow-hidden bg-primary-dark py-20 text-white sm:py-26 lg:py-30">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(21,168,89,0.08) 0%, transparent 70%)' }}
+        />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full border border-white/[0.03]" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-[200px] w-[200px] rounded-full border border-white/[0.02]" />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-center lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-10 max-w-[640px] text-center lg:mb-0 lg:text-left"
+            >
+              <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/60">
+                Bring us the brief
+              </p>
+              <h2 className="mb-5 font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] sm:text-[40px] lg:text-[46px]">
+                Bring us a formulation brief —
+                <br className="hidden sm:block" /> or bring us a problem.
+              </h2>
+              <p className="max-w-[480px] text-[15px] leading-relaxed text-neutral-300 sm:text-[16px] lg:mx-0 mx-auto">
+                We'll work with you to develop the right formulation and bring it to market.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Link href="/contact">
+                <motion.span
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex cursor-pointer items-center gap-3 rounded-[3px] bg-secondary px-7 py-4 font-heading text-[12px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:bg-secondary-dark sm:px-8"
+                >
+                  Enquire Now
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 17L17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                </motion.span>
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>
