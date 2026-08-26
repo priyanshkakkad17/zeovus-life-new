@@ -996,34 +996,6 @@ export default function OurCompany() {
         </div>
       </section>
 
-      {/* Closing CTA */}
-      <section className="section-py bg-primary-dark text-white">
-        <div className="container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
-              Want to know how we take a formulation from lab to your shelf?
-            </h2>
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
-              <Link 
-                href="/contact" 
-                className="inline-flex items-center px-6 py-3 rounded-lg font-medium text-[15px] bg-[#1a2e1a] text-white border border-white/20 hover:bg-[#243524] transition-all duration-300"
-              >
-                Request a Quote
-              </Link>
-              <Link 
-                href="/contact" 
-                className="inline-flex items-center px-6 py-3 rounded-lg font-medium text-[15px] bg-transparent text-white border border-white hover:bg-white hover:text-primary-dark transition-all duration-300"
-              >
-                Enquire About Private Label
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 }
