@@ -18,14 +18,14 @@ const DB_CONFIG = {
 };
 
 const CATEGORIES = [
-  { slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations designed to support healthy ageing, cellular vitality and antioxidant protection at the molecular level.', icon: 'dna', color_from: '#9CCD62', color_to: '#15A859', sort_order: 1 },
-  { slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins engineered for complete nutritional coverage across demographics.', icon: 'pill', color_from: '#15A859', color_to: '#1A475C', sort_order: 2 },
-  { slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes formulated for optimal gut microbiome balance.', icon: 'gut', color_from: '#1A475C', color_to: '#15A859', sort_order: 3 },
-  { slug: 'womens-health', name: "Women's Health", description: "Specialized formulations addressing women's unique nutritional needs across every life stage.", icon: 'heart', color_from: '#E879A8', color_to: '#9CCD62', sort_order: 4 },
-  { slug: 'mens-health', name: "Men's Health", description: "Targeted solutions for men's vitality, prostate health, testosterone support and performance optimization.", icon: 'shield', color_from: '#1A475C', color_to: '#1F4015', sort_order: 5 },
-  { slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic, adaptogenic and sleep-support formulations backed by neuroscience for mental wellness.', icon: 'brain', color_from: '#7C3AED', color_to: '#1A475C', sort_order: 6 },
-  { slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations combining vitamins, minerals, and clinically studied herbal extracts.', icon: 'shield-plus', color_from: '#DC2626', color_to: '#F97316', sort_order: 7 },
-  { slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Comprehensive bone mineralization and joint lubrication support with clinically validated ingredients.', icon: 'bone', color_from: '#0891B2', color_to: '#1A475C', sort_order: 8 },
+  { slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations designed to support healthy ageing, cellular vitality and antioxidant protection at the molecular level.', icon: 'dna', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-1.png', color_from: '#9CCD62', color_to: '#15A859', sort_order: 1 },
+  { slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins engineered for complete nutritional coverage across demographics.', icon: 'pill', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868214/nura-2.png', color_from: '#15A859', color_to: '#1A475C', sort_order: 2 },
+  { slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes formulated for optimal gut microbiome balance.', icon: 'gut', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-3.png', color_from: '#1A475C', color_to: '#15A859', sort_order: 3 },
+  { slug: 'womens-health', name: "Women's Health", description: "Specialized formulations addressing women's unique nutritional needs across every life stage.", icon: 'heart', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868216/nura-4.png', color_from: '#E879A8', color_to: '#9CCD62', sort_order: 4 },
+  { slug: 'mens-health', name: "Men's Health", description: "Targeted solutions for men's vitality, prostate health, testosterone support and performance optimization.", icon: 'shield', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-5.png', color_from: '#1A475C', color_to: '#1F4015', sort_order: 5 },
+  { slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic, adaptogenic and sleep-support formulations backed by neuroscience for mental wellness.', icon: 'brain', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868231/nura-6.png', color_from: '#7C3AED', color_to: '#1A475C', sort_order: 6 },
+  { slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations combining vitamins, minerals, and clinically studied herbal extracts.', icon: 'shield-plus', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-7.png', color_from: '#DC2626', color_to: '#F97316', sort_order: 7 },
+  { slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Comprehensive bone mineralization and joint lubrication support with clinically validated ingredients.', icon: 'bone', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868229/nura-8.png', color_from: '#0891B2', color_to: '#1A475C', sort_order: 8 },
   { slug: 'heart-health', name: 'Heart Health', description: 'Cardiovascular support formulations with omega-3s, antioxidants and heart-protective nutrients.', icon: 'heart-pulse', color_from: '#E11D48', color_to: '#9CCD62', sort_order: 9 },
   { slug: 'energy-sports', name: 'Energy, Sports & Recovery', description: 'Performance-grade formulations for athletes and active lifestyles.', icon: 'zap', color_from: '#F59E0B', color_to: '#15A859', sort_order: 10 },
   { slug: 'weight-management', name: 'Weight Management', description: 'Science-backed thermogenic, appetite-modulating and metabolic formulations for healthy weight management.', icon: 'scale', color_from: '#84CC16', color_to: '#15A859', sort_order: 11 },
@@ -191,6 +191,7 @@ async function main() {
       name VARCHAR(255) NOT NULL,
       description TEXT,
       icon VARCHAR(50) DEFAULT NULL,
+      image VARCHAR(2048) DEFAULT NULL,
       color_from VARCHAR(50) DEFAULT NULL,
       color_to VARCHAR(50) DEFAULT NULL,
       sort_order INT DEFAULT 0,
@@ -264,8 +265,8 @@ async function main() {
     const categoryIds = [];
     for (const cat of CATEGORIES) {
       const [result] = await connection.query(
-        `INSERT INTO categories (slug, name, description, icon, color_from, color_to, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [cat.slug, cat.name, cat.description, cat.icon, cat.color_from, cat.color_to, cat.sort_order]
+        `INSERT INTO categories (slug, name, description, icon, image, color_from, color_to, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [cat.slug, cat.name, cat.description, cat.icon, cat.image || null, cat.color_from, cat.color_to, cat.sort_order]
       );
       categoryIds.push(result.insertId);
     }
