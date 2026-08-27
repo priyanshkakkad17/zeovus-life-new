@@ -32,14 +32,14 @@ const cosmeticsFormats = [
 ];
 
 const processSteps = [
-  { step: 1, title: 'Consultation', description: "Goal, audience and format. We start by understanding what the product needs to do, who it's for, and what format is to be built." },
-  { step: 2, title: 'Formulation', description: "In-house R&D builds an evidence-based formula with particle engineering when standard raw materials won't do the job." },
-  { step: 3, title: 'Ingredient Selection', description: 'Choosing which ingredients and forms meet our potency and bioavailability standards.' },
-  { step: 4, title: 'PO & Kickoff', description: 'Production begins once the order is confirmed. Procurement, scheduling and production planning all start at the same time.' },
-  { step: 5, title: 'Procurement', description: 'Ordering and shipping the ingredients chosen, including made-to-order and temperature-sensitive actives.' },
-  { step: 6, title: 'Manufacturing', description: 'The production run itself, across the chosen format — granulating, encapsulating, or emulsifying.' },
-  { step: 7, title: 'QC & Testing', description: 'Every batch is tested against the original formula and for long-term stability, through ZQA.' },
-  { step: 8, title: 'Packaging & Delivery', description: 'The final step is labelling, packaging and shipping the finished product ready for shelf.' },
+  { step: 1, title: 'Consultation', description: "Goal, audience and format. We start by understanding what the product needs to do, who it's for, and what format is to be built.", image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868035/Consultation.png' },
+  { step: 2, title: 'Formulation', description: "In-house R&D builds an evidence-based formula with particle engineering when standard raw materials won't do the job.", image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868039/Formulation.png' },
+  { step: 3, title: 'Ingredient Selection', description: 'Choosing which ingredients and forms meet our potency and bioavailability standards.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787869644/Ingredient_Selection.png' },
+  { step: 4, title: 'PO & Kickoff', description: 'Production begins once the order is confirmed. Procurement, scheduling and production planning all start at the same time.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868037/PO_Kickoff.png' },
+  { step: 5, title: 'Procurement', description: 'Ordering and shipping the ingredients chosen, including made-to-order and temperature-sensitive actives.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868039/Procurement.png' },
+  { step: 6, title: 'Manufacturing', description: 'The production run itself, across the chosen format — granulating, encapsulating, or emulsifying.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868037/Manufacturing.png' },
+  { step: 7, title: 'QC & Testing', description: 'Every batch is tested against the original formula and for long-term stability, through ZQA.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868058/QC_Testing.png' },
+  { step: 8, title: 'Packaging & Delivery', description: 'The final step is labelling, packaging and shipping the finished product ready for shelf.', image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868037/Packaging_Delivery.png' },
 ];
 
 const formulationScience = [
@@ -539,25 +539,43 @@ export default function Capabilities() {
         </div>
 
         <div ref={horizontalStageRef} className="relative lg:h-screen lg:overflow-hidden">
-          <div className="flex h-full items-center">
+          <div className="flex h-full items-end">
             <div
               ref={trackRef}
-              className="flex gap-6 overflow-x-auto px-5 pb-10 snap-x snap-mandatory sm:gap-8 sm:px-8 lg:snap-none lg:overflow-visible lg:px-12 lg:pb-0"
+              className="flex items-end gap-5 overflow-x-auto px-5 pb-10 snap-x snap-mandatory sm:gap-6 sm:px-8 lg:snap-none lg:overflow-visible lg:px-12 lg:pb-12"
             >
               {processSteps.map((item) => (
                 <div
                   key={item.step}
-                  className="group relative w-[260px] flex-shrink-0 snap-start border-t-2 border-neutral-200 pt-6 transition-colors duration-500 hover:border-primary-light sm:w-[300px] lg:w-[360px] lg:pt-8"
+                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[380px]"
                 >
-                  <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[76px]">
-                    {String(item.step).padStart(2, '0')}
-                  </span>
-                  <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
-                    {item.title}
-                  </h4>
-                  <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-neutral-600">
-                    {item.description}
-                  </p>
+                  {/* Text content — original layout */}
+                  <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-8">
+                    <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[76px]">
+                      {String(item.step).padStart(2, '0')}
+                    </span>
+                    <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
+                      {item.title}
+                    </h4>
+                    <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-neutral-600">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Image — 4:5 aspect ratio, square edges */}
+                  <div className="mt-5">
+                    {item.image ? (
+                      <div className="overflow-hidden aspect-[3/4]">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-[3/4]" />
+                    )}
+                  </div>
                 </div>
               ))}
               {/* trailing spacer for pinned desktop track */}
@@ -566,7 +584,7 @@ export default function Capabilities() {
           </div>
 
           {/* Progress bar — desktop pinned mode only */}
-          <div className="absolute bottom-10 left-12 right-12 hidden h-[2px] bg-neutral-200 lg:block">
+          <div className="absolute bottom-0 left-12 right-12 hidden h-[2px] bg-neutral-200 lg:block">
             <div ref={progressRef} className="h-full origin-left scale-x-0 bg-primary-light" />
           </div>
         </div>
