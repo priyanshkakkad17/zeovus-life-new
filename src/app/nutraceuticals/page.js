@@ -24,14 +24,14 @@ const Icons = {
 };
 
 const staticCategories = [
-  { id: 1, slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations for healthy ageing and antioxidant protection.', icon: 'dna', color_from: '#9CCD62', color_to: '#15A859', product_count: 27, subcategories: [] },
-  { id: 2, slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins for complete nutritional coverage.', icon: 'pill', color_from: '#15A859', color_to: '#1A475C', product_count: 28, subcategories: [] },
-  { id: 3, slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes for gut balance.', icon: 'gut', color_from: '#1A475C', color_to: '#15A859', product_count: 28, subcategories: [] },
-  { id: 4, slug: 'womens-health', name: "Women's Health", description: "Formulations for women's nutritional needs across life stages.", icon: 'heart', color_from: '#E879A8', color_to: '#9CCD62', product_count: 46, subcategories: [] },
-  { id: 5, slug: 'mens-health', name: "Men's Health", description: "Targeted solutions for men's vitality and performance.", icon: 'shield', color_from: '#1A475C', color_to: '#1F4015', product_count: 18, subcategories: [] },
-  { id: 6, slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic and adaptogenic formulations for mental wellness.', icon: 'brain', color_from: '#7C3AED', color_to: '#1A475C', product_count: 41, subcategories: [] },
-  { id: 7, slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations with clinically studied extracts.', icon: 'shield-plus', color_from: '#DC2626', color_to: '#F97316', product_count: 38, subcategories: [] },
-  { id: 8, slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Bone and joint support with clinically validated ingredients.', icon: 'bone', color_from: '#0891B2', color_to: '#1A475C', product_count: 35, subcategories: [] },
+  { id: 1, slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations for healthy ageing and antioxidant protection.', icon: 'dna', color_from: '#9CCD62', color_to: '#15A859', product_count: 27, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-1.png' },
+  { id: 2, slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins for complete nutritional coverage.', icon: 'pill', color_from: '#15A859', color_to: '#1A475C', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868214/nura-2.png' },
+  { id: 3, slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes for gut balance.', icon: 'gut', color_from: '#1A475C', color_to: '#15A859', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-3.png' },
+  { id: 4, slug: 'womens-health', name: "Women's Health", description: "Formulations for women's nutritional needs across life stages.", icon: 'heart', color_from: '#E879A8', color_to: '#9CCD62', product_count: 46, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868216/nura-4.png' },
+  { id: 5, slug: 'mens-health', name: "Men's Health", description: "Targeted solutions for men's vitality and performance.", icon: 'shield', color_from: '#1A475C', color_to: '#1F4015', product_count: 18, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-5.png' },
+  { id: 6, slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic and adaptogenic formulations for mental wellness.', icon: 'brain', color_from: '#7C3AED', color_to: '#1A475C', product_count: 41, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868231/nura-6.png' },
+  { id: 7, slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations with clinically studied extracts.', icon: 'shield-plus', color_from: '#DC2626', color_to: '#F97316', product_count: 38, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-7.png' },
+  { id: 8, slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Bone and joint support with clinically validated ingredients.', icon: 'bone', color_from: '#0891B2', color_to: '#1A475C', product_count: 35, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868229/nura-8.png' },
   { id: 9, slug: 'heart-health', name: 'Heart Health', description: 'Cardiovascular support with heart-healthy nutrients.', icon: 'heart-pulse', color_from: '#E11D48', color_to: '#9CCD62', product_count: 28, subcategories: [] },
   { id: 10, slug: 'energy-sports', name: 'Energy, Sports & Recovery', description: 'Performance-grade formulations for active lifestyles.', icon: 'zap', color_from: '#F59E0B', color_to: '#15A859', product_count: 35, subcategories: [] },
   { id: 11, slug: 'weight-management', name: 'Weight Management', description: 'Science-backed metabolic formulations for weight management.', icon: 'scale', color_from: '#84CC16', color_to: '#15A859', product_count: 16, subcategories: [] },
@@ -81,12 +81,20 @@ function CategoryCard({ category, index, onClick }) {
     >
       {/* Image left — fills half */}
       <div className="relative flex-1 overflow-hidden rounded-[8px]">
-        <PlaceholderPhoto
-          colorFrom={category.color_from}
-          colorTo={category.color_to}
-          icon={IconComponent}
-          className="h-full min-h-[250px] w-full sm:min-h-[400px] lg:min-h-[500px] transition-transform duration-700 ease-out-quint group-hover:scale-[1.02]"
-        />
+        {category.image ? (
+          <img
+            src={category.image}
+            alt={category.name}
+            className="h-full min-h-[250px] w-full object-cover transition-transform duration-700 ease-out-quint group-hover:scale-[1.02] sm:min-h-[400px] lg:min-h-[500px]"
+          />
+        ) : (
+          <PlaceholderPhoto
+            colorFrom={category.color_from}
+            colorTo={category.color_to}
+            icon={IconComponent}
+            className="h-full min-h-[250px] w-full sm:min-h-[400px] lg:min-h-[500px] transition-transform duration-700 ease-out-quint group-hover:scale-[1.02]"
+          />
+        )}
         <div className="absolute right-4 top-4 rounded-full bg-white/85 px-4 py-1.5 backdrop-blur-sm">
           <span className="font-heading text-[12px] font-bold text-primary-dark">
             {category.product_count} formulations
