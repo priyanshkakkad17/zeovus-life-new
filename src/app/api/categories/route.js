@@ -35,17 +35,32 @@ export async function GET() {
   }
 }
 
+function normaliseImageUrl(value) {
+  if (!value || !value.trim()) return null;
+
+  try {
+    const url = new URL(value.trim());
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      throw new Error('Image URL must use HTTP or HTTPS.');
+    }
+    return url.toString();
+  } catch (error) {
+    throw new Error(error.message === 'Image URL must use HTTP or HTTPS.' ? error.message : 'Enter a valid image URL.');
+  }
+}
+
 // POST create category
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, description, icon, color_from, color_to, sort_order } = body;
+    const { name, description, icon, image, color_from, color_to, sort_order } = body;
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const imageUrl = normaliseImageUrl(image);
 
     const result = await query(`
-      INSERT INTO categories (slug, name, description, icon, color_from, color_to, sort_order)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [slug, name, description || null, icon || null, color_from || null, color_to || null, sort_order || 0]);
+      INSERT INTO categories (slug, name, description, icon, image, color_from, color_to, sort_order)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [slug, name, description || null, icon || null, imageUrl, color_from || null, color_to || null, sort_order || 0]);
 
     return Response.json({ success: true, id: result.insertId });
   } catch (error) {
@@ -53,11 +68,22 @@ export async function POST(request) {
   }
 }
 
-// PUT — manage subcategories (add/delete)
+// PUT — update category image or manage subcategories
 export async function PUT(request) {
   try {
     const body = await request.json();
     const { action } = body;
+
+    if (action === 'update_category_image') {
+      const { category_id, image } = body;
+      if (!category_id) return Response.json({ error: 'Category ID is required.' }, { status: 400 });
+
+      const imageUrl = normaliseImageUrl(image);
+      const result = await query('UPDATE categories SET image = ? WHERE id = ?', [imageUrl, category_id]);
+      if (result.affectedRows !== 1) return Response.json({ error: 'Category not found.' }, { status: 404 });
+
+      return Response.json({ success: true, image: imageUrl });
+    }
 
     if (action === 'add_subcategory') {
       const { category_id, name, description, sort_order } = body;
