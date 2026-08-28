@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Icons — monochrome, currentColor driven
+// Icons
 const Icons = {
   dna: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M2 15c6.667-6 13.333 0 20-6M2 9c6.667 6 13.333 0 20 6M4 4v2M8 4v4M12 4v2M16 4v4M20 4v2M4 18v2M8 16v4M12 18v2M16 16v4M20 18v2" strokeLinecap="round" /></svg>,
   pill: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" strokeLinecap="round" strokeLinejoin="round" /></svg>,
@@ -24,103 +24,249 @@ const Icons = {
 };
 
 const staticCategories = [
-  { id: 1, slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations for healthy ageing and antioxidant protection.', icon: 'dna', color_from: '#9CCD62', color_to: '#15A859', product_count: 27, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-1.png' },
-  { id: 2, slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins for complete nutritional coverage.', icon: 'pill', color_from: '#15A859', color_to: '#1A475C', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868214/nura-2.png' },
-  { id: 3, slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes for gut balance.', icon: 'gut', color_from: '#1A475C', color_to: '#15A859', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-3.png' },
-  { id: 4, slug: 'womens-health', name: "Women's Health", description: "Formulations for women's nutritional needs across life stages.", icon: 'heart', color_from: '#E879A8', color_to: '#9CCD62', product_count: 46, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868216/nura-4.png' },
-  { id: 5, slug: 'mens-health', name: "Men's Health", description: "Targeted solutions for men's vitality and performance.", icon: 'shield', color_from: '#1A475C', color_to: '#1F4015', product_count: 18, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-5.png' },
-  { id: 6, slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic and adaptogenic formulations for mental wellness.', icon: 'brain', color_from: '#7C3AED', color_to: '#1A475C', product_count: 41, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868231/nura-6.png' },
-  { id: 7, slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations with clinically studied extracts.', icon: 'shield-plus', color_from: '#DC2626', color_to: '#F97316', product_count: 38, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-7.png' },
-  { id: 8, slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Bone and joint support with clinically validated ingredients.', icon: 'bone', color_from: '#0891B2', color_to: '#1A475C', product_count: 35, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868229/nura-8.png' },
-  { id: 9, slug: 'heart-health', name: 'Heart Health', description: 'Cardiovascular support with heart-healthy nutrients.', icon: 'heart-pulse', color_from: '#E11D48', color_to: '#9CCD62', product_count: 28, subcategories: [] },
-  { id: 10, slug: 'energy-sports', name: 'Energy, Sports & Recovery', description: 'Performance-grade formulations for active lifestyles.', icon: 'zap', color_from: '#F59E0B', color_to: '#15A859', product_count: 35, subcategories: [] },
-  { id: 11, slug: 'weight-management', name: 'Weight Management', description: 'Science-backed metabolic formulations for weight management.', icon: 'scale', color_from: '#84CC16', color_to: '#15A859', product_count: 16, subcategories: [] },
-  { id: 12, slug: 'beauty', name: 'Beauty from Within', description: 'Nutri-cosmetics for radiant skin, hair and nails.', icon: 'sparkles', color_from: '#EC4899', color_to: '#A855F7', product_count: 32, subcategories: [] },
-  { id: 13, slug: 'children', name: "Children's Nutrition", description: 'Kid-friendly formulations for growing bodies.', icon: 'baby', color_from: '#06B6D4', color_to: '#3B82F6', product_count: 5, subcategories: [] },
-  { id: 14, slug: 'specialty', name: 'Specialty Care', description: 'Ayurvedic, botanical and condition-specific formulations.', icon: 'leaf', color_from: '#059669', color_to: '#1F4015', product_count: 24, subcategories: [] },
+  { id: 1, slug: 'healthy-ageing', name: 'Healthy Ageing & Cellular Health', description: 'Advanced formulations designed to support healthy ageing, cellular vitality and antioxidant protection at the molecular level.', icon: 'dna', color_from: '#9CCD62', color_to: '#15A859', product_count: 27, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-1.png', highlights: ['CoQ10 & PQQ', 'NAD+ Precursors', 'Resveratrol Blends', 'Telomere Support', 'Mitochondrial Health'] },
+  { id: 2, slug: 'multivitamins', name: 'Daily Multivitamins & Foundational Nutrition', description: 'Comprehensive daily multivitamins engineered for complete nutritional coverage across demographics.', icon: 'pill', color_from: '#15A859', color_to: '#1A475C', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868214/nura-2.png', highlights: ['One-a-Day Formulas', 'Gender-Specific', 'Age-Targeted', 'Whole Food Based', 'High Bioavailability'] },
+  { id: 3, slug: 'gut-health', name: 'Gut Health & Digestive Wellness', description: 'Probiotics, prebiotics and digestive enzymes formulated for optimal gut barrier function and microbiome balance.', icon: 'gut', color_from: '#1A475C', color_to: '#15A859', product_count: 28, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868213/nura-3.png', highlights: ['Multi-Strain Probiotics', 'Prebiotic Fibres', 'Digestive Enzymes', 'Gut Barrier Support', 'Microbiome Balance'] },
+  { id: 4, slug: 'womens-health', name: "Women's Health", description: "Targeted formulations for women's nutritional needs across all life stages, from fertility to menopause.", icon: 'heart', color_from: '#E879A8', color_to: '#9CCD62', product_count: 46, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868216/nura-4.png', highlights: ['Hormonal Balance', 'PCOS Support', 'Prenatal & Postnatal', 'Menopause Relief', 'Iron & Folate'] },
+  { id: 5, slug: 'mens-health', name: "Men's Health", description: "Performance-driven solutions for men's vitality, hormonal health, and recovery.", icon: 'shield', color_from: '#1A475C', color_to: '#1F4015', product_count: 18, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-5.png', highlights: ['Testosterone Support', 'Prostate Health', 'Fertility Blends', 'Stamina & Vitality', 'Muscle Recovery'] },
+  { id: 6, slug: 'brain-stress-sleep', name: 'Brain, Stress & Sleep', description: 'Nootropic and adaptogenic formulations for cognitive performance, stress resilience and restorative sleep.', icon: 'brain', color_from: '#7C3AED', color_to: '#1A475C', product_count: 41, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868231/nura-6.png', highlights: ['Nootropic Stacks', 'Adaptogen Blends', 'Sleep Formulas', 'Stress & Cortisol', 'Focus & Memory'] },
+  { id: 7, slug: 'immunity', name: 'Immunity & Respiratory', description: 'Immune-fortifying formulations with clinically studied extracts for year-round defence.', icon: 'shield-plus', color_from: '#DC2626', color_to: '#F97316', product_count: 38, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868212/nura-7.png', highlights: ['Vitamin C & Zinc', 'Elderberry Extracts', 'Beta-Glucans', 'Respiratory Support', 'Seasonal Defence'] },
+  { id: 8, slug: 'joint-bone', name: 'Joint & Bone Health', description: 'Clinically validated ingredients for joint mobility, bone density and connective tissue support.', icon: 'bone', color_from: '#0891B2', color_to: '#1A475C', product_count: 35, subcategories: [], image: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1787868229/nura-8.png', highlights: ['Glucosamine & MSM', 'Collagen Peptides', 'Calcium & Vitamin D', 'Curcumin Complexes', 'Mobility Support'] },
+  { id: 9, slug: 'heart-health', name: 'Heart Health', description: 'Cardiovascular support formulations with omega-3s, CoQ10 and plant-based cardio-protective nutrients.', icon: 'heart-pulse', color_from: '#E11D48', color_to: '#9CCD62', product_count: 28, subcategories: [], highlights: ['Omega-3 EPA/DHA', 'CoQ10 Ubiquinol', 'Plant Sterols', 'Magnesium Blends', 'Blood Pressure Support'] },
+  { id: 10, slug: 'energy-sports', name: 'Energy, Sports & Recovery', description: 'Performance-grade formulations for athletes and active lifestyles, from pre-workout to recovery.', icon: 'zap', color_from: '#F59E0B', color_to: '#15A859', product_count: 35, subcategories: [], highlights: ['Pre-Workout Blends', 'BCAA & EAA', 'Electrolyte Formulas', 'Recovery Complexes', 'Natural Energy'] },
+  { id: 11, slug: 'weight-management', name: 'Weight Management', description: 'Science-backed metabolic formulations for sustainable weight management and body composition.', icon: 'scale', color_from: '#84CC16', color_to: '#15A859', product_count: 16, subcategories: [], highlights: ['Thermogenic Blends', 'Appetite Control', 'Metabolic Boosters', 'CLA & L-Carnitine', 'Fibre Complexes'] },
+  { id: 12, slug: 'beauty', name: 'Beauty from Within', description: 'Nutri-cosmetics for radiant skin, stronger hair and healthier nails from the inside out.', icon: 'sparkles', color_from: '#EC4899', color_to: '#A855F7', product_count: 32, subcategories: [], highlights: ['Marine Collagen', 'Biotin & Keratin', 'Hyaluronic Acid', 'Skin Glow Blends', 'Hair & Nail Complex'] },
+  { id: 13, slug: 'children', name: "Children's Nutrition", description: 'Kid-friendly formulations in fun formats for growing bodies and developing minds.', icon: 'baby', color_from: '#06B6D4', color_to: '#3B82F6', product_count: 5, subcategories: [], highlights: ['Gummy Vitamins', 'Growth Support', 'Immunity Boosters', 'Omega for Kids', 'Calcium Chews'] },
+  { id: 14, slug: 'specialty', name: 'Specialty Care', description: 'Ayurvedic, botanical and condition-specific formulations for targeted health outcomes.', icon: 'leaf', color_from: '#059669', color_to: '#1F4015', product_count: 24, subcategories: [], highlights: ['Ayurvedic Blends', 'Liver Detox', 'Eye Health', 'Diabetic Support', 'Herbal Extracts'] },
 ];
 
-// Placeholder visual — stands in for real product/category photography.
-// Swap for a real <img src={category.image} /> once photography is available.
-function PlaceholderPhoto({ colorFrom, colorTo, icon: IconComponent, className = '' }) {
+// ─── Side dot navigation ─────────────────────────────────────────────────────
+function DotNav({ categories, activeIndex, onDotClick }) {
   return (
-    <div
-      className={`relative flex items-center justify-center overflow-hidden ${className}`}
-      style={{ background: `linear-gradient(135deg, ${colorFrom}1A, ${colorTo}2A)` }}
-    >
-      <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.15]" aria-hidden="true">
-        <defs>
-          <pattern id={`ph-${colorFrom.replace('#', '')}`} x="0" y="0" width="34" height="30" patternUnits="userSpaceOnUse">
-            <polygon points="17,1 32,9 32,21 17,29 2,21 2,9" fill="none" stroke={colorTo} strokeWidth="0.7" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill={`url(#ph-${colorFrom.replace('#', '')})`} />
-      </svg>
-      <div
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm sm:h-16 sm:w-16"
-        style={{ color: colorFrom }}
-      >
-        {IconComponent && <IconComponent />}
+    <div className="fixed right-5 top-1/2 z-[90] -translate-y-1/2 flex flex-col gap-2.5 sm:right-7">
+      {categories.map((cat, i) => (
+        <button
+          key={cat.slug || i}
+          onClick={() => onDotClick(i)}
+          aria-label={cat.name}
+          title={cat.name}
+          className="group relative flex items-center justify-end"
+        >
+          {/* Tooltip */}
+          <span className="pointer-events-none absolute right-7 whitespace-nowrap rounded bg-black/80 px-3 py-1.5 font-heading text-[10px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 backdrop-blur-sm">
+            {cat.name}
+          </span>
+          {/* Dot */}
+          <span
+            className={`block rounded-full transition-all duration-400 ${
+              activeIndex === i
+                ? 'h-3 w-3 bg-white shadow-lg shadow-white/30'
+                : 'h-2 w-2 bg-white/30 group-hover:bg-white/60'
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ─── Editorial scroll — snap cards in page-level scroll container ─────────────
+function EditorialScroll({ categories }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const cardRefs = useRef([]);
+
+  const scrollToCard = useCallback((index) => {
+    const card = cardRefs.current[index];
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
+  // Track which card is active via IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = cardRefs.current.indexOf(entry.target);
+            if (index !== -1) setActiveIndex(index);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    cardRefs.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, [categories.length]);
+
+  return (
+    <>
+      <DotNav categories={categories} activeIndex={activeIndex} onDotClick={scrollToCard} />
+      {categories.map((cat, i) => (
+        <div
+          key={cat.slug || i}
+          ref={(el) => { cardRefs.current[i] = el; }}
+          className="relative h-screen w-full snap-start snap-always overflow-hidden"
+        >
+            {/* Background image */}
+            {cat.image ? (
+              <img
+                src={cat.image}
+                alt={cat.name}
+                className="absolute inset-0 h-full w-full object-cover scale-[1.05]"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+            ) : (
+              <div
+                className="absolute inset-0"
+                style={{ background: `linear-gradient(160deg, ${cat.color_from}, ${cat.color_to})` }}
+              />
+            )}
+
+            {/* Multi-layer gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+            <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%)' }} />
+
+            {/* Content */}
+            <div className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20">
+              <div className="mb-8 sm:mb-10 lg:mb-12">
+                <p className="mb-4 font-heading text-[13px] font-medium tracking-[2.5px] text-white/70">
+                  Category {String(i + 1).padStart(2, '0')}
+                </p>
+                <h2 className="max-w-[750px] font-heading text-[40px] font-bold leading-[1.06] tracking-[-0.5px] text-white sm:text-[54px] lg:text-[66px] xl:text-[74px]">
+                  {cat.name}
+                </h2>
+                <p className="mt-5 max-w-[500px] text-[15px] leading-[1.75] text-white/75 sm:text-[16px]">
+                  {cat.description}
+                </p>
+                <Link
+                  href={`/nutraceuticals?category=${cat.slug}`}
+                  className="group mt-8 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:shadow-lg hover:shadow-white/5"
+                >
+                  Explore More
+                  <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" />
+                  </svg>
+                </Link>
+              </div>
+
+              {/* Bottom bar */}
+              <div className="flex flex-wrap items-end gap-x-14 gap-y-4 border-t border-white/15 pt-7 pb-2">
+                <div>
+                  <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Format</p>
+                  <p className="text-[15px] font-semibold text-white">Contract Manufacturing</p>
+                </div>
+                <div>
+                  <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Products</p>
+                  <p className="text-[15px] font-semibold text-white">{cat.product_count}</p>
+                </div>
+                {cat.highlights && (
+                  <div className="ml-auto hidden lg:block">
+                    <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Key Offerings</p>
+                    <div className="flex flex-wrap gap-2">
+                      {cat.highlights.slice(0, 5).map((h, hi) => (
+                        <span key={hi} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[12px] font-medium text-white/80 backdrop-blur-sm">
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Scroll hint on first card */}
+            {i === 0 && (
+              <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse">
+                <span className="font-heading text-[9px] font-medium uppercase tracking-[2px] text-white/40">Scroll</span>
+                <svg className="h-4 w-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+    </>
+  );
+}
+
+// ─── View mode toggle (floating) ─────────────────────────────────────────────
+function ViewToggle({ viewMode, setViewMode }) {
+  return (
+    <div className="fixed top-6 right-6 z-[100]">
+      <div className="flex items-center gap-1 rounded-full border border-white/20 bg-black/70 p-1.5 shadow-2xl backdrop-blur-md">
+        <button
+          onClick={() => setViewMode('editorial')}
+          className={`flex items-center gap-2 rounded-full px-4 py-2 font-heading text-[11px] font-semibold tracking-[0.5px] transition-all duration-300 ${
+            viewMode === 'editorial' ? 'bg-white text-black' : 'text-white/70 hover:text-white'
+          }`}
+        >
+          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="1" y="1" width="14" height="14" rx="2" />
+          </svg>
+          Editorial
+        </button>
+        <button
+          onClick={() => setViewMode('list')}
+          className={`flex items-center gap-2 rounded-full px-4 py-2 font-heading text-[11px] font-semibold tracking-[0.5px] transition-all duration-300 ${
+            viewMode === 'list' ? 'bg-white text-black' : 'text-white/70 hover:text-white'
+          }`}
+        >
+          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="1" y="2" width="5" height="5" rx="1" />
+            <rect x="9" y="2" width="5" height="5" rx="1" />
+            <rect x="1" y="9" width="5" height="5" rx="1" />
+            <rect x="9" y="9" width="5" height="5" rx="1" />
+          </svg>
+          List
+        </button>
       </div>
     </div>
   );
 }
 
-function CategoryCard({ category, index, onClick }) {
+// ─── List view card ──────────────────────────────────────────────────────────
+function ListCard({ category, index }) {
   const IconComponent = Icons[category.icon] || Icons.pill;
   return (
-    <motion.button
-      type="button"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      onClick={onClick}
-      className="group relative flex w-full snap-start flex-col justify-center gap-8 px-5 py-10 sm:flex-row sm:items-center sm:gap-12 sm:px-8 lg:px-12"
-      style={{ height: 'var(--card-height, 100%)' }}
+    <Link
+      href={`/nutraceuticals?category=${category.slug}`}
+      className="group flex items-center gap-6 border-b border-neutral-200 py-6 transition-colors hover:bg-neutral-50 px-4 -mx-4 rounded-lg"
     >
-      {/* Image left — fills half */}
-      <div className="relative flex-1 overflow-hidden rounded-[8px]">
-        {category.image ? (
-          <img
-            src={category.image}
-            alt={category.name}
-            className="h-full min-h-[250px] w-full object-cover transition-transform duration-700 ease-out-quint group-hover:scale-[1.02] sm:min-h-[400px] lg:min-h-[500px]"
-          />
-        ) : (
-          <PlaceholderPhoto
-            colorFrom={category.color_from}
-            colorTo={category.color_to}
-            icon={IconComponent}
-            className="h-full min-h-[250px] w-full sm:min-h-[400px] lg:min-h-[500px] transition-transform duration-700 ease-out-quint group-hover:scale-[1.02]"
-          />
-        )}
-        <div className="absolute right-4 top-4 rounded-full bg-white/85 px-4 py-1.5 backdrop-blur-sm">
-          <span className="font-heading text-[12px] font-bold text-primary-dark">
-            {category.product_count} formulations
-          </span>
-        </div>
+      <span className="hidden sm:block font-heading text-[13px] font-bold text-neutral-300 w-8">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <div
+        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full"
+        style={{ background: `linear-gradient(135deg, ${category.color_from}20, ${category.color_to}30)`, color: category.color_from }}
+      >
+        <IconComponent />
       </div>
-
-      {/* Text right */}
-      <div className="flex-1 text-left">
-        <h3 className="font-heading text-[28px] font-bold leading-tight text-primary-dark transition-colors duration-300 group-hover:text-primary-light sm:text-[36px] lg:text-[42px]">
+      <div className="flex-1 min-w-0">
+        <h3 className="font-heading text-[16px] font-bold text-primary-dark group-hover:text-primary-light transition-colors sm:text-[18px]">
           {category.name}
         </h3>
-        <p className="mt-4 max-w-[480px] text-[15px] leading-relaxed text-neutral-500 sm:text-[17px]">
-          {category.description}
-        </p>
-        <div className="mt-6 flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light">
-          <span>Explore</span>
-          <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+        <p className="mt-1 text-[13px] text-neutral-500 truncate">{category.description}</p>
+      </div>
+      <div className="hidden md:flex items-center gap-6">
+        <div className="text-right">
+          <span className="block text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Products</span>
+          <span className="block text-[14px] font-bold text-primary-dark">{category.product_count}</span>
         </div>
       </div>
-    </motion.button>
+      <svg className="h-5 w-5 flex-shrink-0 text-neutral-300 transition-all duration-300 group-hover:text-primary-light group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      </svg>
+    </Link>
   );
 }
 
+// ─── Product card (unchanged from before) ────────────────────────────────────
 function ProductCard({ product, category, index }) {
   const [expanded, setExpanded] = useState(false);
   const IconComponent = (category && Icons[category.icon]) || Icons.pill;
@@ -135,20 +281,18 @@ function ProductCard({ product, category, index }) {
       transition={{ duration: 0.6, delay: (index % 3) * 0.15, ease: [0.22, 1, 0.36, 1] }}
       className="group flex flex-col overflow-hidden rounded-xl border border-neutral-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-neutral-200/60 hover:border-neutral-200"
     >
-      {/* Top gradient accent bar */}
       <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${colorFrom}, ${colorTo})` }} />
-
       <div className="overflow-hidden">
-        <PlaceholderPhoto
-          colorFrom={colorFrom}
-          colorTo={colorTo}
-          icon={IconComponent}
-          className="aspect-[5/3] w-full transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
-        />
+        <div
+          className="flex aspect-[5/3] w-full items-center justify-center transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
+          style={{ background: `linear-gradient(135deg, ${colorFrom}1A, ${colorTo}2A)` }}
+        >
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm" style={{ color: colorFrom }}>
+            {IconComponent && <IconComponent />}
+          </div>
+        </div>
       </div>
-
       <div className="flex flex-1 flex-col p-5">
-        {/* Header */}
         <div className="flex items-start justify-between gap-3">
           <h4 className="font-heading text-[16px] font-bold leading-tight text-primary-dark">{product.name}</h4>
           {product.brand_line && (
@@ -158,30 +302,21 @@ function ProductCard({ product, category, index }) {
           )}
         </div>
         <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">{product.primary_benefit}</p>
-
-        {/* Key Actives */}
         {product.key_actives && (
           <div className="mt-4">
             <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Key Actives</span>
             <div className="flex flex-wrap gap-1.5">
               {product.key_actives.split(',').slice(0, expanded ? 100 : 3).map((a, i) => (
-                <span key={i} className="rounded-full border border-primary-light/20 bg-primary-light/5 px-2.5 py-1 text-[11px] font-medium text-primary-dark">
-                  {a.trim()}
-                </span>
+                <span key={i} className="rounded-full border border-primary-light/20 bg-primary-light/5 px-2.5 py-1 text-[11px] font-medium text-primary-dark">{a.trim()}</span>
               ))}
               {!expanded && product.key_actives.split(',').length > 3 && (
-                <button
-                  onClick={() => setExpanded(true)}
-                  className="rounded-full bg-primary-light/10 px-2.5 py-1 text-[11px] font-bold text-primary-light transition-colors hover:bg-primary-light/20"
-                >
+                <button onClick={() => setExpanded(true)} className="rounded-full bg-primary-light/10 px-2.5 py-1 text-[11px] font-bold text-primary-light transition-colors hover:bg-primary-light/20">
                   +{product.key_actives.split(',').length - 3} more
                 </button>
               )}
             </div>
           </div>
         )}
-
-        {/* Expanded details */}
         <AnimatePresence>
           {expanded && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
@@ -214,8 +349,6 @@ function ProductCard({ product, category, index }) {
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Toggle button */}
         <button
           onClick={() => setExpanded(!expanded)}
           className="mt-4 inline-flex items-center gap-1.5 self-start rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500 transition-all duration-300 hover:border-primary-light hover:bg-primary-light/5 hover:text-primary-light"
@@ -230,6 +363,7 @@ function ProductCard({ product, category, index }) {
   );
 }
 
+// ─── Main content ────────────────────────────────────────────────────────────
 function NutraceuticalsContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
@@ -239,36 +373,7 @@ function NutraceuticalsContent() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeSubcategory, setActiveSubcategory] = useState(null);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const scrollRef = useRef(null);
-  const [cardHeight, setCardHeight] = useState(0);
-
-  const handleScroll = useCallback(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const scrollTop = container.scrollTop;
-    const h = cardHeight || container.clientHeight;
-    const index = Math.round(scrollTop / h);
-    setActiveCardIndex(index);
-  }, [cardHeight]);
-
-  const scrollToCard = useCallback((index) => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const h = cardHeight || container.clientHeight;
-    container.scrollTo({ top: index * h, behavior: 'smooth' });
-  }, [cardHeight]);
-
-  // Measure scroll container height for cards
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const measure = () => setCardHeight(container.clientHeight);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [selectedCategory]);
+  const [viewMode, setViewMode] = useState('editorial');
 
   useEffect(() => { if (categoryParam) setSelectedCategory(categoryParam); }, [categoryParam]);
   useEffect(() => { fetch('/api/categories').then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) setCategories(data); }).catch(() => {}); }, []);
@@ -287,72 +392,32 @@ function NutraceuticalsContent() {
 
   return (
     <>
+      {/* ===== SNAP SCROLL CARDS ===== */}
       {!selectedCategory && (
-        <section className="relative flex h-[calc(100vh-90px)] flex-col bg-white">
-          <div className="mx-auto w-full max-w-[1500px] flex-shrink-0 px-5 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-10 max-w-[640px]"
-            >
-              <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
-                The Full Range
-              </p>
-              <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
-                Browse by health category.
-              </h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
-                Every category is formulated in-house and manufactured on certified
-                lines. Select one to see the formulations inside it.
-              </p>
-            </motion.div>
-          </div>
+        <section className="relative">
+          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
-          <div className="relative min-h-0 flex-1">
-            {/* Scroll container */}
-            <div
-              ref={scrollRef}
-              onScroll={handleScroll}
-              className="h-full snap-y snap-mandatory overflow-y-auto"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', '--card-height': cardHeight ? `${cardHeight}px` : '100%' }}
-            >
-              {categories.map((cat, i) => (
-                <CategoryCard
-                  key={cat.slug || i}
-                  category={cat}
-                  index={i}
-                  onClick={() => { setSelectedCategory(cat.slug); setActiveSubcategory(null); setSearchTerm(''); }}
-                />
-              ))}
-            </div>
+          {viewMode === 'editorial' && (
+            <EditorialScroll categories={categories} />
+          )}
 
-            {/* Side dot navigation */}
-            <div className="absolute right-4 top-1/2 z-10 -translate-y-1/2 flex flex-col gap-2.5 sm:right-6">
+          {viewMode === 'list' && (
+            <div className="mx-auto max-w-[1000px] px-5 py-16 sm:px-8 sm:py-20">
+              <div className="mb-10">
+                <h2 className="font-heading text-[28px] font-bold text-primary-dark sm:text-[34px]">All Categories</h2>
+                <p className="mt-2 text-[15px] text-neutral-500">14 health categories. 268+ formulations.</p>
+              </div>
+              <div>
                 {categories.map((cat, i) => (
-                  <button
-                    key={cat.slug || i}
-                    onClick={() => scrollToCard(i)}
-                    aria-label={cat.name}
-                    title={cat.name}
-                    className={`group relative h-3 w-3 rounded-full border-2 transition-all duration-300 ${
-                      activeCardIndex === i
-                        ? 'scale-125 border-primary-light bg-primary-light'
-                        : 'border-neutral-300 bg-transparent hover:border-primary-light hover:bg-primary-light/30'
-                    }`}
-                  >
-                    {/* Tooltip on hover */}
-                    <span className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-primary-dark px-2.5 py-1 font-heading text-[11px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                      {cat.name}
-                    </span>
-                  </button>
+                  <ListCard key={cat.slug || i} category={cat} index={i} />
                 ))}
               </div>
             </div>
+          )}
         </section>
       )}
 
+      {/* ===== PRODUCT DETAIL VIEW ===== */}
       <AnimatePresence mode="wait">
         {selectedCategory && selectedCat && (
           <motion.section
@@ -362,7 +427,7 @@ function NutraceuticalsContent() {
             exit={{ opacity: 0 }}
             className="relative bg-white py-16 sm:py-20 lg:py-24"
           >
-            <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+            <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
               <button
                 onClick={() => { setSelectedCategory(null); setProducts([]); setSearchTerm(''); setActiveSubcategory(null); }}
                 className="group mb-10 inline-flex items-center gap-2 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-neutral-500 transition-colors hover:text-primary-dark"
@@ -373,20 +438,16 @@ function NutraceuticalsContent() {
                 All Categories
               </button>
 
-              {/* Category Heading */}
               <h2 className="mb-10 font-heading text-[24px] font-bold uppercase leading-[1.05] tracking-[-0.5px] text-primary-dark sm:text-[30px]">
                 {selectedCat.name}
               </h2>
 
-              {/* Subcategory tabs — pill style */}
               {selectedCat.subcategories?.length > 0 && (
                 <div className="mb-8 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => setActiveSubcategory(null)}
                     className={`rounded-full px-5 py-2.5 font-heading text-[12px] font-semibold tracking-[0.5px] transition-all duration-300 ${
-                      !activeSubcategory
-                        ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20'
-                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
+                      !activeSubcategory ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
                     }`}
                   >
                     All <span className="ml-1 opacity-70">({selectedCat.product_count})</span>
@@ -396,9 +457,7 @@ function NutraceuticalsContent() {
                       key={sub.id}
                       onClick={() => setActiveSubcategory(sub.id.toString())}
                       className={`rounded-full px-5 py-2.5 font-heading text-[12px] font-semibold tracking-[0.5px] transition-all duration-300 ${
-                        activeSubcategory === sub.id.toString()
-                          ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20'
-                          : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
+                        activeSubcategory === sub.id.toString() ? 'bg-primary-dark text-white shadow-md shadow-primary-dark/20' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-primary-dark'
                       }`}
                     >
                       {sub.name} <span className="ml-1 opacity-70">({sub.product_count})</span>
@@ -407,7 +466,6 @@ function NutraceuticalsContent() {
                 </div>
               )}
 
-              {/* Search — minimal underline field */}
               <div className="relative mb-10 max-w-md">
                 <svg className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -421,7 +479,6 @@ function NutraceuticalsContent() {
                 />
               </div>
 
-              {/* Products */}
               {loading ? (
                 <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
                   {[...Array(6)].map((_, i) => (
@@ -473,9 +530,9 @@ function NutraceuticalsContent() {
 
 export default function Nutraceuticals() {
   return (
-    <div className="bg-white">
-      {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
+    <div className="h-screen snap-y snap-mandatory overflow-y-auto bg-white" style={{ scrollbarWidth: 'none' }}>
+      {/* ============ HERO — first snap section ============ */}
+      <section className="relative snap-start snap-always overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
         <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
           <defs>
             <pattern id="nutra-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
@@ -485,7 +542,7 @@ export default function Nutraceuticals() {
           <rect width="100%" height="100%" fill="url(#nutra-hex-grid)" />
         </svg>
 
-        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -518,7 +575,6 @@ export default function Nutraceuticals() {
               </div>
             </motion.div>
 
-            {/* Stat column */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -538,75 +594,68 @@ export default function Nutraceuticals() {
         </div>
       </section>
 
+      {/* ============ MAIN CONTENT ============ */}
       <Suspense fallback={
-        <div className="bg-white py-20">
-          <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-            <div className="grid gap-x-12 lg:grid-cols-2">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-20 animate-pulse border-b border-neutral-100 py-5">
-                  <div className="h-3 w-2/3 rounded-sm bg-neutral-100" />
-                </div>
-              ))}
-            </div>
+        <div className="flex h-screen snap-start items-center justify-center bg-neutral-900">
+          <div className="animate-pulse text-center">
+            <div className="mx-auto h-8 w-48 rounded bg-neutral-700" />
+            <div className="mx-auto mt-4 h-4 w-64 rounded bg-neutral-700" />
           </div>
         </div>
       }>
         <NutraceuticalsContent />
       </Suspense>
 
-      {/* ============ CLOSING CTA ============ */}
-      <section className="relative overflow-hidden bg-primary-dark py-20 text-white sm:py-26 lg:py-30">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(21,168,89,0.08) 0%, transparent 70%)' }}
-        />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full border border-white/[0.03]" />
-        <div className="pointer-events-none absolute -right-10 -top-10 h-[200px] w-[200px] rounded-full border border-white/[0.02]" />
+      {/* ============ CLOSING CTA — last snap section ============ */}
+      <section className="relative snap-start snap-always overflow-hidden bg-primary-dark py-20 text-white sm:py-24 lg:py-28">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(21,168,89,0.08) 0%, transparent 70%)' }}
+          />
+          <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <div className="flex flex-col items-center lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-10 max-w-[640px] text-center lg:mb-0 lg:text-left"
+              >
+                <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/60">
+                  Bring us the brief
+                </p>
+                <h2 className="mb-5 font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] sm:text-[40px] lg:text-[46px]">
+                  Bring us a formulation brief —
+                  <br className="hidden sm:block" /> or bring us a problem.
+                </h2>
+                <p className="max-w-[480px] text-[15px] leading-relaxed text-neutral-300 sm:text-[16px] lg:mx-0 mx-auto">
+                  We'll work with you to develop the right formulation and bring it to market.
+                </p>
+              </motion.div>
 
-        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col items-center lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-10 max-w-[640px] text-center lg:mb-0 lg:text-left"
-            >
-              <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/60">
-                Bring us the brief
-              </p>
-              <h2 className="mb-5 font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] sm:text-[40px] lg:text-[46px]">
-                Bring us a formulation brief —
-                <br className="hidden sm:block" /> or bring us a problem.
-              </h2>
-              <p className="max-w-[480px] text-[15px] leading-relaxed text-neutral-300 sm:text-[16px] lg:mx-0 mx-auto">
-                We'll work with you to develop the right formulation and bring it to market.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Link href="/contact">
-                <motion.span
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-flex cursor-pointer items-center gap-3 rounded-[3px] bg-secondary px-7 py-4 font-heading text-[12px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:bg-secondary-dark sm:px-8"
-                >
-                  Enquire Now
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M7 17L17 7" />
-                    <path d="M7 7h10v10" />
-                  </svg>
-                </motion.span>
-              </Link>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Link href="/contact">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-flex cursor-pointer items-center gap-3 rounded-[3px] bg-secondary px-7 py-4 font-heading text-[12px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:bg-secondary-dark sm:px-8"
+                  >
+                    Enquire Now
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M7 7h10v10" />
+                    </svg>
+                  </motion.span>
+                </Link>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
     </div>
   );
 }

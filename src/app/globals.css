@@ -48,6 +48,7 @@ body {
   color: var(--foreground);
   line-height: 1.6;
   letter-spacing: 0.02em;
+  scrollbar-width: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -72,25 +73,26 @@ a {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1A475C;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #1F4015;
+  background: transparent;
 }
 
 /* Hide scrollbar on snap containers */
 .snap-y::-webkit-scrollbar {
   display: none;
+}
+
+.snap-y {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Smooth scroll */
