@@ -71,9 +71,13 @@ function DotNav({ categories, activeIndex, onDotClick }) {
 }
 
 // ─── Editorial scroll — snap cards in page-level scroll container ─────────────
-function EditorialScroll({ categories }) {
+function EditorialScroll({ categories, scrollContainerRef }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const cardRefs = useRef([]);
+  const sectionRef = useRef(null);
+  const previousActiveIndex = useRef(0);
 
   const scrollToCard = useCallback((index) => {
     const card = cardRefs.current[index];
@@ -82,7 +86,7 @@ function EditorialScroll({ categories }) {
     }
   }, []);
 
-  // Track which card is active via IntersectionObserver
+  // Track which card is active via IntersectionObserver — scoped to the scroll container
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -93,7 +97,7 @@ function EditorialScroll({ categories }) {
           }
         });
       },
-      { threshold: 0.6 }
+      { root: scrollContainerRef.current, threshold: 0.6 }
     );
 
     cardRefs.current.forEach((card) => {
@@ -103,25 +107,73 @@ function EditorialScroll({ categories }) {
     return () => observer.disconnect();
   }, [categories.length]);
 
+  // Play the sweep only when moving from one category to another.
+  useEffect(() => {
+    if (previousActiveIndex.current !== activeIndex) {
+      setIsTransitioning(true);
+      previousActiveIndex.current = activeIndex;
+    }
+  }, [activeIndex]);
+
+  // Show the category navigation only while this section is on screen.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { root: scrollContainerRef.current, threshold: 0.15 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <>
-      <DotNav categories={categories} activeIndex={activeIndex} onDotClick={scrollToCard} />
+    <section ref={sectionRef} className="relative">
+      {isVisible && <DotNav categories={categories} activeIndex={activeIndex} onDotClick={scrollToCard} />}
+      <AnimatePresence>
+        {isVisible && isTransitioning && (
+          <motion.div
+            key={activeIndex}
+            initial={{ x: '-115%', opacity: 0 }}
+            animate={{ x: '125%', opacity: [0, 1, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+            onAnimationComplete={() => setIsTransitioning(false)}
+            className="pointer-events-none fixed inset-y-0 left-0 z-[80] w-[65vw]"
+            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(156, 205, 98, 0.26) 36%, rgba(255, 255, 255, 0.18) 52%, rgba(21, 168, 89, 0.16) 68%, transparent 100%)' }}
+          />
+        )}
+      </AnimatePresence>
       {categories.map((cat, i) => (
-        <div
+        <motion.div
           key={cat.slug || i}
           ref={(el) => { cardRefs.current[i] = el; }}
+          initial={false}
+          animate={{ opacity: activeIndex === i ? 1 : 0.82 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="relative h-screen w-full snap-start snap-always overflow-hidden"
         >
             {/* Background image */}
             {cat.image ? (
-              <img
+              <motion.img
                 src={cat.image}
                 alt={cat.name}
-                className="absolute inset-0 h-full w-full object-cover scale-[1.05]"
+                initial={{ scale: 1.14, opacity: 0.72 }}
+                animate={{
+                  scale: activeIndex === i ? 1.05 : 1.14,
+                  opacity: activeIndex === i ? 1 : 0.72,
+                }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 h-full w-full object-cover"
                 loading={i < 2 ? 'eager' : 'lazy'}
               />
             ) : (
-              <div
+              <motion.div
+                initial={{ opacity: 0.72 }}
+                animate={{ opacity: activeIndex === i ? 1 : 0.72 }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
                 className="absolute inset-0"
                 style={{ background: `linear-gradient(160deg, ${cat.color_from}, ${cat.color_to})` }}
               />
@@ -133,7 +185,15 @@ function EditorialScroll({ categories }) {
             <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%)' }} />
 
             {/* Content */}
-            <div className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20">
+            <motion.div
+              initial={false}
+              animate={{
+                opacity: activeIndex === i ? 1 : 0,
+                y: activeIndex === i ? 0 : 44,
+              }}
+              transition={{ duration: 0.62, delay: activeIndex === i ? 0.12 : 0, ease: [0.22, 1, 0.36, 1] }}
+              className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20"
+            >
               <div className="mb-8 sm:mb-10 lg:mb-12">
                 <p className="mb-4 font-heading text-[13px] font-medium tracking-[2.5px] text-white/70">
                   Category {String(i + 1).padStart(2, '0')}
@@ -156,7 +216,15 @@ function EditorialScroll({ categories }) {
               </div>
 
               {/* Bottom bar */}
-              <div className="flex flex-wrap items-end gap-x-14 gap-y-4 border-t border-white/15 pt-7 pb-2">
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: activeIndex === i ? 1 : 0,
+                  y: activeIndex === i ? 0 : 20,
+                }}
+                transition={{ duration: 0.5, delay: activeIndex === i ? 0.32 : 0, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-wrap items-end gap-x-14 gap-y-4 border-t border-white/15 pt-7 pb-2"
+              >
                 <div>
                   <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Format</p>
                   <p className="text-[15px] font-semibold text-white">Contract Manufacturing</p>
@@ -177,8 +245,8 @@ function EditorialScroll({ categories }) {
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Scroll hint on first card */}
             {i === 0 && (
@@ -189,182 +257,112 @@ function EditorialScroll({ categories }) {
                 </svg>
               </div>
             )}
-          </div>
+          </motion.div>
         ))}
-    </>
+    </section>
   );
 }
 
-// ─── View mode toggle (floating) ─────────────────────────────────────────────
-function ViewToggle({ viewMode, setViewMode }) {
-  return (
-    <div className="fixed top-6 right-6 z-[100]">
-      <div className="flex items-center gap-1 rounded-full border border-white/20 bg-black/70 p-1.5 shadow-2xl backdrop-blur-md">
-        <button
-          onClick={() => setViewMode('editorial')}
-          className={`flex items-center gap-2 rounded-full px-4 py-2 font-heading text-[11px] font-semibold tracking-[0.5px] transition-all duration-300 ${
-            viewMode === 'editorial' ? 'bg-white text-black' : 'text-white/70 hover:text-white'
-          }`}
-        >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <rect x="1" y="1" width="14" height="14" rx="2" />
-          </svg>
-          Editorial
-        </button>
-        <button
-          onClick={() => setViewMode('list')}
-          className={`flex items-center gap-2 rounded-full px-4 py-2 font-heading text-[11px] font-semibold tracking-[0.5px] transition-all duration-300 ${
-            viewMode === 'list' ? 'bg-white text-black' : 'text-white/70 hover:text-white'
-          }`}
-        >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <rect x="1" y="2" width="5" height="5" rx="1" />
-            <rect x="9" y="2" width="5" height="5" rx="1" />
-            <rect x="1" y="9" width="5" height="5" rx="1" />
-            <rect x="9" y="9" width="5" height="5" rx="1" />
-          </svg>
-          List
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─── List view card ──────────────────────────────────────────────────────────
-function ListCard({ category, index }) {
-  const IconComponent = Icons[category.icon] || Icons.pill;
-  return (
-    <Link
-      href={`/nutraceuticals?category=${category.slug}`}
-      className="group flex items-center gap-6 border-b border-neutral-200 py-6 transition-colors hover:bg-neutral-50 px-4 -mx-4 rounded-lg"
-    >
-      <span className="hidden sm:block font-heading text-[13px] font-bold text-neutral-300 w-8">
-        {String(index + 1).padStart(2, '0')}
-      </span>
-      <div
-        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full"
-        style={{ background: `linear-gradient(135deg, ${category.color_from}20, ${category.color_to}30)`, color: category.color_from }}
-      >
-        <IconComponent />
-      </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-heading text-[16px] font-bold text-primary-dark group-hover:text-primary-light transition-colors sm:text-[18px]">
-          {category.name}
-        </h3>
-        <p className="mt-1 text-[13px] text-neutral-500 truncate">{category.description}</p>
-      </div>
-      <div className="hidden md:flex items-center gap-6">
-        <div className="text-right">
-          <span className="block text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Products</span>
-          <span className="block text-[14px] font-bold text-primary-dark">{category.product_count}</span>
-        </div>
-      </div>
-      <svg className="h-5 w-5 flex-shrink-0 text-neutral-300 transition-all duration-300 group-hover:text-primary-light group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </Link>
-  );
-}
-
-// ─── Product card (unchanged from before) ────────────────────────────────────
+// ─── Product card ───────────────────────────────────────────────────────────
 function ProductCard({ product, category, index }) {
-  const [expanded, setExpanded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const IconComponent = (category && Icons[category.icon]) || Icons.pill;
   const colorFrom = category?.color_from || '#15A859';
   const colorTo = category?.color_to || '#1A475C';
+  const keyActives = product.key_actives?.split(',').map((active) => active.trim()).filter(Boolean) || [];
+  const hasImage = Boolean(product.image_url) && !imageError;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, delay: (index % 3) * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col overflow-hidden rounded-xl border border-neutral-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-neutral-200/60 hover:border-neutral-200"
+      whileHover={{ y: -5 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.55, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-primary-dark/[0.08] bg-white shadow-[0_2px_14px_rgba(18,45,35,0.05)] transition-shadow duration-300 hover:shadow-[0_18px_42px_rgba(18,45,35,0.12)]"
     >
-      <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${colorFrom}, ${colorTo})` }} />
-      <div className="overflow-hidden">
-        <div
-          className="flex aspect-[5/3] w-full items-center justify-center transition-transform duration-700 ease-out-quint group-hover:scale-[1.03]"
-          style={{ background: `linear-gradient(135deg, ${colorFrom}1A, ${colorTo}2A)` }}
-        >
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm" style={{ color: colorFrom }}>
-            {IconComponent && <IconComponent />}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex items-start justify-between gap-3">
-          <h4 className="font-heading text-[16px] font-bold leading-tight text-primary-dark">{product.name}</h4>
-          {product.brand_line && (
-            <span className="flex-shrink-0 whitespace-nowrap rounded-full bg-primary-light/10 px-2.5 py-1 font-heading text-[10px] font-bold uppercase tracking-[0.5px] text-primary-light">
-              {product.brand_line}
+      <div className="relative aspect-[4/3] overflow-hidden" style={{ background: `linear-gradient(135deg, ${colorFrom}24, ${colorTo}38)` }}>
+        {hasImage ? (
+          <motion.img
+            src={product.image_url}
+            alt={product.name}
+            onError={() => setImageError(true)}
+            className="h-full w-full object-cover"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ scale: 1.06 }}
+          />
+        ) : (
+          <>
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/25 blur-2xl" />
+            <div className="absolute -bottom-14 -left-10 h-44 w-44 rounded-full bg-black/10 blur-2xl" />
+            <div className="relative flex h-full items-center justify-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-[28px] border border-white/50 bg-white/60 shadow-lg backdrop-blur-sm" style={{ color: colorFrom }}>
+                <IconComponent />
+              </div>
+            </div>
+          </>
+        )}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/45 to-transparent" />
+        <div className="absolute left-4 top-4 flex items-center gap-2">
+          <span className="rounded-full border border-white/30 bg-black/15 px-2.5 py-1 font-heading text-[9px] font-semibold uppercase tracking-[1.2px] text-white backdrop-blur-md">
+            Formula {String(index + 1).padStart(2, '0')}
+          </span>
+          {product.status === 'Verified' && (
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-primary-light shadow-sm" title="Verified formulation">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="m5 12 4 4L19 6" /></svg>
             </span>
           )}
         </div>
-        <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">{product.primary_benefit}</p>
-        {product.key_actives && (
-          <div className="mt-4">
-            <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Key Actives</span>
+        {product.brand_line && (
+          <span className="absolute bottom-4 left-4 max-w-[calc(100%-2rem)] truncate rounded-full bg-white/90 px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-[0.6px] text-primary-dark shadow-sm backdrop-blur-md">
+            {product.brand_line}
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        {product.subcategory_name && (
+          <p className="mb-3 font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-light">
+            {product.subcategory_name}
+          </p>
+        )}
+        <h4 className="font-heading text-[19px] font-bold leading-[1.12] tracking-[-0.35px] text-primary-dark">
+          {product.name}
+        </h4>
+        {product.primary_benefit && (
+          <p className="mt-3 text-[13px] leading-relaxed text-neutral-600">{product.primary_benefit}</p>
+        )}
+
+        {keyActives.length > 0 && (
+          <div className="mt-5 border-t border-neutral-100 pt-4">
+            <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">Key actives</span>
             <div className="flex flex-wrap gap-1.5">
-              {product.key_actives.split(',').slice(0, expanded ? 100 : 3).map((a, i) => (
-                <span key={i} className="rounded-full border border-primary-light/20 bg-primary-light/5 px-2.5 py-1 text-[11px] font-medium text-primary-dark">{a.trim()}</span>
+              {keyActives.slice(0, 3).map((active, activeIndex) => (
+                <span key={activeIndex} className="rounded-full border border-primary-light/15 bg-primary-light/[0.06] px-2.5 py-1 text-[10px] font-medium text-primary-dark">
+                  {active}
+                </span>
               ))}
-              {!expanded && product.key_actives.split(',').length > 3 && (
-                <button onClick={() => setExpanded(true)} className="rounded-full bg-primary-light/10 px-2.5 py-1 text-[11px] font-bold text-primary-light transition-colors hover:bg-primary-light/20">
-                  +{product.key_actives.split(',').length - 3} more
-                </button>
-              )}
+              {keyActives.length > 3 && <span className="px-1 py-1 text-[10px] font-semibold text-primary-light">+{keyActives.length - 3}</span>}
             </div>
           </div>
         )}
-        <AnimatePresence>
-          {expanded && (
-            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-              {product.secondary_benefits && (
-                <div className="mt-4 rounded-lg bg-neutral-50 p-3.5">
-                  <span className="mb-1.5 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Also Supports</span>
-                  <p className="text-[12px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
-                </div>
-              )}
-              {product.manufacturing_formats && (
-                <div className="mt-4">
-                  <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Formats</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {product.manufacturing_formats.split('|').map((f, i) => (
-                      <span key={i} className="rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-medium text-neutral-700">{f.trim()}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {product.dds_delivery_tech && (
-                <div className="mt-4">
-                  <span className="mb-2 block font-heading text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">Delivery Technology</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {product.dds_delivery_tech.split('|').map((d, i) => (
-                      <span key={i} className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-[11px] font-medium text-neutral-600 shadow-sm">{d.trim()}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-4 inline-flex items-center gap-1.5 self-start rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500 transition-all duration-300 hover:border-primary-light hover:bg-primary-light/5 hover:text-primary-light"
+
+        <Link
+          href={`/nutraceuticals/products/${product.id}`}
+          className="mt-6 inline-flex items-center gap-2 self-start font-heading text-[11px] font-semibold uppercase tracking-[1px] text-primary-dark transition-colors hover:text-primary-light"
         >
-          {expanded ? 'Show less' : 'View details'}
-          <svg className={`h-3 w-3 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+          Product details
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current">
+            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17 17 7M7 7h10v10" /></svg>
+          </span>
+        </Link>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
 // ─── Main content ────────────────────────────────────────────────────────────
-function NutraceuticalsContent() {
+function NutraceuticalsContent({ scrollContainerRef }) {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || null);
@@ -373,7 +371,7 @@ function NutraceuticalsContent() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeSubcategory, setActiveSubcategory] = useState(null);
-  const [viewMode, setViewMode] = useState('editorial');
+  const productSectionRef = useRef(null);
 
   useEffect(() => { if (categoryParam) setSelectedCategory(categoryParam); }, [categoryParam]);
   useEffect(() => { fetch('/api/categories').then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) setCategories(data); }).catch(() => {}); }, []);
@@ -390,37 +388,37 @@ function NutraceuticalsContent() {
 
   const selectedCat = categories.find(c => c.slug === selectedCategory);
 
+  // Category deep links should land on the selected products section, not the page hero.
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    const section = productSectionRef.current;
+    if (!selectedCategory || !selectedCat || !container || !section) return;
+
+    const frame = requestAnimationFrame(() => {
+      const containerTop = container.getBoundingClientRect().top;
+      const sectionTop = section.getBoundingClientRect().top;
+      const headerOffset = 92;
+      container.scrollTo({
+        top: Math.max(0, container.scrollTop + sectionTop - containerTop - headerOffset),
+        behavior: 'smooth',
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [selectedCategory, selectedCat?.slug, scrollContainerRef]);
+
   return (
     <>
       {/* ===== SNAP SCROLL CARDS ===== */}
       {!selectedCategory && (
-        <section className="relative">
-          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-
-          {viewMode === 'editorial' && (
-            <EditorialScroll categories={categories} />
-          )}
-
-          {viewMode === 'list' && (
-            <div className="mx-auto max-w-[1000px] px-5 py-16 sm:px-8 sm:py-20">
-              <div className="mb-10">
-                <h2 className="font-heading text-[28px] font-bold text-primary-dark sm:text-[34px]">All Categories</h2>
-                <p className="mt-2 text-[15px] text-neutral-500">14 health categories. 268+ formulations.</p>
-              </div>
-              <div>
-                {categories.map((cat, i) => (
-                  <ListCard key={cat.slug || i} category={cat} index={i} />
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
+        <EditorialScroll categories={categories} scrollContainerRef={scrollContainerRef} />
       )}
 
       {/* ===== PRODUCT DETAIL VIEW ===== */}
       <AnimatePresence mode="wait">
         {selectedCategory && selectedCat && (
           <motion.section
+            ref={productSectionRef}
             key={selectedCategory}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -438,9 +436,30 @@ function NutraceuticalsContent() {
                 All Categories
               </button>
 
-              <h2 className="mb-10 font-heading text-[24px] font-bold uppercase leading-[1.05] tracking-[-0.5px] text-primary-dark sm:text-[30px]">
-                {selectedCat.name}
-              </h2>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-10 border-b border-neutral-100 pb-8"
+              >
+                <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.4px] text-primary-light">Products</p>
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <h2 className="max-w-[850px] font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[50px]">
+                      {selectedCat.name}
+                    </h2>
+                    <p className="mt-4 max-w-[680px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">{selectedCat.description}</p>
+                  </div>
+                  <div className="flex items-center gap-5 border-l-2 border-primary-light/30 pl-4 lg:mb-1">
+                    <div>
+                      <span className="editorial-number block font-heading text-[30px] font-bold leading-none text-primary-light">{selectedCat.product_count}</span>
+                      <span className="mt-1 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">Formulations</span>
+                    </div>
+                    <div className="h-9 w-px bg-neutral-200" />
+                    <p className="max-w-[120px] text-[12px] leading-relaxed text-neutral-500">Open a product to see its listed formats and delivery technology.</p>
+                  </div>
+                </div>
+              </motion.div>
 
               {selectedCat.subcategories?.length > 0 && (
                 <div className="mb-8 flex flex-wrap gap-2.5">
@@ -529,10 +548,12 @@ function NutraceuticalsContent() {
 }
 
 export default function Nutraceuticals() {
+  const pageScrollRef = useRef(null);
+
   return (
-    <div className="h-screen snap-y snap-mandatory overflow-y-auto bg-white" style={{ scrollbarWidth: 'none' }}>
-      {/* ============ HERO — first snap section ============ */}
-      <section className="relative snap-start snap-always overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
+    <div ref={pageScrollRef} className="h-screen snap-y snap-proximity overflow-y-auto scroll-smooth bg-white" style={{ scrollbarWidth: 'none' }}>
+      {/* ============ HERO ============ */}
+      <section className="relative overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
         <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
           <defs>
             <pattern id="nutra-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
@@ -549,19 +570,13 @@ export default function Nutraceuticals() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <p className="mb-5 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/70">
-                Nutraceuticals
-              </p>
+
               <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
                 Formulated
                 <br />
                 <span className="text-secondary">to deliver.</span>
               </h1>
-              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
-                268+ clinically-backed formulations across 14 health categories.
-                Engineered for bioavailability. Manufactured to certified standards.
-                Built for your brand.
-              </p>
+
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/contact">
                   <motion.span
@@ -596,18 +611,18 @@ export default function Nutraceuticals() {
 
       {/* ============ MAIN CONTENT ============ */}
       <Suspense fallback={
-        <div className="flex h-screen snap-start items-center justify-center bg-neutral-900">
+        <div className="flex h-screen items-center justify-center bg-neutral-900">
           <div className="animate-pulse text-center">
             <div className="mx-auto h-8 w-48 rounded bg-neutral-700" />
             <div className="mx-auto mt-4 h-4 w-64 rounded bg-neutral-700" />
           </div>
         </div>
       }>
-        <NutraceuticalsContent />
+        <NutraceuticalsContent scrollContainerRef={pageScrollRef} />
       </Suspense>
 
-      {/* ============ CLOSING CTA — last snap section ============ */}
-      <section className="relative snap-start snap-always overflow-hidden bg-primary-dark py-20 text-white sm:py-24 lg:py-28">
+      {/* ============ CLOSING CTA ============ */}
+      <section className="relative overflow-hidden bg-primary-dark py-20 text-white sm:py-24 lg:py-28">
           <div
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(21,168,89,0.08) 0%, transparent 70%)' }}

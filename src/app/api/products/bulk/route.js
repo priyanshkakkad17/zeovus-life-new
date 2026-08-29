@@ -32,13 +32,14 @@ export async function POST(request) {
           .replace(/(^-|-$)/g, '');
 
         await connection.query(`
-          INSERT INTO products (category_id, subcategory_id, name, slug, brand_line, key_actives,
+          INSERT INTO products (category_id, subcategory_id, name, image_url, slug, brand_line, key_actives,
             primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
           product.category_id,
           product.subcategory_id || null,
           product.name,
+          product.image_url || null,
           slug,
           product.brand_line || null,
           product.key_actives || null,

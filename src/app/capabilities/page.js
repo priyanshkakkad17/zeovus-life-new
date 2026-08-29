@@ -197,19 +197,13 @@ export default function Capabilities() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <p className="mb-5 font-heading text-[11px] font-bold uppercase tracking-[3px] text-secondary/70">
-                Capabilities
-              </p>
+
               <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
                 Proven in research.
                 <br />
                 <span className="text-secondary">Built to scale.</span>
               </h1>
-              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
-                Trusted by nutraceutical and cosmetic brands across global markets to
-                turn formulations into shelf-ready, certified products — from first
-                sample to full commercial volume, without ever changing partners.
-              </p>
+
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/contact">
                   <motion.span
@@ -247,10 +241,7 @@ export default function Capabilities() {
                 <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">17</span>
                 <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Certifications</span>
               </div>
-              <div>
-                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">2</span>
-                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">Divisions</span>
-              </div>
+
             </motion.div>
           </div>
         </div>

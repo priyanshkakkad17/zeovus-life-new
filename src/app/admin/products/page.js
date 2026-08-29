@@ -14,7 +14,7 @@ export default function AdminProducts() {
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
-    category_id: '', subcategory_id: '', name: '', brand_line: '',
+    category_id: '', subcategory_id: '', name: '', image_url: '', brand_line: '',
     key_actives: '', primary_benefit: '', secondary_benefits: '',
     manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft'
   });
@@ -46,7 +46,7 @@ export default function AdminProducts() {
   }
 
   function resetForm() {
-    setFormData({ category_id: '', subcategory_id: '', name: '', brand_line: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft' });
+    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', brand_line: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft' });
     setEditingProduct(null);
     setShowForm(false);
   }
@@ -56,6 +56,7 @@ export default function AdminProducts() {
       category_id: product.category_id,
       subcategory_id: product.subcategory_id || '',
       name: product.name,
+      image_url: product.image_url || '',
       brand_line: product.brand_line || '',
       key_actives: product.key_actives || '',
       primary_benefit: product.primary_benefit || '',
@@ -145,8 +146,19 @@ export default function AdminProducts() {
               )) : products.length > 0 ? products.map(p => (
                 <tr key={p.id} className="hover:bg-neutral-50/50">
                   <td className="px-5 py-3">
-                    <div className="font-medium text-neutral-800 max-w-[180px] truncate">{p.name}</div>
-                    <div className="text-xs text-neutral-400 max-w-[180px] truncate mt-0.5">{p.primary_benefit}</div>
+                    <div className="flex items-center gap-3">
+                      {p.image_url ? (
+                        <img src={p.image_url} alt="" className="h-10 w-10 flex-shrink-0 rounded-lg border border-neutral-200 object-cover" />
+                      ) : (
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-light/10 text-primary-light">
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 16l4.586-4.586a2 2 0 012.828 0L14 14m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-16 4h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2zm6-9h.01" /></svg>
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="font-medium text-neutral-800 max-w-[180px] truncate">{p.name}</div>
+                        <div className="text-xs text-neutral-400 max-w-[180px] truncate mt-0.5">{p.primary_benefit}</div>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-5 py-3"><span className="text-xs px-2 py-0.5 rounded-full bg-primary-light/10 text-primary-light font-medium">{p.brand_line || '—'}</span></td>
                   <td className="px-5 py-3 text-neutral-600 text-xs">{p.category_name}</td>
@@ -217,6 +229,27 @@ export default function AdminProducts() {
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Brand Line</label>
                   <input type="text" value={formData.brand_line} onChange={(e) => setFormData(f => ({ ...f, brand_line: e.target.value }))} placeholder="Smart Men, Meltos..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Product Image URL</label>
+                <input
+                  type="url"
+                  value={formData.image_url}
+                  onChange={(e) => setFormData(f => ({ ...f, image_url: e.target.value }))}
+                  placeholder="https://res.cloudinary.com/.../product.png"
+                  className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm"
+                />
+                <p className="mt-1.5 text-xs text-neutral-400">Use a hosted image URL. Cloudinary URLs work well with the current site setup.</p>
+                {formData.image_url && (
+                  <div className="mt-3 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 p-2">
+                    <img
+                      src={formData.image_url}
+                      alt="Product preview"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      className="h-32 w-full rounded-md object-cover"
+                    />
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">Key Actives</label>

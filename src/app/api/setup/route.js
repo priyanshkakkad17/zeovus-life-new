@@ -1,10 +1,12 @@
-import { getPool } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { getPool } from '@/lib/db';
 
-export async function POST(request) {
+export async function POST() {
+  let connection;
+
   try {
     const pool = getPool();
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
 
     // Create tables
     await connection.query(`
@@ -45,6 +47,7 @@ export async function POST(request) {
         category_id INT NOT NULL,
         subcategory_id INT DEFAULT NULL,
         name VARCHAR(255) NOT NULL,
+        image_url VARCHAR(2048) DEFAULT NULL,
         slug VARCHAR(255) NOT NULL,
         brand_line VARCHAR(100) DEFAULT NULL,
         key_actives TEXT,
@@ -66,6 +69,12 @@ export async function POST(request) {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
 
+    // Migrate databases created before products supported image URLs.
+    const [imageColumn] = await connection.query("SHOW COLUMNS FROM products LIKE 'image_url'");
+    if (imageColumn.length === 0) {
+      await connection.query('ALTER TABLE products ADD COLUMN image_url VARCHAR(2048) DEFAULT NULL AFTER name');
+    }
+
     await connection.query(`
       CREATE TABLE IF NOT EXISTS admin_users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,11 +95,11 @@ export async function POST(request) {
       VALUES (?, ?, 'Super Admin', 'admin')
     `, [process.env.ADMIN_EMAIL || 'admin@zeovuslife.com', hashedPassword]);
 
-    connection.release();
-
-    return Response.json({ success: true, message: 'Database setup complete' });
+    return Response.json({ success: true, message: 'Database setup and product image migration complete' });
   } catch (error) {
     console.error('Setup error:', error);
     return Response.json({ success: false, error: error.message }, { status: 500 });
+  } finally {
+    connection?.release();
   }
 }

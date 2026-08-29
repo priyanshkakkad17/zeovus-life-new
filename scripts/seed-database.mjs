@@ -219,7 +219,7 @@ async function main() {
       id INT AUTO_INCREMENT PRIMARY KEY,
       category_id INT NOT NULL,
       subcategory_id INT DEFAULT NULL,
-      name VARCHAR(255) NOT NULL,
+      image_url VARCHAR(2048) DEFAULT NULL,
       slug VARCHAR(255) NOT NULL,
       brand_line VARCHAR(100) DEFAULT NULL,
       key_actives TEXT,
@@ -321,8 +321,8 @@ async function main() {
         const slug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').substring(0, 250);
 
         await connection.query(
-          `INSERT INTO products (category_id, subcategory_id, name, slug, brand_line, key_actives, primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [catId, subcatId, product.name, slug, product.brand_line, product.key_actives, product.primary_benefit, product.secondary_benefits, product.manufacturing_formats, product.dds_delivery_tech, product.status, order]
+          `INSERT INTO products (category_id, subcategory_id, name, image_url, slug, brand_line, key_actives, primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [catId, subcatId, product.name, product.image_url || null, slug, product.brand_line, product.key_actives, product.primary_benefit, product.secondary_benefits, product.manufacturing_formats, product.dds_delivery_tech, product.status, order]
         );
         inserted++;
         if (inserted % 100 === 0) console.log(`  ... ${inserted} inserted`);

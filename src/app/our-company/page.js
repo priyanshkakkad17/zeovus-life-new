@@ -57,7 +57,7 @@ export default function OurCompany() {
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* ============ HERO ============ */}
       <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         {/* Video Background */}
         <video
@@ -73,19 +73,73 @@ export default function OurCompany() {
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/80 via-primary/70 to-primary-light/60"></div>
         
-        <div className="container relative z-10 pt-24 pb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
-              Built to be trusted with wellness.
-            </h1>
-            <p className="text-xl text-white/90 max-w-3xl">
-              Leading B2B nutraceutical and cosmetic manufacturer with decades of expertise in formulation science and manufacturing excellence.
-            </p>
-          </motion.div>
+        {/* Hex grid overlay similar to capabilities page */}
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+          <defs>
+            <pattern id="company-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+              <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#company-hex-grid)" />
+        </svg>
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12 pt-32 pb-16 sm:pt-36 lg:pt-40 lg:pb-24">
+          <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
+
+              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] text-white">
+                Built to be trusted with wellness.
+              </h1>
+              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-white/80 sm:text-[17px]">
+                Leading B2B nutraceutical and cosmetic manufacturer with decades of expertise in formulation science and manufacturing excellence.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link href="/contact">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-block cursor-pointer rounded-[2px] bg-secondary px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-primary-dark transition-colors hover:bg-secondary-dark"
+                  >
+                    ENQUIRE NOW
+                  </motion.span>
+                </Link>
+                <a href="#process">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="inline-block cursor-pointer rounded-[2px] border border-white/25 bg-white/[0.04] px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-white backdrop-blur-sm transition-colors hover:bg-white/[0.08]"
+                  >
+                    LEARN MORE
+                  </motion.span>
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Stat column - similar to capabilities page */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+            >
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">20+</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-white/70">Years Experience</span>
+              </div>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">268+</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-white/70">Formulations</span>
+              </div>
+              <div>
+                <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">17</span>
+                <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-white/70">Certifications</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

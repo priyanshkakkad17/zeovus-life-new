@@ -78,7 +78,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
-      category_id, subcategory_id, name, brand_line,
+      category_id, subcategory_id, name, image_url, brand_line,
       key_actives, primary_benefit, secondary_benefits,
       manufacturing_formats, dds_delivery_tech, status
     } = body;
@@ -86,11 +86,11 @@ export async function POST(request) {
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     const result = await query(`
-      INSERT INTO products (category_id, subcategory_id, name, slug, brand_line, key_actives, 
+      INSERT INTO products (category_id, subcategory_id, name, image_url, slug, brand_line, key_actives, 
         primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
-      category_id, subcategory_id || null, name, slug, brand_line || null,
+      category_id, subcategory_id || null, name, image_url || null, slug, brand_line || null,
       key_actives || null, primary_benefit || null, secondary_benefits || null,
       manufacturing_formats || null, dds_delivery_tech || null, status || 'Draft'
     ]);
