@@ -25,6 +25,66 @@ export const Icons = {
   sun: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.95 6.95l-1.4-1.4M6.45 6.45l-1.4-1.4m12.5 0l-1.4 1.4M6.45 17.55l-1.4 1.4M16 12a4 4 0 11-8 0 4 4 0 018 0z" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 };
 
+// ─── Stamp seal — rubber-stamp "pressed on paper" effect ──────────────────────
+function StampSeal({ src, label }) {
+  return (
+    <div className="flex flex-col items-center lg:items-start">
+      <motion.div
+        initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
+        animate={{
+          opacity: [0, 1, 1, 1],
+          scale: [2.5, 0.8, 1.07, 1],
+          rotate: [-24, -13, -9, -8],
+          filter: ['blur(4px)', 'blur(0.4px)', 'blur(0px)', 'blur(0px)'],
+        }}
+        transition={{
+          delay: 0.5,
+          duration: 0.52,
+          times: [0, 0.55, 0.8, 1],
+          ease: [0.34, 1.56, 0.64, 1],
+        }}
+        className="relative"
+        style={{ transformOrigin: 'center' }}
+      >
+        {/* Round paper disc the seal is stamped onto */}
+        <div
+          className="relative flex h-32 w-32 items-center justify-center rounded-full border-4 border-white bg-white sm:h-36 sm:w-36 lg:h-40 lg:w-40"
+          style={{
+            boxShadow: '0 10px 30px rgba(0,0,0,0.28)',
+          }}
+        >
+          {/* Ink bleed halo that appears on impact */}
+          <motion.span
+            aria-hidden="true"
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: [0, 0.4, 0], scale: [0.7, 1.15, 1.35] }}
+            transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
+            className="absolute inset-2 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(21,120,60,0.30) 0%, transparent 70%)' }}
+          />
+          <img
+            src={src}
+            alt={label || 'ZQA seal'}
+            className="relative h-[86%] w-[86%] select-none object-contain"
+            style={{ mixBlendMode: 'multiply' }}
+            draggable={false}
+          />
+        </div>
+      </motion.div>
+      {label && (
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.05, duration: 0.4 }}
+          className="mt-3 block font-heading text-[11px] font-semibold uppercase tracking-[2px] text-neutral-400"
+        >
+          {label}
+        </motion.span>
+      )}
+    </div>
+  );
+}
+
 // ─── Side dot navigation ─────────────────────────────────────────────────────
 function DotNav({ categories, activeIndex, onDotClick }) {
   return (
@@ -158,9 +218,6 @@ function EditorialScroll({ categories, scrollContainerRef, basePath }) {
             className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20"
           >
             <div className="mb-8 sm:mb-10 lg:mb-12">
-              <p className="mb-4 font-heading text-[13px] font-medium tracking-[2.5px] text-white/70">
-                Category {String(i + 1).padStart(2, '0')}
-              </p>
               <h2 className="max-w-[750px] font-heading text-[40px] font-bold leading-[1.06] tracking-[-0.5px] text-white sm:text-[54px] lg:text-[66px] xl:text-[74px]">
                 {cat.name}
               </h2>
@@ -178,33 +235,23 @@ function EditorialScroll({ categories, scrollContainerRef, basePath }) {
               </Link>
             </div>
 
-            <motion.div
-              initial={false}
-              animate={{ opacity: activeIndex === i ? 1 : 0, y: activeIndex === i ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: activeIndex === i ? 0.32 : 0, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-wrap items-end gap-x-14 gap-y-4 border-t border-white/15 pt-7 pb-2"
-            >
-              <div>
-                <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Format</p>
-                <p className="text-[15px] font-semibold text-white">Contract Manufacturing</p>
-              </div>
-              <div>
-                <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Products</p>
-                <p className="text-[15px] font-semibold text-white">{cat.product_count}</p>
-              </div>
-              {cat.highlights && cat.highlights.length > 0 && (
-                <div className="ml-auto hidden lg:block">
-                  <p className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Key Offerings</p>
-                  <div className="flex flex-wrap gap-2">
-                    {cat.highlights.slice(0, 5).map((h, hi) => (
-                      <span key={hi} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[12px] font-medium text-white/80 backdrop-blur-sm">
-                        {h}
-                      </span>
-                    ))}
-                  </div>
+            {cat.highlights && cat.highlights.length > 0 && (
+              <motion.div
+                initial={false}
+                animate={{ opacity: activeIndex === i ? 1 : 0, y: activeIndex === i ? 0 : 20 }}
+                transition={{ duration: 0.5, delay: activeIndex === i ? 0.32 : 0, ease: [0.22, 1, 0.36, 1] }}
+                className="hidden border-t border-white/15 pt-7 pb-2 lg:block"
+              >
+                <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Key Offerings</p>
+                <div className="flex flex-wrap gap-2">
+                  {cat.highlights.slice(0, 5).map((h, hi) => (
+                    <span key={hi} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[12px] font-medium text-white/80 backdrop-blur-sm">
+                      {h}
+                    </span>
+                  ))}
                 </div>
-              )}
-            </motion.div>
+              </motion.div>
+            )}
           </motion.div>
 
           {i === 0 && (
@@ -560,19 +607,20 @@ export default function CategoryCatalog({
               </div>
             </motion.div>
 
-            {hero.stats && hero.stats.length > 0 && (
+            {((hero.stats && hero.stats.length > 0) || hero.seal) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+                className="flex items-center gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
               >
-                {hero.stats.map((stat) => (
+                {hero.stats?.map((stat) => (
                   <div key={stat.label}>
                     <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">{stat.value}</span>
                     <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">{stat.label}</span>
                   </div>
                 ))}
+                {hero.seal && <StampSeal src={hero.seal.src} label={hero.seal.label} />}
               </motion.div>
             )}
           </div>

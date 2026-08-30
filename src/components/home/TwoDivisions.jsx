@@ -71,29 +71,6 @@ export default function TwoDivisions() {
       }
     );
 
-    // Subtle parallax offset between cards on scroll (first card moves slightly slower)
-    if (cards[0] && cards[1]) {
-      gsap.to(cards[0], {
-        yPercent: -3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-      gsap.to(cards[1], {
-        yPercent: 3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }
   }, { scope: sectionRef });
 
   return (
@@ -108,14 +85,9 @@ export default function TwoDivisions() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-14 text-center lg:mb-16"
         >
-          <h2 className="mb-4 font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px]">
+          <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px]">
             Two ways we care for you.
           </h2>
-          <p className="mx-auto max-w-3xl text-[15px] leading-relaxed text-neutral-600 sm:text-[16px] md:text-[18px]">
-            Two disciplines, one process: formulated against the evidence, tested
-            to the same protocols, manufactured on lines that answer to the same
-            certifications.
-          </p>
         </motion.div>
 
         {/* Cards — GSAP scroll-stagger target */}

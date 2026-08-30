@@ -16,8 +16,8 @@ const hero = {
   titleAccent: 'to transform.',
   stats: [
     { value: '4', label: 'Categories' },
-    { value: 'ZQA', label: 'Quality Standard' },
   ],
+  seal: { src: '/zqa/seal5.png', label: 'Quality Standard' },
 };
 
 const cta = {
