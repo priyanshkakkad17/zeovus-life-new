@@ -15,6 +15,7 @@ export async function POST() {
         slug VARCHAR(100) NOT NULL UNIQUE,
         name VARCHAR(255) NOT NULL,
         description TEXT,
+        division VARCHAR(20) NOT NULL DEFAULT 'nutraceuticals',
         icon VARCHAR(50) DEFAULT NULL,
         color_from VARCHAR(50) DEFAULT NULL,
         color_to VARCHAR(50) DEFAULT NULL,
@@ -24,6 +25,18 @@ export async function POST() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
+
+    // Migrate databases created before categories supported divisions.
+    const [divisionColumn] = await connection.query("SHOW COLUMNS FROM categories LIKE 'division'");
+    if (divisionColumn.length === 0) {
+      await connection.query("ALTER TABLE categories ADD COLUMN division VARCHAR(20) NOT NULL DEFAULT 'nutraceuticals' AFTER description");
+    }
+
+    // Ensure categories support a hosted image URL (used across admin and public pages).
+    const [categoryImageColumn] = await connection.query("SHOW COLUMNS FROM categories LIKE 'image'");
+    if (categoryImageColumn.length === 0) {
+      await connection.query('ALTER TABLE categories ADD COLUMN image VARCHAR(2048) DEFAULT NULL AFTER description');
+    }
 
     await connection.query(`
       CREATE TABLE IF NOT EXISTS subcategories (

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 const EMPTY_CATEGORY_FORM = {
   name: '',
   description: '',
+  division: 'nutraceuticals',
   icon: '',
   image: '',
   color_from: '#15A859',
@@ -160,10 +161,17 @@ export default function AdminCategories() {
         <div className="mb-6 rounded-xl border border-neutral-200/60 bg-white p-6 shadow-sm">
           <h3 className="mb-4 font-display font-semibold text-neutral-900">New Category</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700">Name *</label>
                 <input type="text" value={formData.name} onChange={(event) => setFormData((data) => ({ ...data, name: event.target.value }))} required className="w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-neutral-700">Division *</label>
+                <select value={formData.division} onChange={(event) => setFormData((data) => ({ ...data, division: event.target.value }))} className="w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20">
+                  <option value="nutraceuticals">Nutraceuticals</option>
+                  <option value="cosmetics">Cosmetics</option>
+                </select>
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700">Icon Key</label>
@@ -225,6 +233,7 @@ export default function AdminCategories() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-display text-base font-semibold text-neutral-900">{cat.name}</h3>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${cat.division === 'cosmetics' ? 'bg-pink-50 text-pink-700' : 'bg-blue-50 text-blue-700'}`}>{cat.division || 'nutraceuticals'}</span>
                       <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">Active</span>
                       <span className="text-xs text-neutral-400">({cat.product_count || 0} products)</span>
                     </div>

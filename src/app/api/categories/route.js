@@ -1,17 +1,26 @@
 import { query } from '@/lib/db';
 
 // GET all categories with product counts and subcategories
-export async function GET() {
+export async function GET(request) {
   try {
-    const categories = await query(`
+    const { searchParams } = new URL(request.url);
+    const division = searchParams.get('division');
+
+    const categoryParams = [];
+    let categorySql = `
       SELECT c.*, 
         COUNT(p.id) as product_count
       FROM categories c
       LEFT JOIN products p ON p.category_id = c.id AND p.is_active = 1
       WHERE c.is_active = 1
-      GROUP BY c.id
-      ORDER BY c.sort_order ASC
-    `);
+    `;
+    if (division) {
+      categorySql += ' AND c.division = ?';
+      categoryParams.push(division);
+    }
+    categorySql += ' GROUP BY c.id ORDER BY c.sort_order ASC';
+
+    const categories = await query(categorySql, categoryParams);
 
     // Fetch subcategories for each category
     const subcategories = await query(`
@@ -53,14 +62,15 @@ function normaliseImageUrl(value) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, description, icon, image, color_from, color_to, sort_order } = body;
+    const { name, description, division, icon, image, color_from, color_to, sort_order } = body;
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     const imageUrl = normaliseImageUrl(image);
+    const categoryDivision = division === 'cosmetics' ? 'cosmetics' : 'nutraceuticals';
 
     const result = await query(`
-      INSERT INTO categories (slug, name, description, icon, image, color_from, color_to, sort_order)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `, [slug, name, description || null, icon || null, imageUrl, color_from || null, color_to || null, sort_order || 0]);
+      INSERT INTO categories (slug, name, description, division, icon, image, color_from, color_to, sort_order)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [slug, name, description || null, categoryDivision, icon || null, imageUrl, color_from || null, color_to || null, sort_order || 0]);
 
     return Response.json({ success: true, id: result.insertId });
   } catch (error) {

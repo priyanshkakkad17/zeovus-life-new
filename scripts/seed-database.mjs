@@ -190,6 +190,7 @@ async function main() {
       slug VARCHAR(100) NOT NULL UNIQUE,
       name VARCHAR(255) NOT NULL,
       description TEXT,
+      division VARCHAR(20) NOT NULL DEFAULT 'nutraceuticals',
       icon VARCHAR(50) DEFAULT NULL,
       image VARCHAR(2048) DEFAULT NULL,
       color_from VARCHAR(50) DEFAULT NULL,
