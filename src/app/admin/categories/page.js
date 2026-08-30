@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ImageField from '@/components/admin/ImageField';
 
 const EMPTY_CATEGORY_FORM = {
   name: '',
@@ -184,16 +185,12 @@ export default function AdminCategories() {
               <textarea value={formData.description} onChange={(event) => setFormData((data) => ({ ...data, description: event.target.value }))} rows={2} className="w-full resize-none rounded-lg border border-neutral-200 px-3 py-2.5 text-sm focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20" />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_160px]">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-neutral-700">Category Image URL</label>
-                <input type="url" value={formData.image} onChange={(event) => setFormData((data) => ({ ...data, image: event.target.value }))} placeholder="https://res.cloudinary.com/..." className="w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20" />
-                <p className="mt-1 text-xs text-neutral-400">Use a direct HTTPS image URL. Leave blank to use the frontend placeholder.</p>
-              </div>
-              <div className="overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50">
-                {formData.image ? <img src={formData.image} alt="New category preview" className="h-24 w-full object-cover" /> : <div className="flex h-24 items-center justify-center text-xs text-neutral-400">Image preview</div>}
-              </div>
-            </div>
+            <ImageField
+              label="Category Image"
+              value={formData.image}
+              onChange={(url) => setFormData((data) => ({ ...data, image: url }))}
+              help="Paste a hosted image URL or upload a file. Leave blank to use the frontend placeholder."
+            />
 
             <div className="grid grid-cols-3 gap-4">
               <div>
@@ -262,21 +259,17 @@ export default function AdminCategories() {
               {/* Image editor */}
               {editingImageId === cat.id && (
                 <div className="mt-5 border-t border-neutral-100 pt-5">
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_180px]">
-                    <div>
-                      <label className="mb-1 block text-xs font-medium text-neutral-600">Category Image URL</label>
-                      <input type="url" value={imageDraft} onChange={(event) => setImageDraft(event.target.value)} placeholder="https://res.cloudinary.com/..." className="w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20" />
-                      <p className="mt-1 text-xs text-neutral-400">Leave blank and save to remove this category image.</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <button type="button" onClick={() => saveCategoryImage(cat.id)} disabled={savingImage} className="rounded-lg bg-primary-light px-4 py-2 text-xs font-medium text-white transition-all hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60">
-                          {savingImage ? 'Saving…' : 'Save Image'}
-                        </button>
-                        <button type="button" onClick={cancelImageEdit} disabled={savingImage} className="rounded-lg border border-neutral-200 px-4 py-2 text-xs text-neutral-600 transition-all hover:bg-neutral-50">Cancel</button>
-                      </div>
-                    </div>
-                    <div className="overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50">
-                      {imageDraft ? <img src={imageDraft} alt="Category image preview" className="h-32 w-full object-cover" /> : <div className="flex h-32 items-center justify-center text-xs text-neutral-400">No image selected</div>}
-                    </div>
+                  <ImageField
+                    label="Category Image"
+                    value={imageDraft}
+                    onChange={setImageDraft}
+                    help="Paste a hosted image URL or upload a file. Clear and save to remove this category image."
+                  />
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button type="button" onClick={() => saveCategoryImage(cat.id)} disabled={savingImage} className="rounded-lg bg-primary-light px-4 py-2 text-xs font-medium text-white transition-all hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60">
+                      {savingImage ? 'Saving…' : 'Save Image'}
+                    </button>
+                    <button type="button" onClick={cancelImageEdit} disabled={savingImage} className="rounded-lg border border-neutral-200 px-4 py-2 text-xs text-neutral-600 transition-all hover:bg-neutral-50">Cancel</button>
                   </div>
                 </div>
               )}

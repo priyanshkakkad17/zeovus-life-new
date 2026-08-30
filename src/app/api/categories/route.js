@@ -1,4 +1,5 @@
 import { query } from '@/lib/db';
+import { normaliseImageUrl } from '@/lib/images';
 
 // GET all categories with product counts and subcategories
 export async function GET(request) {
@@ -41,20 +42,6 @@ export async function GET(request) {
   } catch (error) {
     console.error('Categories GET error:', error);
     return Response.json({ error: error.message }, { status: 500 });
-  }
-}
-
-function normaliseImageUrl(value) {
-  if (!value || !value.trim()) return null;
-
-  try {
-    const url = new URL(value.trim());
-    if (!['http:', 'https:'].includes(url.protocol)) {
-      throw new Error('Image URL must use HTTP or HTTPS.');
-    }
-    return url.toString();
-  } catch (error) {
-    throw new Error(error.message === 'Image URL must use HTTP or HTTPS.' ? error.message : 'Enter a valid image URL.');
   }
 }
 

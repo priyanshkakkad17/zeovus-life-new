@@ -88,6 +88,22 @@ export async function POST() {
       await connection.query('ALTER TABLE products ADD COLUMN image_url VARCHAR(2048) DEFAULT NULL AFTER name');
     }
 
+    // Editable page content for the CMS. Each row is one editable field on a page.
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS site_content (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        page VARCHAR(60) NOT NULL,
+        content_key VARCHAR(120) NOT NULL,
+        content_type ENUM('text', 'image') NOT NULL DEFAULT 'text',
+        content_value TEXT,
+        label VARCHAR(160) DEFAULT NULL,
+        sort_order INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY unique_content (page, content_key)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+
     await connection.query(`
       CREATE TABLE IF NOT EXISTS admin_users (
         id INT AUTO_INCREMENT PRIMARY KEY,

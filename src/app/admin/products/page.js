@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ImageField from '@/components/admin/ImageField';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -230,27 +231,12 @@ export default function AdminProducts() {
                   <input type="text" value={formData.brand_line} onChange={(e) => setFormData(f => ({ ...f, brand_line: e.target.value }))} placeholder="Smart Men, Meltos..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Product Image URL</label>
-                <input
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData(f => ({ ...f, image_url: e.target.value }))}
-                  placeholder="https://res.cloudinary.com/.../product.png"
-                  className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm"
-                />
-                <p className="mt-1.5 text-xs text-neutral-400">Use a hosted image URL. Cloudinary URLs work well with the current site setup.</p>
-                {formData.image_url && (
-                  <div className="mt-3 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 p-2">
-                    <img
-                      src={formData.image_url}
-                      alt="Product preview"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      className="h-32 w-full rounded-md object-cover"
-                    />
-                  </div>
-                )}
-              </div>
+              <ImageField
+                label="Product Image"
+                value={formData.image_url}
+                onChange={(url) => setFormData(f => ({ ...f, image_url: url }))}
+                help="Paste a hosted image URL or upload a file. Uploads are stored under /uploads."
+              />
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">Key Actives</label>
                 <textarea value={formData.key_actives} onChange={(e) => setFormData(f => ({ ...f, key_actives: e.target.value }))} rows={2} placeholder="Comma separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />

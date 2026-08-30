@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import EditableRegion from '@/components/cms/EditableRegion';
 
 const partnershipOptions = [
   {
@@ -43,6 +44,16 @@ export default function Contact() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/content?page=contact')
+      .then((res) => res.json())
+      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,15 +89,16 @@ export default function Contact() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h1 className="max-w-[760px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[62px]">
-                Bring the brief.
-                <br />
-                <span className="text-secondary">We'll bring the batch.</span>
-              </h1>
-              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
-                Backed by decades of leadership experience across pharmaceuticals and
-                nutraceuticals — now behind your next formula.
-              </p>
+              <EditableRegion page="contact">
+                <h1 className="max-w-[760px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[62px]">
+                  {content?.hero_title_lead || 'Bring the brief.'}
+                  <br />
+                  <span className="text-secondary">{content?.hero_title_accent || "We'll bring the batch."}</span>
+                </h1>
+                <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                  {content?.hero_subtitle || 'Backed by decades of leadership experience across pharmaceuticals and nutraceuticals — now behind your next formula.'}
+                </p>
+              </EditableRegion>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href="#enquire">
                   <motion.span
