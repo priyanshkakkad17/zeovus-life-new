@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import EditableRegion from '@/components/cms/EditableRegion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,8 +113,19 @@ function ArrowLink({ href, children }) {
 
 export default function Capabilities() {
   const [activeSection, setActiveSection] = useState('innovation');
+  const [content, setContent] = useState(null);
   const innovationRef = useRef(null);
   const manufacturingRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/content?page=capabilities')
+      .then((res) => res.json())
+      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+  const cms = (key, fallback) => content?.[key] || fallback;
 
   const horizontalStageRef = useRef(null);
   const trackRef = useRef(null);
@@ -198,11 +210,13 @@ export default function Capabilities() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
 
-              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
-                Proven in research.
-                <br />
-                <span className="text-secondary">Built to scale.</span>
-              </h1>
+              <EditableRegion page="capabilities">
+                <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+                  {cms('hero_title_lead', 'Proven in research.')}
+                  <br />
+                  <span className="text-secondary">{cms('hero_title_accent', 'Built to scale.')}</span>
+                </h1>
+              </EditableRegion>
 
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/contact">
@@ -293,16 +307,14 @@ export default function Capabilities() {
                   <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
                     01 — Innovation
                   </p>
-                  <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
-                    Where formulation science meets real-world performance.
-                  </h2>
-                  <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
-                    Zeovus Life's in-house formulation team is adept at turning ideas
-                    into expertly formulated nutraceutical and cosmetic products. We
-                    specialise in custom formulation across gummies, softgels and
-                    tablets, alongside serums, lotions and other topical formats,
-                    each developed with the same clinical rigour, whatever the format.
-                  </p>
+                  <EditableRegion page="capabilities">
+                    <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
+                      {cms('innovation_heading', 'Where formulation science meets real-world performance.')}
+                    </h2>
+                    <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                      {cms('innovation_intro', "Zeovus Life's in-house formulation team is adept at turning ideas into expertly formulated nutraceutical and cosmetic products. We specialise in custom formulation across gummies, softgels and tablets, alongside serums, lotions and other topical formats, each developed with the same clinical rigour, whatever the format.")}
+                    </p>
+                  </EditableRegion>
 
                   {/* At-a-glance facts */}
                   <div className="mt-8 grid gap-x-8 gap-y-3 border-t border-neutral-100 pt-6 sm:grid-cols-3">
@@ -363,7 +375,7 @@ export default function Capabilities() {
                   transition={{ duration: 0.6 }}
                   className="mt-14 border-l-2 border-primary-light pl-6 font-heading text-[20px] font-semibold leading-snug text-primary-dark sm:text-[24px]"
                 >
-                  Every format is developed with the same clinical rigour.
+                  {cms('innovation_quote', 'Every format is developed with the same clinical rigour.')}
                 </motion.blockquote>
 
                 {/* Regulatory Science inset */}
@@ -399,16 +411,14 @@ export default function Capabilities() {
                   <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
                     02 — Manufacturing
                   </p>
-                  <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
-                    Manufacturing built for every format, at scale.
-                  </h2>
-                  <p className="mt-5 max-w-[680px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
-                    Zeovus Life manufactures nutraceuticals and cosmetics across every
-                    major format on the market today, inside GMP, ISO- and
-                    HACCP-certified, allergen-controlled facilities — with capacity
-                    that scales from first sample to full commercial volume without
-                    ever changing partners.
-                  </p>
+                  <EditableRegion page="capabilities">
+                    <h2 className="max-w-[640px] font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
+                      {cms('manufacturing_heading', 'Manufacturing built for every format, at scale.')}
+                    </h2>
+                    <p className="mt-5 max-w-[680px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                      {cms('manufacturing_intro', 'Zeovus Life manufactures nutraceuticals and cosmetics across every major format on the market today, inside GMP, ISO- and HACCP-certified, allergen-controlled facilities — with capacity that scales from first sample to full commercial volume without ever changing partners.')}
+                    </p>
+                  </EditableRegion>
 
                   <div className="mt-8 grid gap-x-8 gap-y-3 border-t border-neutral-100 pt-6 sm:grid-cols-3">
                     {manufacturingFacts.map((fact, i) => (
@@ -520,7 +530,7 @@ export default function Capabilities() {
               How we work
             </p>
             <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px]">
-              From brief to shelf, in eight steps.
+              {cms('process_heading', 'From brief to shelf, in eight steps.')}
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
               Scroll to move through our process — from first consultation to the

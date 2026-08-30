@@ -582,6 +582,7 @@ export default function CategoryCatalog({
 
   const titleLead = content?.hero_title_lead || hero.titleLead;
   const titleAccent = content?.hero_title_accent || hero.titleAccent;
+  const heroSubtitle = content?.hero_subtitle || hero.subtitle || '';
 
   return (
     <div ref={pageScrollRef} className="h-screen snap-y snap-proximity overflow-y-auto scroll-smooth bg-white" style={{ scrollbarWidth: 'none' }}>
@@ -609,6 +610,11 @@ export default function CategoryCatalog({
                   <br />
                   <span className="text-secondary">{titleAccent}</span>
                 </h1>
+                {heroSubtitle && (
+                  <p className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                    {heroSubtitle}
+                  </p>
+                )}
               </EditableRegion>
 
               <div className="mt-9 flex flex-wrap gap-3">

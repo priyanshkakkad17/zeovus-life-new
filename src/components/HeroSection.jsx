@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import EditableRegion from '@/components/cms/EditableRegion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,6 +40,24 @@ export default function HeroSection() {
   const videoRef = useRef(null);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/content?page=home')
+      .then((res) => res.json())
+      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  const heroVideo = content?.hero_video || 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4';
+  const titleLine1 = content?.hero_title_line1 || 'Wellness,';
+  const titleLine2 = content?.hero_title_line2 || 'Inside & Outside.';
+  const subtitle = content?.hero_subtitle || 'Trusted B2B nutraceutical and cosmetic manufacturer. Formulated to deliver, built to scale.';
+  const ctaPrimary = content?.hero_cta_primary || 'EXPLORE NUTRACEUTICALS';
+  const ctaSecondary = content?.hero_cta_secondary || 'EXPLORE COSMETICS';
+  const ctaTertiary = content?.hero_cta_tertiary || 'ENQUIRE NOW';
 
   useGSAP(() => {
     const section = sectionRef.current;
@@ -94,14 +113,19 @@ export default function HeroSection() {
     >
       {/* Background Video — parallax target */}
       <div ref={videoRef} className="absolute inset-0 z-0 will-change-transform">
-        <video
-          src="https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="h-full w-full object-cover"
-        />
+        {/\.(mp4|webm|mov)(\?|$)/i.test(heroVideo) ? (
+          <video
+            key={heroVideo}
+            src={heroVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <img src={heroVideo} alt="" className="h-full w-full object-cover" />
+        )}
       </div>
 
       {/* Cinematic gradient overlay */}
@@ -136,72 +160,73 @@ export default function HeroSection() {
 
       {/* Content — scroll-fade target */}
       <div ref={contentRef} className="relative z-10 mx-auto w-full max-w-[1800px] will-change-transform">
-        <motion.div
-          className="max-w-[900px]"
-          variants={container}
-          initial="hidden"
-          animate="visible"
-        >
-          <h1 className="font-heading text-[42px] font-black uppercase leading-[0.9] tracking-[-2px] sm:text-[58px] md:text-[72px] lg:text-[88px]">
-            <motion.span
-              variants={item}
-              className="block text-[#f7f2e6]"
-              style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.18)' }}
-            >
-              Wellness,
-            </motion.span>
-
-            <motion.span
-              variants={item}
-              className="block text-[#f7f2e6]"
-              style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.22)' }}
-            >
-              Inside & Outside.
-            </motion.span>
-          </h1>
-
-          <motion.p
-            variants={item}
-            className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-[#e8f5ed]/90 sm:text-[18px] md:text-[20px]"
-            style={{ textShadow: '0 1px 8px rgba(0, 0, 0, 0.15)' }}
+        <EditableRegion page="home">
+          <motion.div
+            className="max-w-[900px]"
+            variants={container}
+            initial="hidden"
+            animate="visible"
           >
-            Trusted B2B nutraceutical and cosmetic manufacturer. Formulated to
-            deliver, built to scale.
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <Link href="/nutraceuticals">
+            <h1 className="font-heading text-[42px] font-black uppercase leading-[0.9] tracking-[-2px] sm:text-[58px] md:text-[72px] lg:text-[88px]">
               <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-block cursor-pointer rounded-[2px] bg-[#9CCD62] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#B4BD62] sm:px-8 sm:py-4 sm:text-sm"
+                variants={item}
+                className="block text-[#f7f2e6]"
+                style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.18)' }}
               >
-                EXPLORE NUTRACEUTICALS
+                {titleLine1}
               </motion.span>
-            </Link>
 
-            <Link href="/cosmetics">
               <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-block cursor-pointer rounded-[2px] border border-[#e8f5ed]/50 bg-[#e8f5ed]/10 px-6 py-3 text-xs font-semibold tracking-widest text-[#e8f5ed] backdrop-blur-sm transition-colors hover:bg-[#e8f5ed]/20 sm:px-8 sm:py-4 sm:text-sm"
+                variants={item}
+                className="block text-[#f7f2e6]"
+                style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.22)' }}
               >
-                EXPLORE COSMETICS
+                {titleLine2}
               </motion.span>
-            </Link>
+            </h1>
 
-            <Link href="/contact">
-              <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-block cursor-pointer rounded-[2px] bg-[#FFD374] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#FFEF98] sm:px-8 sm:py-4 sm:text-sm"
-              >
-                ENQUIRE NOW
-              </motion.span>
-            </Link>
+            <motion.p
+              variants={item}
+              className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-[#e8f5ed]/90 sm:text-[18px] md:text-[20px]"
+              style={{ textShadow: '0 1px 8px rgba(0, 0, 0, 0.15)' }}
+            >
+              {subtitle}
+            </motion.p>
+
+            {/* Buttons */}
+            <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
+              <Link href="/nutraceuticals">
+                <motion.span
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-block cursor-pointer rounded-[2px] bg-[#9CCD62] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#B4BD62] sm:px-8 sm:py-4 sm:text-sm"
+                >
+                  {ctaPrimary}
+                </motion.span>
+              </Link>
+
+              <Link href="/cosmetics">
+                <motion.span
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-block cursor-pointer rounded-[2px] border border-[#e8f5ed]/50 bg-[#e8f5ed]/10 px-6 py-3 text-xs font-semibold tracking-widest text-[#e8f5ed] backdrop-blur-sm transition-colors hover:bg-[#e8f5ed]/20 sm:px-8 sm:py-4 sm:text-sm"
+                >
+                  {ctaSecondary}
+                </motion.span>
+              </Link>
+
+              <Link href="/contact">
+                <motion.span
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-block cursor-pointer rounded-[2px] bg-[#FFD374] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#FFEF98] sm:px-8 sm:py-4 sm:text-sm"
+                >
+                  {ctaTertiary}
+                </motion.span>
+              </Link>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </EditableRegion>
 
         {/* Scroll indicator */}
         <motion.div

@@ -58,7 +58,7 @@ export async function PUT(request) {
       if (!definition) continue; // ignore unknown keys
 
       let value = field.value ?? '';
-      if (definition.type === 'image' && value) {
+      if ((definition.type === 'image' || definition.type === 'media') && value) {
         value = normaliseImageUrl(value) || '';
       }
 

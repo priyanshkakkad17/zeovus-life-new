@@ -102,11 +102,12 @@ function AdminContentInner() {
             <div className="space-y-6">
               {activeSchema?.fields.map((field) => (
                 <div key={field.key}>
-                  {field.type === 'image' ? (
+                  {field.type === 'image' || field.type === 'media' ? (
                     <ImageField
                       label={field.label}
                       value={values[field.key] || ''}
                       onChange={(url) => setField(field.key, url)}
+                      help={field.type === 'media' ? 'Image or video URL. You can also upload an image file.' : undefined}
                     />
                   ) : (
                     <div>

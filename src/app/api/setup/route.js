@@ -94,7 +94,7 @@ export async function POST() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         page VARCHAR(60) NOT NULL,
         content_key VARCHAR(120) NOT NULL,
-        content_type ENUM('text', 'image') NOT NULL DEFAULT 'text',
+        content_type ENUM('text', 'image', 'media') NOT NULL DEFAULT 'text',
         content_value TEXT,
         label VARCHAR(160) DEFAULT NULL,
         sort_order INT DEFAULT 0,
@@ -103,6 +103,9 @@ export async function POST() {
         UNIQUE KEY unique_content (page, content_key)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
+
+    // Ensure the content_type enum includes 'media' for databases created earlier.
+    await connection.query("ALTER TABLE site_content MODIFY COLUMN content_type ENUM('text', 'image', 'media') NOT NULL DEFAULT 'text'");
 
     await connection.query(`
       CREATE TABLE IF NOT EXISTS admin_users (
