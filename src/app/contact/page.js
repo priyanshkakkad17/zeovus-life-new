@@ -97,7 +97,7 @@ export default function Contact() {
                 </h1>
                 <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
                   {content?.hero_subtitle || 'Backed by decades of leadership experience across pharmaceuticals and nutraceuticals — now behind your next formula.'}
-                </p>
+                </p> 
               </EditableRegion>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href="#enquire">
