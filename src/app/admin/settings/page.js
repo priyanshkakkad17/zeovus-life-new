@@ -7,6 +7,47 @@ export default function AdminSettings() {
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState(null);
 
+  const [matchLoading, setMatchLoading] = useState(false);
+  const [matchReport, setMatchReport] = useState(null);
+  const [matchError, setMatchError] = useState('');
+  const [overwrite, setOverwrite] = useState(true);
+
+  async function previewImageMatches() {
+    setMatchLoading(true);
+    setMatchError('');
+    setMatchReport(null);
+    try {
+      const res = await fetch('/api/products/match-images');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Preview failed.');
+      setMatchReport({ ...data, applied: false });
+    } catch (err) {
+      setMatchError(err.message);
+    } finally {
+      setMatchLoading(false);
+    }
+  }
+
+  async function applyImageMatches() {
+    if (!confirm(overwrite ? 'Apply images to all matched products (overwriting any existing images)?' : 'Apply images only to products without an image?')) return;
+    setMatchLoading(true);
+    setMatchError('');
+    try {
+      const res = await fetch('/api/products/match-images', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ overwrite }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Apply failed.');
+      setMatchReport({ ...data, applied: true });
+    } catch (err) {
+      setMatchError(err.message);
+    } finally {
+      setMatchLoading(false);
+    }
+  }
+
   async function handleBulkImport() {
     if (!bulkData.trim()) return;
     setImporting(true);
@@ -74,6 +115,80 @@ export default function AdminSettings() {
         <p className="text-xs text-neutral-400 mt-3">
           "Initialize Tables" creates the database schema. "Seed Categories" populates the 14 default categories.
         </p>
+      </div>
+
+      {/* Product Image Matching */}
+      <div className="bg-white rounded-xl border border-neutral-200/60 shadow-sm p-6 mb-6">
+        <h2 className="font-display font-semibold text-neutral-900 mb-2">Product Images</h2>
+        <p className="text-sm text-neutral-500 mb-4">
+          Match the uploaded bottle images (in <code className="rounded bg-neutral-100 px-1">/uploads/zeovus_life_bottle_products_v3</code>) to products by name.
+          Preview first, then apply. Applying updates each matched product's image.
+        </p>
+
+        <label className="mb-4 flex items-center gap-2 text-sm text-neutral-600">
+          <input type="checkbox" checked={overwrite} onChange={(e) => setOverwrite(e.target.checked)} className="h-4 w-4 rounded border-neutral-300" />
+          Overwrite images that are already set
+        </label>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={previewImageMatches}
+            disabled={matchLoading}
+            className="px-5 py-2.5 border border-neutral-200 text-neutral-700 rounded-lg font-medium text-sm hover:border-primary-light hover:text-primary-light transition-all disabled:opacity-50"
+          >
+            {matchLoading ? 'Working…' : 'Preview Matches'}
+          </button>
+          <button
+            onClick={applyImageMatches}
+            disabled={matchLoading}
+            className="px-5 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all disabled:opacity-50"
+          >
+            {matchLoading ? 'Working…' : 'Apply Images'}
+          </button>
+        </div>
+
+        {matchError && <p className="mt-3 text-sm text-red-600">✗ {matchError}</p>}
+
+        {matchReport && (
+          <div className="mt-5 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm">
+            <p className="font-medium text-neutral-800">
+              {matchReport.applied
+                ? `✓ Applied — ${matchReport.updated} updated${matchReport.skipped ? `, ${matchReport.skipped} skipped` : ''}.`
+                : `Preview — ${matchReport.matchedCount} of ${matchReport.totalProducts} products matched.`}
+            </p>
+            <p className="mt-1 text-neutral-500">
+              {matchReport.unmatchedProductCount} products without a match · {matchReport.unmatchedImageCount} images unused.
+            </p>
+
+            {matchReport.matches?.length > 0 && (
+              <details className="mt-3">
+                <summary className="cursor-pointer font-medium text-primary-light">View matches ({matchReport.matches.length})</summary>
+                <div className="mt-2 max-h-64 overflow-y-auto rounded border border-neutral-200 bg-white">
+                  {matchReport.matches.map((m) => (
+                    <div key={m.id} className="flex items-center justify-between gap-3 border-b border-neutral-100 px-3 py-2 last:border-b-0">
+                      <span className="truncate text-neutral-700">{m.name}</span>
+                      <span className="flex items-center gap-2 whitespace-nowrap text-xs text-neutral-400">
+                        <span className={m.kind === 'exact' ? 'text-green-600' : 'text-amber-600'}>{m.kind} {m.score}</span>
+                        {m.file}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
+
+            {matchReport.unmatchedProducts?.length > 0 && (
+              <details className="mt-2">
+                <summary className="cursor-pointer font-medium text-neutral-600">Unmatched products ({matchReport.unmatchedProducts.length})</summary>
+                <div className="mt-2 max-h-48 overflow-y-auto rounded border border-neutral-200 bg-white">
+                  {matchReport.unmatchedProducts.map((p) => (
+                    <div key={p.id} className="border-b border-neutral-100 px-3 py-1.5 text-neutral-600 last:border-b-0">{p.name}</div>
+                  ))}
+                </div>
+              </details>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bulk Import */}
