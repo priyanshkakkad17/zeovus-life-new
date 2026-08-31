@@ -150,32 +150,6 @@ export default function CapabilitiesSection() {
                 }}
               />
 
-              {/* Floating pill — bottom left */}
-              <div className="absolute bottom-5 left-5 flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-black/40 px-3.5 py-2 backdrop-blur-md">
-                <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                <span className="font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/85">
-                  Manufacturing &amp; R&amp;D
-                </span>
-              </div>
-
-              {/* Live indicator — bottom right */}
-              <div className="absolute bottom-5 right-5 flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-black/30 px-2.5 py-1.5 backdrop-blur-md">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-50" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-secondary" />
-                </span>
-                <span className="font-heading text-[9px] uppercase tracking-[1.5px] text-white/60">
-                  Live
-                </span>
-              </div>
-            </div>
-
-            {/* Caption with subtle divider */}
-            <div className="mt-4 flex items-center gap-3">
-              <div className="h-px w-8 bg-white/10" />
-              <p className="text-[12px] tracking-[0.3px] text-neutral-500">
-                Inside Zeovus Life — From formulation to production
-              </p>
             </div>
           </motion.div>
 

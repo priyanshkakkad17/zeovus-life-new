@@ -93,7 +93,7 @@ export default function Contact() {
                 <h1 className="max-w-[760px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[62px]">
                   {content?.hero_title_lead || 'Bring the brief.'}
                   <br />
-                  <span className="text-secondary">{content?.hero_title_accent || "We'll bring the batch."}</span>
+                  <span className="text-secondary lg:whitespace-nowrap">{content?.hero_title_accent || "We'll bring the batch."}</span>
                 </h1>
                 <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
                   {content?.hero_subtitle || 'Backed by decades of leadership experience across pharmaceuticals and nutraceuticals — now behind your next formula.'}
@@ -191,9 +191,6 @@ export default function Contact() {
               <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px]">
                 Tell us what you're building.
               </h2>
-              <p className="mt-4 max-w-[420px] text-[15px] leading-relaxed text-neutral-600">
-                Fill out the form and we'll come back with a clear, competitive quote — usually within one business day.
-              </p>
 
               <div className="mt-10 space-y-6 border-t border-neutral-200 pt-8">
                 {processSteps.map((step) => (

@@ -34,19 +34,6 @@ export default function Footer() {
     'Body Care',
   ];
 
-  const certifications = [
-    { label: 'GMP', logo: '/logo/gmp.png' },
-    { label: 'HACCP', logo: '/logo/haccp.png' },
-    { label: 'FSSC 22000', logo: '/logo/iso22000.png' },
-    { label: 'BRCGS', logo: '/logo/brcgs.png' },
-    { label: 'US FDA', logo: '/logo/usfda.png' },
-    { label: 'HALAL', logo: '/logo/halal.png' },
-    { label: 'KOSHER', logo: '/logo/kosher.png' },
-    { label: 'ORGANIC', logo: '/logo/organic.png' },
-    { label: 'VEGAN', logo: '/logo/vegan.webp' },
-    { label: 'FSSAI', logo: '/logo/fssai.png' },
-  ];
-
   return (
     <footer className="relative overflow-hidden">
 
@@ -209,7 +196,7 @@ export default function Footer() {
             </div>
 
             {/* Cosmetics */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-2">
               <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
                 Cosmetics
               </p>
@@ -236,33 +223,29 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* ═══════════════════ CERTIFICATION LOGOS ═══════════════════ */}
-        <div className="relative">
-          {/* Curved separator */}
-          <svg className="w-full h-8 md:h-12" viewBox="0 0 1440 48" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 48H1440V24C1440 24 1200 0 720 0C240 0 0 24 0 24V48Z" fill="#0F2409"/>
-          </svg>
-          
-          <div className="bg-[#0F2409] pb-8 pt-4">
-            <div className="max-w-[1100px] mx-auto px-6 md:px-10">
-              <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
-                {certifications.map((cert) => (
-                  <div key={cert.label} className="group relative">
-                    <img
-                      src={cert.logo}
-                      alt={cert.label}
-                      className="h-7 md:h-8 w-auto max-w-[50px] object-contain brightness-0 invert opacity-25 group-hover:opacity-50 transition-opacity duration-400"
-                    />
-                    {/* Tooltip */}
-                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-primary-dark text-[10px] font-semibold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                      {cert.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            {/* Group */}
+            <div className="lg:col-span-1">
+              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
+                Group
+              </p>
+              <ul className="space-y-3">
+                <li>
+                  <span className="text-neutral-400 text-[14px] whitespace-nowrap">
+                    Zeovus Group
+                  </span>
+                </li>
+                <li>
+                  <a
+                    href="https://www.zeovusfood.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
+                  >
+                    Zeovus Food
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -287,10 +270,6 @@ export default function Footer() {
                 <span className="w-1 h-1 rounded-full bg-neutral-700"></span>
                 <a href="#" className="text-neutral-600 hover:text-neutral-400 transition-colors">
                   Terms
-                </a>
-                <span className="w-1 h-1 rounded-full bg-neutral-700"></span>
-                <a href="#" className="text-neutral-600 hover:text-neutral-400 transition-colors">
-                  Sitemap
                 </a>
               </div>
             </div>

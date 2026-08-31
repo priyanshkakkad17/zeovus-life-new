@@ -185,14 +185,6 @@ export default function HeroSection() {
               </motion.span>
             </h1>
 
-            <motion.p
-              variants={item}
-              className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-[#e8f5ed]/90 sm:text-[18px] md:text-[20px]"
-              style={{ textShadow: '0 1px 8px rgba(0, 0, 0, 0.15)' }}
-            >
-              {subtitle}
-            </motion.p>
-
             {/* Buttons */}
             <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
               <Link href="/nutraceuticals">

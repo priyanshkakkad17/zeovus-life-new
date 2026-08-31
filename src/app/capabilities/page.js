@@ -502,13 +502,6 @@ export default function Capabilities() {
                   </motion.div>
                 </div>
 
-                <p className="mt-10 text-[13px] text-neutral-500">
-                  Every line operates under GMP, ISO, HACCP and 14 additional
-                  certifications —{' '}
-                  <a href="#certifications" className="text-primary-light underline decoration-primary-light/30 hover:decoration-primary-light">
-                    see them all below
-                  </a>.
-                </p>
               </div>
 
             </div>
@@ -524,7 +517,7 @@ export default function Capabilities() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-12 max-w-[640px] lg:mb-16"
+            className="mb-12 max-w-[820px] lg:mb-16"
           >
             <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
               How we work

@@ -17,7 +17,7 @@ export default function Header() {
     { name: 'Capabilities', href: '/capabilities' },
     { name: 'Nutraceuticals', href: '/nutraceuticals', hasDropdown: true },
     { name: 'Cosmetics', href: '/cosmetics', hasDropdown: true },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Working Together', href: '/contact' },
   ];
 
   useEffect(() => {
