@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import EditableRegion from '@/components/cms/EditableRegion';
+import { resolveBottleImage } from '@/lib/bottleImages';
 
 // Shared category icon set used across nutraceuticals and cosmetics.
 export const Icons = {
@@ -276,7 +277,9 @@ function ProductCard({ product, category, index, basePath }) {
   const colorFrom = category?.color_from || '#15A859';
   const colorTo = category?.color_to || '#1A475C';
   const keyActives = product.key_actives?.split(',').map((active) => active.trim()).filter(Boolean) || [];
-  const hasImage = Boolean(product.image_url) && !imageError;
+  // Prefer the stored image; otherwise fall back to a name-matched bottle image.
+  const resolvedImage = product.image_url || resolveBottleImage(product.name);
+  const hasImage = Boolean(resolvedImage) && !imageError;
 
   return (
     <motion.article
@@ -290,10 +293,10 @@ function ProductCard({ product, category, index, basePath }) {
       <div className="relative aspect-[4/3] overflow-hidden" style={{ background: `linear-gradient(135deg, ${colorFrom}24, ${colorTo}38)` }}>
         {hasImage ? (
           <motion.img
-            src={product.image_url}
+            src={resolvedImage}
             alt={product.name}
             onError={() => setImageError(true)}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain p-4"
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{ scale: 1.06 }}
           />

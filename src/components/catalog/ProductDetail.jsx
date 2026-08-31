@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { resolveBottleImage } from '@/lib/bottleImages';
 
 function splitValues(value, separator) {
   return value ? value.split(separator).map((item) => item.trim()).filter(Boolean) : [];
@@ -11,12 +12,13 @@ function splitValues(value, separator) {
 
 function ProductImage({ product, colorFrom, colorTo }) {
   const [imageError, setImageError] = useState(false);
-  const hasImage = Boolean(product.image_url) && !imageError;
+  const resolvedImage = product.image_url || resolveBottleImage(product.name);
+  const hasImage = Boolean(resolvedImage) && !imageError;
 
   return (
     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-primary-dark/[0.08]" style={{ background: `linear-gradient(135deg, ${colorFrom}25, ${colorTo}38)` }}>
       {hasImage ? (
-        <img src={product.image_url} alt={product.name} onError={() => setImageError(true)} className="h-full w-full object-cover" />
+        <img src={resolvedImage} alt={product.name} onError={() => setImageError(true)} className="h-full w-full object-contain p-6" />
       ) : (
         <>
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-white/25 blur-3xl" />
