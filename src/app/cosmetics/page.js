@@ -20,12 +20,6 @@ const hero = {
   seal: { src: '/zqa/seal5.png', label: 'Quality Standard' },
 };
 
-const cta = {
-  eyebrow: 'Bring us the brief',
-  heading: "Let's build your next launch.",
-  body: "Bring us your formulation brief and we'll create cosmetics your customers will love.",
-};
-
 export default function Cosmetics() {
   return (
     <CategoryCatalog
@@ -33,7 +27,6 @@ export default function Cosmetics() {
       basePath="/cosmetics"
       staticCategories={staticCategories}
       hero={hero}
-      cta={cta}
     />
   );
 }

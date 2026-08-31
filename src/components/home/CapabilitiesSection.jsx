@@ -95,7 +95,7 @@ export default function CapabilitiesSection() {
                 className="group inline-flex items-center gap-2.5 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-secondary"
               >
                 <span className="relative">
-                  Explore Manufacturing &amp; Research
+                  Explore Capabilities
                   <span className="absolute -bottom-px left-0 h-px w-0 bg-secondary transition-all duration-400 group-hover:w-full" />
                 </span>
                 <svg

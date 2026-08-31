@@ -2,32 +2,22 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Lightbulb, Tag, Globe, Box } from 'lucide-react';
-
 const options = [
   {
     title: 'Co-Development & Formulation Innovation',
     description: 'Bring us your idea, brief or product challenge. We work with you to develop the right formulation.',
-    icon: Lightbulb,
-    accent: 'from-primary-light/8 to-transparent',
   },
   {
     title: 'Private Label & White Label',
     description: 'Launch products under your own brand, with our support across formulation, sourcing and manufacturing.',
-    icon: Tag,
-    accent: 'from-secondary/8 to-transparent',
   },
   {
     title: 'Distribution & Regional Partnerships',
     description: 'Take our products into new markets and grow with us as a distribution partner.',
-    icon: Globe,
-    accent: 'from-accent/10 to-transparent',
   },
   {
     title: 'Bulk Ingredient & Raw Material Supply',
     description: 'Source the ingredients and raw materials you need, in the quantities your business requires.',
-    icon: Box,
-    accent: 'from-primary-dark/5 to-transparent',
   },
 ];
 
@@ -64,7 +54,6 @@ export default function WorkingTogether() {
         {/* Staggered list layout — numbered, with progressive reveal */}
         <div className="grid gap-0">
           {options.map((item, index) => {
-            const Icon = item.icon;
             return (
               <motion.div
                 key={index}
@@ -79,14 +68,11 @@ export default function WorkingTogether() {
                 className="group relative border-b border-neutral-100 py-8 first:border-t lg:py-10"
               >
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8 lg:gap-12">
-                  {/* Number + Icon block */}
-                  <div className="flex items-center gap-4 sm:w-[200px] sm:flex-shrink-0 lg:w-[240px]">
-                    <span className="font-heading text-[48px] font-bold leading-none tracking-[-3px] text-neutral-200 transition-colors duration-500 group-hover:text-primary-light/30 lg:text-[56px]">
+                  {/* Number block */}
+                  <div className="flex items-center sm:w-[110px] sm:flex-shrink-0 lg:w-[140px]">
+                    <span className="font-heading text-[72px] font-bold leading-none tracking-[-4px] text-neutral-200 transition-colors duration-500 group-hover:text-primary-light/30 lg:text-[96px]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition-all duration-500 group-hover:bg-primary-light/10 group-hover:text-primary-light">
-                      <Icon className="h-5 w-5" strokeWidth={1.5} />
-                    </div>
                   </div>
 
                   {/* Content */}

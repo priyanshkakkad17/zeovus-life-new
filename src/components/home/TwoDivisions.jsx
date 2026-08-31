@@ -3,7 +3,6 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Shield, Heart } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -13,14 +12,13 @@ gsap.registerPlugin(ScrollTrigger);
 const CARDS = [
   {
     id: 'nutraceuticals',
-    icon: Shield,
     label: 'NUTRACEUTICALS',
     subtitle: 'Formulated to be felt.',
     body: 'Immunity, sleep, joints, heart — formulated by life stage, dosed for what the body can absorb.',
     cta: 'Explore Nutraceuticals',
     href: '/nutraceuticals',
     image:
-      'https://res.cloudinary.com/ac74hfe9/image/upload/v1787607303/Nutraceuticals-home.jpg',
+      'https://res.cloudinary.com/ac74hfe9/image/upload/v1788197673/Formulated_to_be_felt.jpg',
     overlay:
       'linear-gradient(100deg, rgba(10,38,14,0.92) 0%, rgba(10,38,14,0.72) 30%, rgba(10,38,14,0.38) 58%, rgba(10,38,14,0.10) 100%), linear-gradient(180deg, rgba(10,38,14,0.10) 0%, rgba(10,38,14,0.30) 100%)',
     hoverOverlay:
@@ -28,14 +26,13 @@ const CARDS = [
   },
   {
     id: 'cosmetics',
-    icon: Heart,
     label: 'COSMETICS',
     subtitle: 'Formulated to be seen.',
     body: 'Skincare and haircare, formulated clean-label first and reviewed for how they perform on skin.',
     cta: 'Explore Cosmetics',
     href: '/cosmetics',
     image:
-      'https://res.cloudinary.com/ac74hfe9/image/upload/v1787607303/Cosmetics-home.jpg',
+      'https://res.cloudinary.com/ac74hfe9/image/upload/v1788197210/Formulated_to_be_seen..jpg',
     overlay:
       'linear-gradient(100deg, rgba(8,48,36,0.92) 0%, rgba(8,48,36,0.72) 30%, rgba(8,48,36,0.38) 58%, rgba(8,48,36,0.10) 100%), linear-gradient(180deg, rgba(8,48,36,0.10) 0%, rgba(8,48,36,0.30) 100%)',
     hoverOverlay:
@@ -93,7 +90,6 @@ export default function TwoDivisions() {
         {/* Cards — GSAP scroll-stagger target */}
         <div ref={cardsRef} className="grid gap-6 md:grid-cols-2 lg:gap-8">
           {CARDS.map((card) => {
-            const Icon = card.icon;
             return (
               <div
                 key={card.id}
@@ -122,11 +118,6 @@ export default function TwoDivisions() {
                 <div className="relative flex h-full min-h-[440px] flex-col justify-between p-8 md:min-h-[480px] md:p-12">
                   {/* Top */}
                   <div>
-                    {/* Icon badge */}
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm ring-1 ring-white/20 transition-all duration-500 group-hover:bg-white/15 group-hover:ring-white/30">
-                      <Icon className="h-5 w-5 text-white/90" strokeWidth={1.5} />
-                    </div>
-
                     {/* Category label */}
                     <p className="mb-3 font-heading text-[11px] font-semibold uppercase tracking-[3px] text-white/60">
                       {card.label}

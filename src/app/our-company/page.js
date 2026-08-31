@@ -123,15 +123,6 @@ export default function OurCompany() {
                     ENQUIRE NOW
                   </motion.span>
                 </Link>
-                <a href="#process">
-                  <motion.span
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-block cursor-pointer rounded-[2px] border border-white/25 bg-white/[0.04] px-7 py-3.5 font-heading text-xs font-semibold tracking-widest text-white backdrop-blur-sm transition-colors hover:bg-white/[0.08]"
-                  >
-                    LEARN MORE
-                  </motion.span>
-                </a>
               </div>
             </motion.div>
 
@@ -287,7 +278,7 @@ export default function OurCompany() {
                     
                     <div className="relative overflow-hidden rounded-2xl">
                       <img
-                        src="https://res.cloudinary.com/ac74hfe9/image/upload/v1787610312/our_story_3.png"
+                        src="https://res.cloudinary.com/ac74hfe9/image/upload/v1788200884/Today_Global_Manufacturing.jpg"
                         alt="Today: Global Manufacturing"
                         className="w-full h-48 object-cover"
                       />
@@ -345,31 +336,6 @@ export default function OurCompany() {
                   <div className="bg-white p-6 rounded-xl text-center shadow-md">
                     <p className="text-3xl font-display font-bold text-primary-light">50+</p>
                     <p className="text-sm text-neutral-600">Countries</p>
-                  </div>
-                </div>
-              </motion.div>
-              
-              {/* Bullet Points Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-              >
-                <div className="bg-white p-6 rounded-xl shadow-md h-full">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-primary-light rounded-full"></div>
-                      <p className="text-neutral-700 text-sm">Decades of leadership expertise in pharmaceuticals and nutraceuticals</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-primary-light rounded-full"></div>
-                      <p className="text-neutral-700 text-sm">One standard, held across Food, Life and Vet</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-primary-light rounded-full"></div>
-                      <p className="text-neutral-700 text-sm">Supplier relationships built over years</p>
-                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -529,6 +495,79 @@ export default function OurCompany() {
         </div>
       </section>
 
+      {/* Note from Founders - Premium Editorial Redesign */}
+      <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fafaf8 0%, #f5f7f5 50%, #fafaf8 100%)' }}>
+        
+        {/* Subtle background texture */}
+        <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #4A6F4A 1px, transparent 0)', backgroundSize: '36px 36px' }}></div>
+        <div className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-primary-light/[0.03] rounded-full blur-3xl"></div>
+        
+        <div className="container relative z-10">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="grid lg:grid-cols-[40%_60%] gap-16 xl:gap-24 items-start">
+              
+              {/* LEFT SIDE — Emotional Anchor */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="relative lg:sticky lg:top-32"
+              >
+                {/* Vertical green accent line */}
+                <div className="absolute -left-5 top-0 w-[2.5px] h-40 bg-gradient-to-b from-[#2C3E2C] via-primary-light to-transparent rounded-full"></div>
+                
+                {/* Eyebrow */}
+                <p className="text-primary-light font-semibold text-[14px] md:text-[15px] tracking-[0.18em] uppercase mb-6 leading-relaxed">
+                  A NOTE FROM THE PEOPLE<br />BEHIND ZEOVUS LIFE
+                </p>
+                
+                {/* Headline - Primary Anchor */}
+                <h3 className="text-[44px] md:text-[52px] lg:text-[56px] font-display font-bold text-[#2C3E2C] leading-[1.05] tracking-tight mb-8">
+                  Built to do it right.
+                </h3>
+                
+                {/* Large decorative quotation mark */}
+                <div className="relative">
+                  <span className="text-[160px] md:text-[180px] font-serif font-bold text-primary-light/[0.08] leading-none select-none absolute -top-8 -left-2">
+                    "
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* RIGHT SIDE — The Letter */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="relative"
+              >
+                {/* Opening quotation paragraph */}
+                <p className="text-[21px] md:text-[23px] text-[#2C3E2C] font-medium leading-[1.65] mb-8">
+                  "We started Zeovus Life because we believed great wellness products should be accessible to more people, without compromising on quality.
+                </p>
+
+                {/* Supporting paragraphs */}
+                <div className="space-y-6 text-neutral-600 text-[17px] md:text-[18px] leading-[1.8]">
+                  <p>
+                    We've spent years working with ingredients, formulations and manufacturing partners, learning that the small things matter: where an ingredient comes from, how it is tested, how a product is made, and what finally goes into the bottle.
+                  </p>
+                  <p>
+                    We don't make products just to fill a shelf. We work with brands to build supplements and cosmetics that are well formulated, responsibly sourced and made to the standards they deserve.
+                  </p>
+                  <p className="mt-2">
+                    <span className="inline-block border-l-[3px] border-primary-light pl-4 text-[#2C3E2C] font-semibold text-[18px] md:text-[19px] leading-[1.6] italic">
+                      That's what Zeovus Life is here to do."
+                    </span>
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Who We Build With - Horizontal Row Style */}
       <section className="relative py-20 md:py-28 bg-gradient-to-br from-neutral-100 via-neutral-50 to-neutral-100/50 overflow-hidden">
 
@@ -588,12 +627,6 @@ export default function OurCompany() {
                     </p>
                   </div>
 
-                  {/* Right number */}
-                  <div className="pr-8 md:pr-10 flex-shrink-0">
-                    <span className="text-[13px] font-semibold text-neutral-300 tracking-[0.15em]">
-                      {item.num}
-                    </span>
-                  </div>
                 </motion.div>
               ))}
 
@@ -990,79 +1023,6 @@ export default function OurCompany() {
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Note from Founders - Premium Editorial Redesign */}
-      <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fafaf8 0%, #f5f7f5 50%, #fafaf8 100%)' }}>
-        
-        {/* Subtle background texture */}
-        <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #4A6F4A 1px, transparent 0)', backgroundSize: '36px 36px' }}></div>
-        <div className="absolute top-1/4 right-1/3 w-[500px] h-[500px] bg-primary-light/[0.03] rounded-full blur-3xl"></div>
-        
-        <div className="container relative z-10">
-          <div className="max-w-7xl mx-auto px-4 lg:px-8">
-            <div className="grid lg:grid-cols-[40%_60%] gap-16 xl:gap-24 items-start">
-              
-              {/* LEFT SIDE — Emotional Anchor */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-                className="relative lg:sticky lg:top-32"
-              >
-                {/* Vertical green accent line */}
-                <div className="absolute -left-5 top-0 w-[2.5px] h-40 bg-gradient-to-b from-[#2C3E2C] via-primary-light to-transparent rounded-full"></div>
-                
-                {/* Eyebrow */}
-                <p className="text-primary-light font-semibold text-[14px] md:text-[15px] tracking-[0.18em] uppercase mb-6 leading-relaxed">
-                  A NOTE FROM THE PEOPLE<br />BEHIND ZEOVUS LIFE
-                </p>
-                
-                {/* Headline - Primary Anchor */}
-                <h3 className="text-[44px] md:text-[52px] lg:text-[56px] font-display font-bold text-[#2C3E2C] leading-[1.05] tracking-tight mb-8">
-                  Built to do it right.
-                </h3>
-                
-                {/* Large decorative quotation mark */}
-                <div className="relative">
-                  <span className="text-[160px] md:text-[180px] font-serif font-bold text-primary-light/[0.08] leading-none select-none absolute -top-8 -left-2">
-                    "
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* RIGHT SIDE — The Letter */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="relative"
-              >
-                {/* Opening quotation paragraph */}
-                <p className="text-[21px] md:text-[23px] text-[#2C3E2C] font-medium leading-[1.65] mb-8">
-                  "We started Zeovus Life because we believed <span className="text-[#2C3E2C] font-semibold">great wellness products</span> should be accessible to more people, <span className="text-[#2C3E2C] font-semibold">without compromising on quality</span>.
-                </p>
-
-                {/* Supporting paragraphs */}
-                <div className="space-y-6 text-neutral-600 text-[17px] md:text-[18px] leading-[1.8]">
-                  <p>
-                    We've spent years working with ingredients, formulations and manufacturing partners, learning that <span className="text-[#3a5a3a] font-medium">the small things matter</span>: where an ingredient comes from, how it is tested, how a product is made, and what finally goes into the bottle.
-                  </p>
-                  <p>
-                    We don't make products just to fill a shelf. We work with brands to build supplements and cosmetics that are well formulated, <span className="text-[#3a5a3a] font-medium">responsibly sourced</span> and <span className="text-[#3a5a3a] font-medium">made to the standards they deserve</span>.
-                  </p>
-                  <p className="mt-2">
-                    <span className="inline-block border-l-[3px] border-primary-light pl-4 text-[#2C3E2C] font-semibold text-[18px] md:text-[19px] leading-[1.6] italic">
-                      That's what Zeovus Life is here to do."
-                    </span>
-                  </p>
-                </div>
-              </motion.div>
-            </div>
-          </div>
         </div>
       </section>
 

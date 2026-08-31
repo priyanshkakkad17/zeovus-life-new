@@ -28,12 +28,6 @@ const hero = {
   ],
 };
 
-const cta = {
-  eyebrow: 'Bring us the brief',
-  heading: 'Bring us a formulation brief — or bring us a problem.',
-  body: "We'll work with you to develop the right formulation and bring it to market.",
-};
-
 export default function Nutraceuticals() {
   return (
     <CategoryCatalog
@@ -41,7 +35,6 @@ export default function Nutraceuticals() {
       basePath="/nutraceuticals"
       staticCategories={staticCategories}
       hero={hero}
-      cta={cta}
     />
   );
 }
