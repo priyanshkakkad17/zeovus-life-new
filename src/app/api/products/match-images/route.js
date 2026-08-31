@@ -5,6 +5,15 @@ import { listProductImages, matchProductsToImages } from '@/lib/matchProductImag
 
 export const dynamic = 'force-dynamic';
 
+// Guarantee the products.image_url column exists so this endpoint is a complete,
+// self-contained fix regardless of whether /api/setup has been run.
+async function ensureImageColumn() {
+  const cols = await query("SHOW COLUMNS FROM products LIKE 'image_url'");
+  if (cols.length === 0) {
+    await query('ALTER TABLE products ADD COLUMN image_url VARCHAR(2048) DEFAULT NULL AFTER name');
+  }
+}
+
 async function buildReport() {
   const publicRoot = path.join(process.cwd(), 'public');
   const images = await listProductImages(publicRoot);
@@ -19,6 +28,7 @@ export async function GET() {
   if (guard.response) return guard.response;
 
   try {
+    await ensureImageColumn();
     const report = await buildReport();
     return Response.json({
       preview: true,
@@ -47,6 +57,7 @@ export async function POST(request) {
     const body = await request.json().catch(() => ({}));
     const overwrite = body.overwrite !== false; // default true
 
+    await ensureImageColumn();
     const report = await buildReport();
     let updated = 0;
     let skipped = 0;
