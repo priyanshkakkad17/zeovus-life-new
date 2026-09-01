@@ -524,176 +524,94 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
       </section>
       )}
 
-      {/* Global Standards - Two Column Layout with ZQA Framework */}
+      {/* Global Standards - Dark Banner Layout with ZQA Seal */}
       {zqa.enabled !== false && (
-      <section className="section-py bg-gradient-to-br from-neutral-50 via-white to-neutral-50/50 relative overflow-hidden">
-        {/* Subtle scientific pattern background - left side */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <svg className="absolute left-0 top-1/4 w-64 h-64" viewBox="0 0 200 200" fill="none">
-            <circle cx="100" cy="100" r="60" stroke="#7FAF7F" strokeWidth="0.5"/>
-            <circle cx="100" cy="100" r="40" stroke="#7FAF7F" strokeWidth="0.5"/>
-            <circle cx="100" cy="100" r="20" stroke="#7FAF7F" strokeWidth="0.5"/>
-          </svg>
-          <svg className="absolute left-1/4 bottom-1/4 w-48 h-48" viewBox="0 0 200 200" fill="none">
-            <path d="M100 20 L100 180 M20 100 L180 100" stroke="#7FAF7F" strokeWidth="0.5"/>
-            <circle cx="100" cy="100" r="30" stroke="#7FAF7F" strokeWidth="0.5"/>
-          </svg>
-        </div>
-        
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1c2620] via-[#2b3a2c] to-[#3a4b3a]">
+        {/* Soft radial highlight */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_35%,rgba(127,175,127,0.18),transparent_55%)]"></div>
+
         <div className="container relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-[45%_55%] gap-12 xl:gap-16 items-center">
-              
-              {/* LEFT SIDE - ZQA Framework Visual */}
+          <div className="py-16 md:py-20 lg:py-28">
+
+            {/* TITLE + SEAL ROW */}
+            <div className="flex items-start justify-between gap-8 mb-10 lg:mb-14">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
-                className="relative"
               >
-                <div className="relative max-w-[480px] mx-auto">
-                  {/* Framework container */}
-                  <div className="relative py-12 px-8">
-                    
-                    {/* ZQA Seal - Central Focus */}
-                    <div className="flex justify-center mb-12">
-                      <motion.div
-                        initial={{ scale: 0, rotate: -45, opacity: 0 }}
-                        whileInView={{ scale: 1, rotate: -8, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ 
-                          duration: 0.8, 
-                          delay: 0.3,
-                          type: "spring",
-                          stiffness: 150,
-                          damping: 12
-                        }}
-                        className="relative"
-                      >
-                        {/* Subtle glow around seal */}
-                        <div className="absolute inset-0 bg-primary-light/10 blur-2xl rounded-full scale-125"></div>
-                        <div className="absolute inset-0 border border-primary-light/15 rounded-full scale-110"></div>
-                        
-                        <img
-                          src={zqa.sealImage || '/zqa/seal5.png'}
-                          alt="ZQA Seal"
-                          className="w-40 h-40 md:w-48 md:h-48 object-contain relative z-10"
-                        />
-                      </motion.div>
-                    </div>
-                    
-                    {/* Three Quality Stages - Vertical Flow */}
-                    <div className="relative">
-                      {/* Connecting vertical line */}
-                      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary-light/40 via-primary-light/30 to-primary-light/40 -translate-x-1/2"></div>
-                      
-                      <div className="space-y-8">
-                        {(zqa.stages || []).map((stage, index) => {
-                          const alignRight = index % 2 === 0;
-                          return (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: alignRight ? -20 : 20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                              className="relative"
-                            >
-                              <div className="flex items-center gap-4">
-                                <div className={`flex-1 ${alignRight ? 'text-right' : ''}`}>
-                                  {alignRight && (
-                                    <div className="inline-block bg-white border border-primary-light/30 rounded-full px-4 py-2">
-                                      <p className="text-sm font-medium text-primary-dark">{stage}</p>
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="w-3 h-3 bg-primary-light rounded-full border-2 border-white shadow-sm relative z-10"></div>
-                                <div className="flex-1">
-                                  {!alignRight && (
-                                    <div className="inline-block bg-white border border-primary-light/30 rounded-full px-4 py-2">
-                                      <p className="text-sm font-medium text-primary-dark">{stage}</p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    
-                    {/* Quality Check Labels - Around Framework */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.8 }}
-                      className="mt-12 flex flex-wrap justify-center gap-2"
-                    >
-                      {(zqa.checks || []).map((check, index) => (
-                        <span
-                          key={index}
-                          className="inline-block bg-primary-light/5 border border-primary-light/20 rounded-full px-3 py-1 text-xs text-primary-dark/70"
-                        >
-                          {check}
-                        </span>
-                      ))}
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-              
-              {/* Subtle Vertical Divider */}
-              <div className="hidden lg:block absolute left-1/2 top-1/4 bottom-1/4 w-px bg-gradient-to-b from-transparent via-neutral-200/40 to-transparent -translate-x-1/2"></div>
-              
-              {/* RIGHT SIDE - Existing Content */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="max-w-[650px]"
-              >
-                <p className="text-primary-light font-semibold text-[15px] md:text-[16px] tracking-[0.25em] uppercase mb-5">
-                  {zqa.eyebrow}
-                </p>
-                <h2 className="text-[36px] md:text-[42px] lg:text-[46px] font-display font-bold text-[#2C3E2C] mb-8 leading-[1.1] tracking-tight">
-                  {zqa.heading}
-                </h2>
-                <div className="space-y-6 text-neutral-600 text-[17px] md:text-[18px] leading-[1.75]">
-                  {(zqa.paragraphs || []).map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
+                <h2 className="font-display font-bold uppercase text-[#f5f2e8] leading-[0.95] tracking-[-1px] text-[44px] sm:text-[56px] md:text-[64px] lg:text-[80px]">
+                  {(zqa.eyebrow || 'Global Standards').split(' ').map((word, index) => (
+                    <span key={index} className="block">{word}</span>
                   ))}
-                </div>
+                </h2>
+              </motion.div>
 
-                {zqa.ctaLabel && (
-                  <Link
-                    href={zqa.ctaHref || '/capabilities'}
-                    className="inline-flex items-center gap-2 mt-8 text-primary-light font-medium text-[15px] group hover:gap-3 transition-all duration-300"
-                  >
-                    {zqa.ctaLabel}
-                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
-                )}
-
-                {/* Bottom Accent - Proof Points */}
-                {(zqa.proofPoints || []).length > 0 && (
-                  <div className="mt-12 pt-6 border-t border-neutral-200/60">
-                    <p className="text-sm text-neutral-500 tracking-wide">
-                      {zqa.proofPoints.map((point, index) => (
-                        <span key={index}>
-                          {index > 0 && <span className="mx-2 text-neutral-300">•</span>}
-                          <span className="text-primary-light font-semibold">{point}</span>
-                        </span>
-                      ))}
-                    </p>
-                  </div>
-                )}
+              {/* ZQA Seal - Stamp animation */}
+              <motion.div
+                initial={{ scale: 2.4, opacity: 0, rotate: -18 }}
+                whileInView={{
+                  scale: [2.4, 0.92, 1.04, 1],
+                  opacity: [0, 1, 1, 1],
+                  rotate: [-18, -8, -10, -8],
+                }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.3,
+                  times: [0, 0.55, 0.8, 1],
+                  ease: 'easeOut',
+                }}
+                className="shrink-0"
+              >
+                <img
+                  src={zqa.sealImage || '/zqa/seal5.png'}
+                  alt="ZQA Seal"
+                  className="w-32 h-32 md:w-44 md:h-44 lg:w-56 lg:h-56 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)]"
+                />
               </motion.div>
             </div>
+
+            {/* DESCRIPTION - full width */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+            >
+              <div className="space-y-5 text-[#e6e9df]/85 text-[20px] md:text-[23px] leading-[1.85]">
+                {(zqa.paragraphs || []).map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+
+              {zqa.ctaLabel && (
+                <Link
+                  href={zqa.ctaHref || '/capabilities'}
+                  className="inline-flex items-center gap-3 mt-8 px-8 py-4 rounded-full border border-[#f5f2e8]/40 text-[#f5f2e8] font-semibold text-[13px] tracking-[0.15em] uppercase group hover:bg-[#f5f2e8]/10 hover:border-[#f5f2e8]/70 transition-all duration-300"
+                >
+                  {zqa.ctaLabel}
+                  <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              )}
+
+              {/* Proof Points */}
+              {(zqa.proofPoints || []).length > 0 && (
+                <div className="mt-10 pt-6 border-t border-[#f5f2e8]/15">
+                  <p className="text-sm text-[#e6e9df]/60 tracking-wide">
+                    {zqa.proofPoints.map((point, index) => (
+                      <span key={index}>
+                        {index > 0 && <span className="mx-2 text-[#f5f2e8]/25">•</span>}
+                        <span className="text-primary-light font-semibold">{point}</span>
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              )}
+            </motion.div>
           </div>
         </div>
       </section>
