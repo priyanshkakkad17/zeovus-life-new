@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import EditableRegion from '@/components/cms/EditableRegion';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -11,20 +9,9 @@ const fadeInUp = {
 };
 
 export default function OurCompany() {
-  const [content, setContent] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/api/content?page=our-company')
-      .then((res) => res.json())
-      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
-
-  const heroVideo = content?.hero_video || 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787608494/ourCompanyHero.mp4';
-  const heroTitle = content?.hero_title || 'Built to be trusted with wellness.';
-  const heroSubtitle = content?.hero_subtitle || 'Leading B2B nutraceutical and cosmetic manufacturer with decades of expertise in formulation science and manufacturing excellence.';
+  const heroVideo = 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787608494/ourCompanyHero.mp4';
+  const heroTitle = 'Built to be trusted with wellness.';
+  const heroSubtitle = 'Leading B2B nutraceutical and cosmetic manufacturer with decades of expertise in formulation science and manufacturing excellence.';
   const certifications = [
     'GMP', 'ISO', 'HACCP', 'FSSC 22000', 'BRCGS', 'IFS', 'FDA', 
     'ISO 22716', 'COSMOS', 'HALAL', 'KOSHER', 'ORGANIC', 
@@ -105,14 +92,12 @@ export default function OurCompany() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
 
-              <EditableRegion page="our-company">
-                <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] text-white">
-                  {heroTitle}
-                </h1>
-                <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-white/80 sm:text-[17px]">
-                  {heroSubtitle}
-                </p>
-              </EditableRegion>
+              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] text-white">
+                {heroTitle}
+              </h1>
+              <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-white/80 sm:text-[17px]">
+                {heroSubtitle}
+              </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/contact">
                   <motion.span
@@ -168,7 +153,7 @@ export default function OurCompany() {
             >
               <p className="text-primary-light font-semibold text-[15px] md:text-[16px] tracking-[0.25em] uppercase mb-6">OUR STORY</p>
               <h2 className="text-3xl md:text-4xl xl:text-5xl font-display font-bold text-primary-dark mb-8 leading-[1.15] tracking-tight max-w-4xl mx-auto">
-                {content?.story_heading || 'Bridging Ancient Wisdom with Modern Innovation'}
+                Bridging Ancient Wisdom with Modern Innovation
               </h2>
             </motion.div>
 
@@ -824,7 +809,7 @@ export default function OurCompany() {
                   GLOBAL STANDARDS
                 </p>
                 <h2 className="text-[36px] md:text-[42px] lg:text-[46px] font-display font-bold text-[#2C3E2C] mb-8 leading-[1.1] tracking-tight">
-                  {content?.standards_heading || 'Zeovus Quality Assurance (ZQA) is the standard. Everything else is proof of it.'}
+                  Zeovus Quality Assurance (ZQA) is the standard. Everything else is proof of it.
                 </h2>
                 <div className="space-y-6 text-neutral-600 text-[17px] md:text-[18px] leading-[1.75]">
                   <p>

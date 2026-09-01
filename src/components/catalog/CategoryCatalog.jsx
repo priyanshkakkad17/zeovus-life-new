@@ -4,7 +4,6 @@ import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import EditableRegion from '@/components/cms/EditableRegion';
 import { resolveBottleImage } from '@/lib/bottleImages';
 
 // Shared category icon set used across nutraceuticals and cosmetics.
@@ -570,21 +569,10 @@ export default function CategoryCatalog({
   hero,
 }) {
   const pageScrollRef = useRef(null);
-  const [content, setContent] = useState(null);
 
-  // Load editable hero copy from the CMS (falls back to props when unset).
-  useEffect(() => {
-    let cancelled = false;
-    fetch(`/api/content?page=${division}`)
-      .then((res) => res.json())
-      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, [division]);
-
-  const titleLead = content?.hero_title_lead || hero.titleLead;
-  const titleAccent = content?.hero_title_accent || hero.titleAccent;
-  const heroSubtitle = content?.hero_subtitle || hero.subtitle || '';
+  const titleLead = hero.titleLead;
+  const titleAccent = hero.titleAccent;
+  const heroSubtitle = hero.subtitle || '';
 
   return (
     <div ref={pageScrollRef} className="h-screen snap-y snap-proximity overflow-y-auto scroll-smooth bg-white" style={{ scrollbarWidth: 'none' }}>
@@ -606,18 +594,16 @@ export default function CategoryCatalog({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <EditableRegion page={division}>
-                <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
-                  {titleLead}
-                  <br />
-                  <span className="text-secondary">{titleAccent}</span>
-                </h1>
-                {heroSubtitle && (
-                  <p className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
-                    {heroSubtitle}
-                  </p>
-                )}
-              </EditableRegion>
+              <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+                {titleLead}
+                <br />
+                <span className="text-secondary">{titleAccent}</span>
+              </h1>
+              {heroSubtitle && (
+                <p className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                  {heroSubtitle}
+                </p>
+              )}
 
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/contact">

@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import EditableRegion from '@/components/cms/EditableRegion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,24 +39,13 @@ export default function HeroSection() {
   const videoRef = useRef(null);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
-  const [content, setContent] = useState(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/api/content?page=home')
-      .then((res) => res.json())
-      .then((data) => { if (!cancelled && data?.content) setContent(data.content); })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
-
-  const heroVideo = content?.hero_video || 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4';
-  const titleLine1 = content?.hero_title_line1 || 'Wellness,';
-  const titleLine2 = content?.hero_title_line2 || 'Inside & Outside.';
-  const subtitle = content?.hero_subtitle || 'Trusted B2B nutraceutical and cosmetic manufacturer. Formulated to deliver, built to scale.';
-  const ctaPrimary = content?.hero_cta_primary || 'EXPLORE NUTRACEUTICALS';
-  const ctaSecondary = content?.hero_cta_secondary || 'EXPLORE COSMETICS';
-  const ctaTertiary = content?.hero_cta_tertiary || 'ENQUIRE NOW';
+  const heroVideo = 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4';
+  const titleLine1 = 'Wellness,';
+  const titleLine2 = 'Inside & Outside.';
+  const ctaPrimary = 'EXPLORE NUTRACEUTICALS';
+  const ctaSecondary = 'EXPLORE COSMETICS';
+  const ctaTertiary = 'ENQUIRE NOW';
 
   useGSAP(() => {
     const section = sectionRef.current;
@@ -160,7 +148,6 @@ export default function HeroSection() {
 
       {/* Content — scroll-fade target */}
       <div ref={contentRef} className="relative z-10 mx-auto w-full max-w-[1800px] will-change-transform">
-        <EditableRegion page="home">
           <motion.div
             className="max-w-[900px]"
             variants={container}
@@ -218,7 +205,6 @@ export default function HeroSection() {
               </Link>
             </motion.div>
           </motion.div>
-        </EditableRegion>
 
         {/* Scroll indicator */}
         <motion.div

@@ -8,7 +8,6 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: 'grid' },
   { href: '/admin/products', label: 'Products', icon: 'package' },
   { href: '/admin/categories', label: 'Categories', icon: 'folder' },
-  { href: '/admin/content', label: 'Page Content', icon: 'document' },
   { href: '/admin/settings', label: 'Settings', icon: 'settings' },
 ];
 

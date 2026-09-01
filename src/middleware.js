@@ -5,7 +5,7 @@ import { authCookieName, verifySessionToken } from '@/lib/auth';
 const PUBLIC_API_PREFIXES = ['/api/auth/login', '/api/auth/logout'];
 
 // API paths that are allowed for public GET reads (writes still require admin).
-const PUBLIC_READ_API_PREFIXES = ['/api/categories', '/api/products', '/api/content'];
+const PUBLIC_READ_API_PREFIXES = ['/api/categories', '/api/products'];
 
 function isPublicRead(pathname, method) {
   if (method !== 'GET') return false;
