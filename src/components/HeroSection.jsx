@@ -34,18 +34,24 @@ const item = {
   },
 };
 
-export default function HeroSection() {
+export default function HeroSection({ content = {} }) {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
 
-  const heroVideo = 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4';
-  const titleLine1 = 'Wellness,';
-  const titleLine2 = 'Inside & Outside.';
-  const ctaPrimary = 'EXPLORE NUTRACEUTICALS';
-  const ctaSecondary = 'EXPLORE COSMETICS';
-  const ctaTertiary = 'ENQUIRE NOW';
+  const heroVideo = content.media || '';
+  const titleLine1 = content.titleLine1 || '';
+  const titleLine2 = content.titleLine2 || '';
+  const ctas = [
+    { label: content.ctaPrimaryLabel, href: content.ctaPrimaryHref || '/', className: 'bg-[#9CCD62] text-[#1F4015] hover:bg-[#B4BD62]' },
+    {
+      label: content.ctaSecondaryLabel,
+      href: content.ctaSecondaryHref || '/',
+      className: 'border border-[#e8f5ed]/50 bg-[#e8f5ed]/10 text-[#e8f5ed] backdrop-blur-sm hover:bg-[#e8f5ed]/20',
+    },
+    { label: content.ctaTertiaryLabel, href: content.ctaTertiaryHref || '/', className: 'bg-[#FFD374] text-[#1F4015] hover:bg-[#FFEF98]' },
+  ].filter((cta) => cta.label);
 
   useGSAP(() => {
     const section = sectionRef.current;
@@ -100,8 +106,8 @@ export default function HeroSection() {
       className="relative flex min-h-screen items-end overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-20"
     >
       {/* Background Video — parallax target */}
-      <div ref={videoRef} className="absolute inset-0 z-0 will-change-transform">
-        {/\.(mp4|webm|mov)(\?|$)/i.test(heroVideo) ? (
+      <div ref={videoRef} className="absolute inset-0 z-0 bg-primary-dark will-change-transform">
+        {heroVideo && (/\.(mp4|webm|mov)(\?|$)/i.test(heroVideo) ? (
           <video
             key={heroVideo}
             src={heroVideo}
@@ -113,7 +119,7 @@ export default function HeroSection() {
           />
         ) : (
           <img src={heroVideo} alt="" className="h-full w-full object-cover" />
-        )}
+        ))}
       </div>
 
       {/* Cinematic gradient overlay */}
@@ -173,37 +179,21 @@ export default function HeroSection() {
             </h1>
 
             {/* Buttons */}
-            <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-              <Link href="/nutraceuticals">
-                <motion.span
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-block cursor-pointer rounded-[2px] bg-[#9CCD62] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#B4BD62] sm:px-8 sm:py-4 sm:text-sm"
-                >
-                  {ctaPrimary}
-                </motion.span>
-              </Link>
-
-              <Link href="/cosmetics">
-                <motion.span
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-block cursor-pointer rounded-[2px] border border-[#e8f5ed]/50 bg-[#e8f5ed]/10 px-6 py-3 text-xs font-semibold tracking-widest text-[#e8f5ed] backdrop-blur-sm transition-colors hover:bg-[#e8f5ed]/20 sm:px-8 sm:py-4 sm:text-sm"
-                >
-                  {ctaSecondary}
-                </motion.span>
-              </Link>
-
-              <Link href="/contact">
-                <motion.span
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-block cursor-pointer rounded-[2px] bg-[#FFD374] px-6 py-3 text-xs font-semibold tracking-widest text-[#1F4015] transition-colors hover:bg-[#FFEF98] sm:px-8 sm:py-4 sm:text-sm"
-                >
-                  {ctaTertiary}
-                </motion.span>
-              </Link>
-            </motion.div>
+            {ctas.length > 0 && (
+              <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
+                {ctas.map((cta, i) => (
+                  <Link key={i} href={cta.href}>
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.97 }}
+                      className={`inline-block cursor-pointer rounded-[2px] px-6 py-3 text-xs font-semibold tracking-widest transition-colors sm:px-8 sm:py-4 sm:text-sm ${cta.className}`}
+                    >
+                      {cta.label}
+                    </motion.span>
+                  </Link>
+                ))}
+              </motion.div>
+            )}
           </motion.div>
 
         {/* Scroll indicator */}
@@ -214,7 +204,7 @@ export default function HeroSection() {
           className="absolute bottom-0 right-0 hidden items-center gap-3 lg:flex"
         >
           <span className="font-heading text-[10px] uppercase tracking-[2px] text-white/40">
-            Scroll
+            {content.scrollLabel}
           </span>
           <div className="flex h-10 w-[1px] items-end overflow-hidden bg-white/10">
             <motion.div

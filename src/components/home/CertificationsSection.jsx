@@ -3,34 +3,12 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-const certifications = [
-  { label: 'GMP',          logo: '/logo/gmp.png' },
-  { label: 'ISO',          logo: null },
-  { label: 'HACCP',        logo: '/logo/haccp.png' },
-  { label: 'FSSC 22000',   logo: '/logo/iso22000.png' },
-  { label: 'BRCGS',        logo: '/logo/brcgs.png' },
-  { label: 'IFS',          logo: null },
-  { label: 'US FDA',       logo: '/logo/usfda.png' },
-  { label: 'ISO 22716',    logo: null },
-  { label: 'COSMOS',       logo: null },
-  { label: 'HALAL',        logo: '/logo/halal.png' },
-  { label: 'KOSHER',       logo: '/logo/kosher.png' },
-  { label: 'ORGANIC',      logo: '/logo/organic.png' },
-  { label: 'NON-GMO',      logo: null },
-  { label: 'REACH',        logo: null },
-  { label: 'NSF',          logo: null },
-  { label: 'LEAPING BUNNY',logo: null },
-  { label: 'VEGAN',        logo: '/logo/vegan.webp' },
-  { label: 'FSSAI',        logo: '/logo/fssai.png' },
-];
+export default function CertificationsSection({ content = {}, certifications = [] }) {
+  const metrics = content.metrics || [];
+  const showCerts = content.showCertifications !== false && certifications.length > 0;
 
-const metrics = [
-  { value: '12', suffix: '', label: 'Quality Steps' },
-  { value: '825', suffix: '+', label: 'Tested Parameters' },
-  { value: '3', suffix: '×', label: 'Layer Verification' },
-];
+  if (content.enabled === false) return null;
 
-export default function CertificationsSection() {
   return (
     <section className="relative overflow-hidden bg-[#f5f9f6] py-20 sm:py-26 lg:py-30">
 
@@ -63,22 +41,27 @@ export default function CertificationsSection() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-10 text-center"
         >
-          <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-primary-light">
-            Manufactured in facilities built to global standards
-          </p>
+          {content.eyebrow && (
+            <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-primary-light">
+              {content.eyebrow}
+            </p>
+          )}
           <h2 className="mb-5 font-heading text-[36px] font-bold uppercase leading-[1.02] tracking-[-1.5px] text-primary-dark sm:text-[48px] md:text-[56px]">
-            Quality is not a department.
-            <br />
-            <span className="text-primary-light">It's our DNA.</span>
+            {content.headingLead}
+            {content.headingAccent && (
+              <>
+                <br />
+                <span className="text-primary-light">{content.headingAccent}</span>
+              </>
+            )}
           </h2>
           <p className="mx-auto max-w-[680px] text-[16px] leading-relaxed text-neutral-600 sm:text-[18px]">
-            Every product passes through facilities verified to global quality,
-            safety and regulatory standards — anchored by our proprietary ZQA
-            framework.
+            {content.intro}
           </p>
         </motion.div>
 
         {/* ZQA seal — overlaps the metrics card */}
+        {content.sealImage && (
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -92,14 +75,16 @@ export default function CertificationsSection() {
             className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-primary-light/25 bg-white shadow-[0_8px_48px_rgba(31,64,21,0.14)] sm:h-[180px] sm:w-[180px]"
           >
             <img
-              src="/zqa/seal5.png"
-              alt="Zeovus Quality Assurance Seal"
+              src={content.sealImage}
+              alt={content.sealAlt || ''}
               className="h-[132px] w-[132px] object-contain sm:h-[152px] sm:w-[152px]"
             />
           </motion.div>
         </motion.div>
+        )}
 
         {/* Metrics card — refined with editorial number styling */}
+        {metrics.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -107,11 +92,11 @@ export default function CertificationsSection() {
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="relative mb-14"
         >
-          <div className="overflow-hidden rounded-[20px] bg-white pt-[96px] shadow-[0_2px_40px_rgba(31,64,21,0.07)] ring-1 ring-primary-dark/[0.04]">
+          <div className={`overflow-hidden rounded-[20px] bg-white shadow-[0_2px_40px_rgba(31,64,21,0.07)] ring-1 ring-primary-dark/[0.04] ${content.sealImage ? 'pt-[96px]' : 'pt-2'}`}>
             <div className="grid divide-y divide-neutral-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               {metrics.map((m, i) => (
                 <motion.div
-                  key={m.label}
+                  key={i}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -130,15 +115,17 @@ export default function CertificationsSection() {
                 </motion.div>
               ))}
             </div>
-            <div className="border-t border-neutral-100 px-8 py-4">
-              <p className="text-center text-[13px] text-neutral-500">
-                From raw materials to finished goods — ZQA adds a verification layer at every stage.
-              </p>
-            </div>
+            {content.metricsFootnote && (
+              <div className="border-t border-neutral-100 px-8 py-4">
+                <p className="text-center text-[13px] text-neutral-500">{content.metricsFootnote}</p>
+              </div>
+            )}
           </div>
         </motion.div>
+        )}
 
         {/* Certification carousel — refined cards */}
+        {showCerts && (
         <div className="relative overflow-hidden">
           {/* Fade edges */}
           <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-[#f5f9f6] to-transparent sm:w-28" />
@@ -169,6 +156,7 @@ export default function CertificationsSection() {
             ))}
           </div>
         </div>
+        )}
 
         {/* Standards footer CTA — refined */}
         <motion.div
@@ -179,18 +167,17 @@ export default function CertificationsSection() {
           className="mt-16 border-t border-primary-dark/[0.06] pt-10 text-center"
         >
           <p className="mb-2 font-heading text-[12px] font-semibold uppercase tracking-[2px] text-neutral-500">
-            Held to standards you can verify.
+            {content.footerHeading}
           </p>
           <p className="mx-auto mb-6 max-w-[500px] text-[14px] leading-relaxed text-neutral-500">
-            Explore every certification, audit protocol, and compliance framework
-            behind Zeovus manufacturing.
+            {content.footerBody}
           </p>
           <Link
-            href="/capabilities"
+            href={content.footerCtaHref || '/capabilities'}
             className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light"
           >
             <span className="relative">
-              View Manufacturing Standards
+              {content.footerCtaLabel}
               <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
             </span>
             <svg

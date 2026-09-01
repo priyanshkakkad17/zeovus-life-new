@@ -1,7 +1,9 @@
-'use client';
-
 import ProductDetail from '@/components/catalog/ProductDetail';
+import { getContentGroup } from '@/lib/content/store';
 
-export default function CosmeticProductPage() {
-  return <ProductDetail basePath="/cosmetics" />;
+export const dynamic = 'force-dynamic';
+
+export default async function CosmeticProductPage() {
+  const content = await getContentGroup('cosmetics');
+  return <ProductDetail basePath="/cosmetics" labels={content.productDetail || {}} />;
 }

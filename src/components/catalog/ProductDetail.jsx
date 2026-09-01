@@ -53,7 +53,7 @@ function DetailSection({ title, children }) {
  * Shared product detail view. `basePath` is the catalogue root (e.g. /nutraceuticals
  * or /cosmetics) used for the back-to-category link and empty-state browse link.
  */
-export default function ProductDetail({ basePath = '/nutraceuticals' }) {
+export default function ProductDetail({ basePath = '/nutraceuticals', labels = {} }) {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -119,7 +119,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals' }) {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
         <Link href={backHref} className="group inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-neutral-500 transition-colors hover:text-primary-dark">
           <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5m0 0 6-6m-6 6 6 6" /></svg>
-          Back to {product.category_name}
+          {labels.backLabel} {product.category_name}
         </Link>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
@@ -134,8 +134,8 @@ export default function ProductDetail({ basePath = '/nutraceuticals' }) {
             {product.brand_line && <p className="mt-4 font-heading text-[13px] font-semibold uppercase tracking-[1.2px] text-primary-light">{product.brand_line}</p>}
             {product.primary_benefit && <p className="mt-6 max-w-[620px] text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{product.primary_benefit}</p>}
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/contact" className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-5 py-3 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
-                Ask about this product
+              <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-5 py-3 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
+                {labels.enquireLabel}
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17 17 7M7 7h10v10" /></svg>
               </Link>
               <span className="inline-flex items-center rounded-[3px] border border-neutral-200 px-4 py-3 font-heading text-[10px] font-semibold uppercase tracking-[1px] text-neutral-500">Product ID {product.id}</span>
@@ -146,26 +146,26 @@ export default function ProductDetail({ basePath = '/nutraceuticals' }) {
         <div className="mt-16 grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="space-y-9">
             {keyActives.length > 0 && (
-              <DetailSection title="Key actives">
+              <DetailSection title={labels.keyActivesLabel}>
                 <div className="flex flex-wrap gap-2">
                   {keyActives.map((active, index) => <span key={index} className="rounded-full border border-primary-light/20 bg-primary-light/[0.06] px-3 py-1.5 text-[12px] font-medium text-primary-dark">{active}</span>)}
                 </div>
               </DetailSection>
             )}
             {product.secondary_benefits && (
-              <DetailSection title="Additional support">
+              <DetailSection title={labels.secondaryLabel}>
                 <p className="max-w-[760px] text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
               </DetailSection>
             )}
             {formats.length > 0 && (
-              <DetailSection title="Available formats">
+              <DetailSection title={labels.formatsLabel}>
                 <div className="flex flex-wrap gap-2">
                   {formats.map((format, index) => <span key={index} className="rounded-full bg-neutral-100 px-3 py-1.5 text-[12px] font-medium text-neutral-700">{format}</span>)}
                 </div>
               </DetailSection>
             )}
             {technologies.length > 0 && (
-              <DetailSection title="Delivery technology">
+              <DetailSection title={labels.deliveryLabel}>
                 <div className="flex flex-wrap gap-2">
                   {technologies.map((technology, index) => <span key={index} className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-[12px] font-medium text-neutral-600">{technology}</span>)}
                 </div>
@@ -174,7 +174,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals' }) {
           </div>
 
           <aside className="h-fit rounded-2xl bg-[#f5f9f6] p-6 sm:p-7">
-            <p className="font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-light">Product information</p>
+            <p className="font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-light">{labels.infoLabel}</p>
             <dl className="mt-5 space-y-4 text-[13px]">
               <div className="flex items-start justify-between gap-6 border-b border-primary-dark/[0.08] pb-3"><dt className="text-neutral-500">Category</dt><dd className="text-right font-medium text-primary-dark">{product.category_name}</dd></div>
               {product.subcategory_name && <div className="flex items-start justify-between gap-6 border-b border-primary-dark/[0.08] pb-3"><dt className="text-neutral-500">Subcategory</dt><dd className="text-right font-medium text-primary-dark">{product.subcategory_name}</dd></div>}

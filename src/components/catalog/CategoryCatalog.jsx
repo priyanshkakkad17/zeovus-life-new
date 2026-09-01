@@ -115,7 +115,7 @@ function DotNav({ categories, activeIndex, onDotClick }) {
 }
 
 // ─── Editorial scroll — snap cards in page-level scroll container ─────────────
-function EditorialScroll({ categories, scrollContainerRef, basePath }) {
+function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {} }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -243,7 +243,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath }) {
                 transition={{ duration: 0.5, delay: activeIndex === i ? 0.32 : 0, ease: [0.22, 1, 0.36, 1] }}
                 className="hidden border-t border-white/15 pt-7 pb-2 lg:block"
               >
-                <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">Key Offerings</p>
+                <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">{labels.highlightsHeading}</p>
                 <div className="flex flex-wrap gap-2">
                   {cat.highlights.slice(0, 5).map((h, hi) => (
                     <span key={hi} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[12px] font-medium text-white/80 backdrop-blur-sm">
@@ -257,7 +257,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath }) {
 
           {i === 0 && (
             <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse">
-              <span className="font-heading text-[9px] font-medium uppercase tracking-[2px] text-white/40">Scroll</span>
+              <span className="font-heading text-[9px] font-medium uppercase tracking-[2px] text-white/40">{labels.scrollLabel}</span>
               <svg className="h-4 w-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
@@ -270,7 +270,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath }) {
 }
 
 // ─── Product card ───────────────────────────────────────────────────────────
-function ProductCard({ product, category, index, basePath }) {
+function ProductCard({ product, category, index, basePath, labels = {} }) {
   const [imageError, setImageError] = useState(false);
   const IconComponent = (category && Icons[category.icon]) || Icons.pill;
   const colorFrom = category?.color_from || '#15A859';
@@ -343,7 +343,7 @@ function ProductCard({ product, category, index, basePath }) {
 
         {keyActives.length > 0 && (
           <div className="mt-5 border-t border-neutral-100 pt-4">
-            <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">Key actives</span>
+            <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{labels.keyActivesLabel}</span>
             <div className="flex flex-wrap gap-1.5">
               {keyActives.slice(0, 3).map((active, activeIndex) => (
                 <span key={activeIndex} className="rounded-full border border-primary-light/15 bg-primary-light/[0.06] px-2.5 py-1 text-[10px] font-medium text-primary-dark">
@@ -370,7 +370,7 @@ function ProductCard({ product, category, index, basePath }) {
 }
 
 // ─── Catalog content ──────────────────────────────────────────────────────────
-function CatalogContent({ scrollContainerRef, division, basePath, staticCategories }) {
+function CatalogContent({ scrollContainerRef, division, basePath, staticCategories, labels = {} }) {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || null);
@@ -422,7 +422,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
   return (
     <>
       {!selectedCategory && (
-        <EditorialScroll categories={categories} scrollContainerRef={scrollContainerRef} basePath={basePath} />
+        <EditorialScroll categories={categories} scrollContainerRef={scrollContainerRef} basePath={basePath} labels={labels} />
       )}
 
       <AnimatePresence mode="wait">
@@ -452,7 +452,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="mb-10 border-b border-neutral-100 pb-8"
               >
-                <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.4px] text-primary-light">Products</p>
+                <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.4px] text-primary-light">{labels.productsLabel}</p>
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <h2 className="max-w-[850px] font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[50px]">
@@ -463,10 +463,10 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                   <div className="flex items-center gap-5 border-l-2 border-primary-light/30 pl-4 lg:mb-1">
                     <div>
                       <span className="editorial-number block font-heading text-[30px] font-bold leading-none text-primary-light">{selectedCat.product_count}</span>
-                      <span className="mt-1 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">Products</span>
+                      <span className="mt-1 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{labels.productsLabel}</span>
                     </div>
                     <div className="h-9 w-px bg-neutral-200" />
-                    <p className="max-w-[120px] text-[12px] leading-relaxed text-neutral-500">Open a product to see its listed formats and delivery technology.</p>
+                    <p className="max-w-[120px] text-[12px] leading-relaxed text-neutral-500">{labels.footnote}</p>
                   </div>
                 </div>
               </motion.div>
@@ -501,7 +501,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                 </svg>
                 <input
                   type="text"
-                  placeholder="Search products, actives, brands..."
+                  placeholder={labels.searchPlaceholder}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full border-b border-neutral-200 bg-transparent py-2.5 pl-7 text-[14px] text-primary-dark placeholder:text-neutral-400 focus:border-primary-light focus:outline-none"
@@ -521,7 +521,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
               ) : products.length > 0 ? (
                 <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
                   {products.map((p, i) => (
-                    <ProductCard key={p.id} product={p} category={selectedCat} index={i} basePath={basePath} />
+                    <ProductCard key={p.id} product={p} category={selectedCat} index={i} basePath={basePath} labels={labels} />
                   ))}
                 </div>
               ) : (
@@ -563,6 +563,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
  * product view for the selected category.
  */
 export default function CategoryCatalog({
+  labels = {},
   division,
   basePath,
   staticCategories = [],
@@ -647,7 +648,7 @@ export default function CategoryCatalog({
           </div>
         </div>
       }>
-        <CatalogContent scrollContainerRef={pageScrollRef} division={division} basePath={basePath} staticCategories={staticCategories} />
+        <CatalogContent scrollContainerRef={pageScrollRef} division={division} basePath={basePath} staticCategories={staticCategories} labels={labels} />
       </Suspense>
     </div>
   );

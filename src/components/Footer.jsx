@@ -4,40 +4,39 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-export default function Footer() {
+const SOCIAL_PATHS = {
+  twitter:
+    'M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z',
+  instagram:
+    'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z',
+  linkedin:
+    'M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z',
+  facebook:
+    'M22.675 0h-21.35C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24h-1.918c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z',
+  youtube:
+    'M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.121 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.376-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
+};
+
+export default function Footer({ site }) {
   const currentYear = new Date().getFullYear();
 
-  const quickLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Our Company', href: '/our-company' },
-    { name: 'Capabilities', href: '/capabilities' },
-    { name: 'Nutraceuticals', href: '/nutraceuticals' },
-    { name: 'Cosmetics', href: '/cosmetics' },
-    { name: 'Contact', href: '/contact' },
-  ];
+  const cta = site?.footerCta || {};
+  const footer = site?.footer || {};
+  const brand = site?.brand || {};
+  const contact = site?.contactInfo || {};
+  const socials = (site?.social?.items || []).filter((item) => item?.href && item.href !== '#');
 
-  const nutraceuticalCategories = [
-    'Healthy Ageing',
-    'Multivitamins',
-    'Gut Health',
-    "Women's Health",
-    "Men's Health",
-    'Brain, Stress & Sleep',
-    'Immunity & Respiratory',
-    'Joint & Bone Health',
-  ];
-
-  const cosmeticsCategories = [
-    'Skincare',
-    'Haircare',
-    'Sun Care',
-    'Body Care',
-  ];
+  const quickLinks = footer.companyLinks || [];
+  const nutraceuticalCategories = footer.nutraceuticalsLinks || [];
+  const cosmeticsCategories = footer.cosmeticsLinks || [];
+  const groupLinks = footer.groupLinks || [];
+  const legalLinks = footer.legalLinks || [];
 
   return (
     <footer className="relative overflow-hidden">
 
       {/* ═══════════════════ CURVED TOP CTA SECTION ═══════════════════ */}
+      {cta.enabled !== false && (
       <div className="relative bg-[#f5f9f6]">
         {/* Wave separator at bottom */}
         <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -77,30 +76,35 @@ export default function Footer() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-primary-light/[0.06] blur-[80px] pointer-events-none"></div>
 
               <div className="relative z-10 text-center max-w-xl mx-auto">
-                <p className="text-primary-light text-[11px] font-semibold tracking-[0.35em] uppercase mb-4">
-                  Let's Create Together
-                </p>
+                {cta.eyebrow && (
+                  <p className="text-primary-light text-[11px] font-semibold tracking-[0.35em] uppercase mb-4">
+                    {cta.eyebrow}
+                  </p>
+                )}
                 <h3 className="font-display text-[28px] md:text-[38px] font-bold text-white leading-[1.15] tracking-tight mb-5">
-                  Your next breakthrough product starts here.
+                  {cta.heading}
                 </h3>
                 <p className="text-white/60 text-[15px] md:text-[16px] leading-[1.7] mb-9">
-                  From formulation to final product — partner with a manufacturer that delivers science, quality, and scale.
+                  {cta.body}
                 </p>
-                <Link
-                  href="/contact"
-                  className="group inline-flex items-center gap-3 px-9 py-4 bg-primary-light text-white text-[13px] font-semibold uppercase tracking-[0.15em] rounded-full hover:bg-[#12964E] transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_40px_rgba(21,168,89,0.3)]"
-                >
-                  Start a Conversation
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" />
-                    <path d="M12 5l7 7-7 7" />
-                  </svg>
-                </Link>
+                {cta.buttonLabel && (
+                  <Link
+                    href={cta.buttonHref || '/contact'}
+                    className="group inline-flex items-center gap-3 px-9 py-4 bg-primary-light text-white text-[13px] font-semibold uppercase tracking-[0.15em] rounded-full hover:bg-[#12964E] transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_40px_rgba(21,168,89,0.3)]"
+                  >
+                    {cta.buttonLabel}
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" />
+                      <path d="M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
         </div>
       </div>
+      )}
 
       {/* ═══════════════════ MAIN FOOTER ═══════════════════ */}
       <div className="relative bg-[#162E10]">
@@ -129,46 +133,47 @@ export default function Footer() {
             <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-5 bg-white rounded-[16px] px-3 py-1.5 shadow-sm">
                 <Image
-                  src="/logo.png"
-                  alt="Zeovus Life"
+                  src={brand.logo || '/logo.png'}
+                  alt={brand.logoAlt || 'Zeovus Life'}
                   width={160}
                   height={60}
                   className="h-auto w-[100px] object-contain"
                 />
               </Link>
               <p className="text-neutral-400 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
-                Science-backed formulations and world-class manufacturing for brands that demand excellence.
+                {footer.brandBlurb}
               </p>
 
               {/* Social Icons - pill shape */}
-              <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-white/[0.04] border border-white/10">
-                <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300" aria-label="Twitter">
-                  <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </a>
-                <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300" aria-label="Instagram">
-                  <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
-                <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300" aria-label="LinkedIn">
-                  <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
-                </a>
-              </div>
+              {socials.length > 0 && (
+                <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-white/[0.04] border border-white/10">
+                  {socials.map((item, i) => (
+                    <a
+                      key={`${item.platform}-${i}`}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300"
+                      aria-label={item.platform}
+                    >
+                      <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <path d={SOCIAL_PATHS[item.platform] || SOCIAL_PATHS.linkedin} />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Navigation */}
             <div className="lg:col-span-2">
               <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
-                Company
+                {footer.companyHeading}
               </p>
               <ul className="space-y-3">
-                {quickLinks.map((link) => (
-                  <li key={link.name}>
-                    <Link href={link.href} className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200">
+                {quickLinks.map((link, i) => (
+                  <li key={`${link.name}-${i}`}>
+                    <Link href={link.href || '/'} className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200">
                       {link.name}
                     </Link>
                   </li>
@@ -179,16 +184,16 @@ export default function Footer() {
             {/* Nutraceuticals */}
             <div className="lg:col-span-3">
               <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
-                Nutraceuticals
+                {footer.nutraceuticalsHeading}
               </p>
               <ul className="space-y-3">
-                {nutraceuticalCategories.map((cat) => (
-                  <li key={cat}>
+                {nutraceuticalCategories.map((cat, i) => (
+                  <li key={`${cat.name}-${i}`}>
                     <Link
-                      href={`/nutraceuticals?category=${cat.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}`}
+                      href={cat.href || '/nutraceuticals'}
                       className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200"
                     >
-                      {cat}
+                      {cat.name}
                     </Link>
                   </li>
                 ))}
@@ -198,53 +203,67 @@ export default function Footer() {
             {/* Cosmetics */}
             <div className="lg:col-span-2">
               <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
-                Cosmetics
+                {footer.cosmeticsHeading}
               </p>
               <ul className="space-y-3">
-                {cosmeticsCategories.map((cat) => (
-                  <li key={cat}>
+                {cosmeticsCategories.map((cat, i) => (
+                  <li key={`${cat.name}-${i}`}>
                     <Link
-                      href={`/cosmetics?category=${cat.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}`}
+                      href={cat.href || '/cosmetics'}
                       className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200"
                     >
-                      {cat}
+                      {cat.name}
                     </Link>
                   </li>
                 ))}
               </ul>
 
               {/* Contact */}
-              <div className="mt-8 pt-6 border-t border-white/[0.06]">
-                <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-4">
-                  Contact
-                </p>
-                <a href="mailto:info@zeovuslife.com" className="text-neutral-400 text-[14px] hover:text-white transition-colors">
-                  info@zeovuslife.com
-                </a>
-              </div>
+              {(contact.email || contact.phone || contact.address) && (
+                <div className="mt-8 pt-6 border-t border-white/[0.06]">
+                  <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-4">
+                    {footer.contactHeading}
+                  </p>
+                  <div className="space-y-2">
+                    {contact.email && (
+                      <a href={`mailto:${contact.email}`} className="block text-neutral-400 text-[14px] hover:text-white transition-colors">
+                        {contact.email}
+                      </a>
+                    )}
+                    {contact.phone && (
+                      <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="block text-neutral-400 text-[14px] hover:text-white transition-colors">
+                        {contact.phone}
+                      </a>
+                    )}
+                    {contact.address && (
+                      <p className="whitespace-pre-line text-neutral-400 text-[14px] leading-[1.7]">{contact.address}</p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Group */}
             <div className="lg:col-span-1">
               <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
-                Group
+                {footer.groupHeading}
               </p>
               <ul className="space-y-3">
-                <li>
-                  <span className="text-neutral-400 text-[14px] whitespace-nowrap">
-                    Zeovus Group
-                  </span>
-                </li>
-                <li>
-                  <a
-                    href="https://www.zeovusfood.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
-                  >
-                    Zeovus Food
-                  </a>
-                </li>
+                {groupLinks.map((link, i) => (
+                  <li key={`${link.name}-${i}`}>
+                    {link.href ? (
+                      <a
+                        href={link.href}
+                        {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        className="text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <span className="text-neutral-400 text-[14px] whitespace-nowrap">{link.name}</span>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -261,16 +280,17 @@ export default function Footer() {
           <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-5">
             <div className="flex flex-col md:flex-row justify-between items-center gap-3">
               <p className="text-neutral-600 text-[12px]">
-                © {currentYear} Zeovus Life Sciences Pvt. Ltd. All rights reserved.
+                {(footer.copyright || '').replace('{year}', String(currentYear))}
               </p>
               <div className="flex items-center gap-5 text-[12px]">
-                <a href="#" className="text-neutral-600 hover:text-neutral-400 transition-colors">
-                  Privacy Policy
-                </a>
-                <span className="w-1 h-1 rounded-full bg-neutral-700"></span>
-                <a href="#" className="text-neutral-600 hover:text-neutral-400 transition-colors">
-                  Terms
-                </a>
+                {legalLinks.map((link, i) => (
+                  <span key={`${link.name}-${i}`} className="flex items-center gap-5">
+                    {i > 0 && <span className="w-1 h-1 rounded-full bg-neutral-700" />}
+                    <Link href={link.href || '#'} className="text-neutral-600 hover:text-neutral-400 transition-colors">
+                      {link.name}
+                    </Link>
+                  </span>
+                ))}
               </div>
             </div>
           </div>

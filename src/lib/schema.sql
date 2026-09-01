@@ -63,3 +63,35 @@ CREATE TABLE IF NOT EXISTS admin_users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- NOTE: /api/setup is the source of truth and applies these idempotently,
+-- including the following columns added after the initial release:
+--   categories.division  VARCHAR(20) NOT NULL DEFAULT 'nutraceuticals'
+--   categories.image     VARCHAR(2048)
+--   products.image_url   VARCHAR(2048)
+
+-- CMS content: one row per `group.section` key, value stored as JSON.
+-- Sections with no row here fall back to the defaults in src/lib/content/schema.
+CREATE TABLE IF NOT EXISTS site_content (
+  content_key VARCHAR(191) NOT NULL PRIMARY KEY,
+  value JSON NOT NULL,
+  updated_by VARCHAR(255) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Contact form submissions, shown in Admin → Enquiries.
+CREATE TABLE IF NOT EXISTS enquiries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(120) NOT NULL,
+  last_name VARCHAR(120) NOT NULL,
+  company VARCHAR(255) DEFAULT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(60) DEFAULT NULL,
+  interest VARCHAR(120) DEFAULT NULL,
+  message TEXT,
+  status ENUM('new', 'read', 'archived') DEFAULT 'new',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

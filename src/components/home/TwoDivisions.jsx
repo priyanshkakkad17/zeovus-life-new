@@ -9,41 +9,25 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CARDS = [
-  {
-    id: 'nutraceuticals',
-    label: 'NUTRACEUTICALS',
-    subtitle: 'Formulated to be felt.',
-    body: 'Immunity, sleep, joints, heart — formulated by life stage, dosed for what the body can absorb.',
-    cta: 'Explore Nutraceuticals',
-    href: '/nutraceuticals',
-    image:
-      'https://res.cloudinary.com/ac74hfe9/image/upload/v1788197673/Formulated_to_be_felt.jpg',
-    overlay:
-      'linear-gradient(100deg, rgba(10,38,14,0.92) 0%, rgba(10,38,14,0.72) 30%, rgba(10,38,14,0.38) 58%, rgba(10,38,14,0.10) 100%), linear-gradient(180deg, rgba(10,38,14,0.10) 0%, rgba(10,38,14,0.30) 100%)',
-    hoverOverlay:
-      'linear-gradient(100deg, rgba(10,38,14,0.82) 0%, rgba(10,38,14,0.60) 30%, rgba(10,38,14,0.28) 58%, rgba(10,38,14,0.06) 100%), linear-gradient(180deg, rgba(10,38,14,0.06) 0%, rgba(10,38,14,0.22) 100%)',
-  },
-  {
-    id: 'cosmetics',
-    label: 'COSMETICS',
-    subtitle: 'Formulated to be seen.',
-    body: 'Skincare and haircare, formulated clean-label first and reviewed for how they perform on skin.',
-    cta: 'Explore Cosmetics',
-    href: '/cosmetics',
-    image:
-      'https://res.cloudinary.com/ac74hfe9/image/upload/v1788197210/Formulated_to_be_seen..jpg',
-    overlay:
-      'linear-gradient(100deg, rgba(8,48,36,0.92) 0%, rgba(8,48,36,0.72) 30%, rgba(8,48,36,0.38) 58%, rgba(8,48,36,0.10) 100%), linear-gradient(180deg, rgba(8,48,36,0.10) 0%, rgba(8,48,36,0.30) 100%)',
-    hoverOverlay:
-      'linear-gradient(100deg, rgba(8,48,36,0.82) 0%, rgba(8,48,36,0.60) 30%, rgba(8,48,36,0.28) 58%, rgba(8,48,36,0.06) 100%), linear-gradient(180deg, rgba(8,48,36,0.06) 0%, rgba(8,48,36,0.22) 100%)',
-  },
-];
+/** Convert a #rrggbb tint into the layered cinematic overlays the design uses. */
+function buildOverlays(tint) {
+  const hex = /^#[0-9a-fA-F]{6}$/.test(tint || '') ? tint : '#0A260E';
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const rgba = (a) => `rgba(${r},${g},${b},${a})`;
+  return {
+    overlay: `linear-gradient(100deg, ${rgba(0.92)} 0%, ${rgba(0.72)} 30%, ${rgba(0.38)} 58%, ${rgba(0.1)} 100%), linear-gradient(180deg, ${rgba(0.1)} 0%, ${rgba(0.3)} 100%)`,
+    hoverOverlay: `linear-gradient(100deg, ${rgba(0.82)} 0%, ${rgba(0.6)} 30%, ${rgba(0.28)} 58%, ${rgba(0.06)} 100%), linear-gradient(180deg, ${rgba(0.06)} 0%, ${rgba(0.22)} 100%)`,
+  };
+}
 
-export default function TwoDivisions() {
+export default function TwoDivisions({ content = {} }) {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const cardsRef = useRef(null);
+
+  const cards = content.cards || [];
 
   useGSAP(() => {
     const cards = cardsRef.current?.children;
@@ -70,6 +54,8 @@ export default function TwoDivisions() {
 
   }, { scope: sectionRef });
 
+  if (content.enabled === false || cards.length === 0) return null;
+
   return (
     <section ref={sectionRef} className="relative overflow-hidden bg-[#f5f9f6] py-16 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
@@ -83,16 +69,17 @@ export default function TwoDivisions() {
           className="mb-14 text-center lg:mb-16"
         >
           <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px]">
-            Two ways we care for you.
+            {content.heading}
           </h2>
         </motion.div>
 
         {/* Cards — GSAP scroll-stagger target */}
         <div ref={cardsRef} className="grid gap-6 md:grid-cols-2 lg:gap-8">
-          {CARDS.map((card) => {
+          {cards.map((card, index) => {
+            const { overlay, hoverOverlay } = buildOverlays(card.tint);
             return (
               <div
-                key={card.id}
+                key={index}
                 className="group relative min-h-[440px] overflow-hidden rounded-[22px] opacity-0 will-change-transform md:min-h-[480px]"
               >
                 {/* Background image with zoom */}
@@ -104,11 +91,11 @@ export default function TwoDivisions() {
                 {/* Cinematic overlay — lightens slightly on hover */}
                 <div
                   className="absolute inset-0 transition-opacity duration-[600ms] ease-out"
-                  style={{ background: card.overlay }}
+                  style={{ background: overlay }}
                 />
                 <div
                   className="absolute inset-0 opacity-0 transition-opacity duration-[600ms] ease-out group-hover:opacity-100"
-                  style={{ background: card.hoverOverlay }}
+                  style={{ background: hoverOverlay }}
                 />
 
                 {/* Lift shadow on hover */}
@@ -119,9 +106,11 @@ export default function TwoDivisions() {
                   {/* Top */}
                   <div>
                     {/* Category label */}
-                    <p className="mb-3 font-heading text-[11px] font-semibold uppercase tracking-[3px] text-white/60">
-                      {card.label}
-                    </p>
+                    {card.label && (
+                      <p className="mb-3 font-heading text-[11px] font-semibold uppercase tracking-[3px] text-white/60">
+                        {card.label}
+                      </p>
+                    )}
 
                     {/* Subtitle */}
                     <h3 className="mb-4 font-heading text-[28px] font-bold leading-[1.1] tracking-[-0.5px] text-white sm:text-[32px] md:text-[36px]">
@@ -135,9 +124,10 @@ export default function TwoDivisions() {
                   </div>
 
                   {/* CTA */}
+                  {card.cta && (
                   <div className="mt-10">
                     <Link
-                      href={card.href}
+                      href={card.href || '/'}
                       className="group/cta inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-white transition-all duration-300"
                     >
                       {card.cta}
@@ -155,6 +145,7 @@ export default function TwoDivisions() {
                       </svg>
                     </Link>
                   </div>
+                  )}
                 </div>
               </div>
             );

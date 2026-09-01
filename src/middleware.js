@@ -4,8 +4,11 @@ import { authCookieName, verifySessionToken } from '@/lib/auth';
 // API paths that must always be reachable without a session.
 const PUBLIC_API_PREFIXES = ['/api/auth/login', '/api/auth/logout'];
 
+// Paths where a specific method is public (public contact form submissions).
+const PUBLIC_METHOD_ROUTES = [{ path: '/api/enquiries', method: 'POST' }];
+
 // API paths that are allowed for public GET reads (writes still require admin).
-const PUBLIC_READ_API_PREFIXES = ['/api/categories', '/api/products'];
+const PUBLIC_READ_API_PREFIXES = ['/api/categories', '/api/products', '/api/content'];
 
 function isPublicRead(pathname, method) {
   if (method !== 'GET') return false;
@@ -29,6 +32,9 @@ export async function middleware(request) {
       return NextResponse.next();
     }
     if (isPublicRead(pathname, method)) {
+      return NextResponse.next();
+    }
+    if (PUBLIC_METHOD_ROUTES.some((r) => r.path === pathname && r.method === method)) {
       return NextResponse.next();
     }
     if (!user) {

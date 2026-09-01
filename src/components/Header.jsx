@@ -6,19 +6,13 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
-export default function Header() {
+export default function Header({ site }) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'Our Company', href: '/our-company' },
-    { name: 'Capabilities', href: '/capabilities' },
-    { name: 'Nutraceuticals', href: '/nutraceuticals', hasDropdown: true },
-    { name: 'Cosmetics', href: '/cosmetics', hasDropdown: true },
-    { name: 'Working Together', href: '/contact' },
-  ];
+  const brand = site?.brand || {};
+  const navItems = (site?.nav?.items || []).filter((item) => item?.name);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,8 +23,10 @@ export default function Header() {
   }, []);
 
   const isActive = (href) => {
-    if (href === '/') return pathname === '/';
-    return pathname.startsWith(href);
+    if (!href) return false;
+    const path = href.split(/[?#]/)[0];
+    if (path === '/') return pathname === '/';
+    return pathname.startsWith(path);
   };
 
   return (
@@ -52,8 +48,8 @@ export default function Header() {
             className="flex shrink-0 items-center"
           >
             <Image
-              src="/logo.png"
-              alt="Zeovus Life"
+              src={brand.logo || '/logo.png'}
+              alt={brand.logoAlt || 'Zeovus Life'}
               width={160}
               height={60}
               priority
@@ -61,13 +57,17 @@ export default function Header() {
             />
           </Link>
 
-          {/* Divider */}
-          <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:ml-5 lg:h-9" />
+          {brand.showTagline !== false && brand.tagline && (
+            <>
+              {/* Divider */}
+              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:ml-5 lg:h-9" />
 
-          {/* Tagline */}
-          <p className="ml-4 hidden max-w-[200px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-none md:whitespace-nowrap md:text-[13px] lg:ml-5 lg:text-[15px]">
-            Committed to better tomorrow
-          </p>
+              {/* Tagline */}
+              <p className="ml-4 hidden max-w-[200px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-none md:whitespace-nowrap md:text-[13px] lg:ml-5 lg:text-[15px]">
+                {brand.tagline}
+              </p>
+            </>
+          )}
         </div>
 
         {/* Desktop Navigation */}

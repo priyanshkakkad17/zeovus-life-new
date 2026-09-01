@@ -101,6 +101,35 @@ export async function POST() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
 
+    // CMS content overrides — one row per `group.section`, value stored as JSON.
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS site_content (
+        content_key VARCHAR(191) NOT NULL PRIMARY KEY,
+        value JSON NOT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+
+    // Contact form submissions.
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS enquiries (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        first_name VARCHAR(120) NOT NULL,
+        last_name VARCHAR(120) NOT NULL,
+        company VARCHAR(255) DEFAULT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(60) DEFAULT NULL,
+        interest VARCHAR(120) DEFAULT NULL,
+        message TEXT,
+        status ENUM('new', 'read', 'archived') DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_status (status),
+        INDEX idx_created (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+
     // Create default admin user
     const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'ZeovusAdmin@2024', 12);
     await connection.query(`

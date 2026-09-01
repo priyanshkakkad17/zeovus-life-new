@@ -2,26 +2,11 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-const options = [
-  {
-    title: 'Co-Development & Formulation Innovation',
-    description: 'Bring us your idea, brief or product challenge. We work with you to develop the right formulation.',
-  },
-  {
-    title: 'Private Label & White Label',
-    description: 'Launch products under your own brand, with our support across formulation, sourcing and manufacturing.',
-  },
-  {
-    title: 'Distribution & Regional Partnerships',
-    description: 'Take our products into new markets and grow with us as a distribution partner.',
-  },
-  {
-    title: 'Bulk Ingredient & Raw Material Supply',
-    description: 'Source the ingredients and raw materials you need, in the quantities your business requires.',
-  },
-];
+export default function WorkingTogether({ content = {} }) {
+  const options = content.items || [];
 
-export default function WorkingTogether() {
+  if (content.enabled === false || options.length === 0) return null;
+
   return (
     <section className="bg-white py-20 sm:py-26 lg:py-30">
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
@@ -35,7 +20,7 @@ export default function WorkingTogether() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-primary-light">
-              Built to grow with you.
+              {content.eyebrow}
             </p>
           </motion.div>
 
@@ -46,8 +31,8 @@ export default function WorkingTogether() {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-[720px] font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[48px]"
           >
-            We shape what you sell —{' '}
-            <span className="text-primary-light">and stay for what comes next.</span>
+            {content.headingLead}{' '}
+            <span className="text-primary-light">{content.headingAccent}</span>
           </motion.h2>
         </div>
 
@@ -86,12 +71,13 @@ export default function WorkingTogether() {
                   </div>
 
                   {/* CTA — right-aligned on desktop */}
+                  {content.itemCtaLabel && (
                   <div className="mt-4 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
                     <Link
-                      href="/contact"
+                      href={content.itemCtaHref || '/contact'}
                       className="group/link inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-medium uppercase tracking-[1px] text-neutral-500 transition-all duration-300 hover:border-primary-light/40 hover:text-primary-light"
                     >
-                      Enquire
+                      {content.itemCtaLabel}
                       <svg
                         className="h-3 w-3 transition-transform duration-300 group-hover/link:translate-x-0.5"
                         fill="none"
@@ -106,6 +92,7 @@ export default function WorkingTogether() {
                       </svg>
                     </Link>
                   </div>
+                  )}
                 </div>
 
                 {/* Hover accent — left vertical bar */}
@@ -124,9 +111,7 @@ export default function WorkingTogether() {
           className="mt-14 flex items-center gap-4 border-t border-neutral-100 pt-8"
         >
           <div className="h-2 w-2 rounded-full bg-primary-light/40" />
-          <p className="text-[13px] text-neutral-500">
-            All partnership models include dedicated account management and quality assurance.
-          </p>
+          <p className="text-[13px] text-neutral-500">{content.footnote}</p>
         </motion.div>
 
       </div>

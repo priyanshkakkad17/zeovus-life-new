@@ -1,19 +1,37 @@
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import { getContentGroup } from '@/lib/content/store';
 
-export const metadata = {
-  title: 'Zeovus Life - Wellness Products Manufacturer',
-  description: 'Trusted B2B nutraceutical and cosmetic manufacturer. Formulated to deliver, built to scale.',
-  icons: {
-    icon: '/logo.png',
-  },
-};
+// Content is read from the database on every request so admin edits appear
+// immediately without a rebuild.
+export const dynamic = 'force-dynamic';
 
-export default function RootLayout({ children }) {
+export async function generateMetadata() {
+  const site = await getContentGroup('site');
+  const seo = site.seo || {};
+  return {
+    title: seo.title || 'Zeovus Life',
+    description: seo.description || '',
+    icons: { icon: seo.favicon || '/logo.png' },
+    ...(seo.siteUrl ? { metadataBase: safeUrl(seo.siteUrl) } : {}),
+  };
+}
+
+function safeUrl(value) {
+  try {
+    return new URL(value);
+  } catch {
+    return undefined;
+  }
+}
+
+export default async function RootLayout({ children }) {
+  const site = await getContentGroup('site');
+
   return (
     <html lang="en">
       <body className="font-sans text-neutral-900 bg-white">
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <LayoutWrapper site={site}>{children}</LayoutWrapper>
       </body>
     </html>
   );
