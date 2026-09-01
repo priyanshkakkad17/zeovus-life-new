@@ -16,19 +16,20 @@ function ProductImage({ product, colorFrom, colorTo }) {
   const hasImage = Boolean(resolvedImage) && !imageError;
 
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-primary-dark/[0.08]" style={{ background: `linear-gradient(135deg, ${colorFrom}25, ${colorTo}38)` }}>
+    <div className="group relative flex items-center justify-center">
       {hasImage ? (
-        <img src={resolvedImage} alt={product.name} onError={() => setImageError(true)} className="h-full w-full object-contain p-6" />
+        <img
+          src={resolvedImage}
+          alt={product.name}
+          onError={() => setImageError(true)}
+          className="w-full max-w-[620px] object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+        />
       ) : (
-        <>
-          <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-white/25 blur-3xl" />
-          <div className="absolute -bottom-20 -left-12 h-60 w-60 rounded-full bg-primary-dark/10 blur-3xl" />
-          <div className="relative flex h-full items-center justify-center">
-            <div className="flex h-24 w-24 items-center justify-center rounded-[30px] border border-white/50 bg-white/60 text-primary-dark shadow-lg backdrop-blur-sm">
-              <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.35} d="M9.75 3.75h4.5m-6 0h7.5m-9 0v3.5c0 .9-.32 1.77-.9 2.46l-1.92 2.27a3 3 0 00-.7 1.94v3.33A3.75 3.75 0 006.83 21h10.34A3.75 3.75 0 0021 17.25v-3.33a3 3 0 00-.7-1.94l-1.92-2.27a3.8 3.8 0 01-.88-2.46v-3.5" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.35} d="M7.5 14.25h9" /></svg>
-            </div>
+        <div className="flex items-center justify-center">
+          <div className="flex h-32 w-32 items-center justify-center rounded-[36px] border border-neutral-200 bg-neutral-50 text-primary-dark">
+            <svg className="h-14 w-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.35} d="M9.75 3.75h4.5m-6 0h7.5m-9 0v3.5c0 .9-.32 1.77-.9 2.46l-1.92 2.27a3 3 0 00-.7 1.94v3.33A3.75 3.75 0 006.83 21h10.34A3.75 3.75 0 0021 17.25v-3.33a3 3 0 00-.7-1.94l-1.92-2.27a3.8 3.8 0 01-.88-2.46v-3.5" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.35} d="M7.5 14.25h9" /></svg>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -36,10 +37,26 @@ function ProductImage({ product, colorFrom, colorTo }) {
 
 function DetailSection({ title, children }) {
   return (
-    <section className="border-t border-neutral-100 pt-7">
-      <h2 className="font-heading text-[12px] font-bold uppercase tracking-[1.6px] text-primary-dark">{title}</h2>
-      <div className="mt-4">{children}</div>
+    <section className="grid gap-4 border-t border-neutral-200 py-9 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] md:gap-12">
+      <h2 className="flex items-center gap-2.5 font-heading text-[13px] font-bold uppercase tracking-[1.8px] text-primary-dark">
+        <span className="h-3 w-[3px] rounded-full bg-primary-light" />
+        {title}
+      </h2>
+      <div>{children}</div>
     </section>
+  );
+}
+
+function BulletList({ items, columns = false }) {
+  return (
+    <ul className={columns ? 'grid gap-x-8 gap-y-2.5 sm:grid-cols-2' : 'space-y-2.5'}>
+      {items.map((item, index) => (
+        <li key={index} className="flex items-start gap-2.5 text-[14px] leading-relaxed text-neutral-700">
+          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary-light" />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -76,8 +93,8 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="animate-pulse">
             <div className="h-4 w-40 rounded bg-neutral-100" />
-            <div className="mt-10 grid gap-10 lg:grid-cols-2">
-              <div className="aspect-[4/3] rounded-2xl bg-neutral-100" />
+            <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
+              <div className="min-h-[440px] rounded-[32px] bg-neutral-100 sm:min-h-[560px] lg:min-h-[640px]" />
               <div className="space-y-4 pt-8"><div className="h-10 w-3/4 rounded bg-neutral-100" /><div className="h-5 w-full rounded bg-neutral-100" /><div className="h-5 w-5/6 rounded bg-neutral-100" /></div>
             </div>
           </div>
@@ -116,55 +133,54 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
           {labels.backLabel} {product.category_name}
         </Link>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
-          <ProductImage product={product} colorFrom={colorFrom} colorTo={colorTo} />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* Sticky big product image — Minimalist-style */}
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <ProductImage product={product} colorFrom={colorFrom} colorTo={colorTo} />
+          </div>
 
-          <div className="flex flex-col justify-center">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-heading text-[10px] font-bold uppercase tracking-[1.5px] text-primary-light">
-              <span>{product.category_name}</span>
-              {product.subcategory_name && <><span className="h-1 w-1 rounded-full bg-primary-light/50" /><span>{product.subcategory_name}</span></>}
+          {/* Scrolling product info column */}
+          <div className="flex flex-col">
+            <div className="lg:pt-6">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-heading text-[10px] font-bold uppercase tracking-[1.5px] text-primary-light">
+                <span>{product.category_name}</span>
+                {product.subcategory_name && <><span className="h-1 w-1 rounded-full bg-primary-light/50" /><span>{product.subcategory_name}</span></>}
+              </div>
+              <h1 className="mt-5 font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[46px] lg:text-[52px]">{product.name}</h1>
+              {product.primary_benefit && <p className="mt-6 text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{product.primary_benefit}</p>}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-6 py-3.5 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
+                  {labels.enquireLabel}
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17 17 7M7 7h10v10" /></svg>
+                </Link>
+              </div>
             </div>
-            <h1 className="mt-5 font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[50px] lg:text-[58px]">{product.name}</h1>
-            {product.primary_benefit && <p className="mt-6 max-w-[620px] text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{product.primary_benefit}</p>}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-5 py-3 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
-                {labels.enquireLabel}
-                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17 17 7M7 7h10v10" /></svg>
-              </Link>
+
+            {/* Sectioned detail rows */}
+            <div className="mt-10">
+              {keyActives.length > 0 && (
+                <DetailSection title={labels.keyActivesLabel}>
+                  <BulletList items={keyActives} />
+                </DetailSection>
+              )}
+              {product.secondary_benefits && (
+                <DetailSection title={labels.secondaryLabel}>
+                  <p className="text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
+                </DetailSection>
+              )}
+              {formats.length > 0 && (
+                <DetailSection title={labels.formatsLabel}>
+                  <BulletList items={formats} columns />
+                </DetailSection>
+              )}
+              {technologies.length > 0 && (
+                <DetailSection title={labels.deliveryLabel}>
+                  <BulletList items={technologies} columns />
+                </DetailSection>
+              )}
             </div>
           </div>
         </motion.div>
-
-        <div className="mt-16">
-          <div className="space-y-9">
-            {keyActives.length > 0 && (
-              <DetailSection title={labels.keyActivesLabel}>
-                <div className="flex flex-wrap gap-2">
-                  {keyActives.map((active, index) => <span key={index} className="rounded-full border border-primary-light/20 bg-primary-light/[0.06] px-3 py-1.5 text-[12px] font-medium text-primary-dark">{active}</span>)}
-                </div>
-              </DetailSection>
-            )}
-            {product.secondary_benefits && (
-              <DetailSection title={labels.secondaryLabel}>
-                <p className="max-w-[760px] text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
-              </DetailSection>
-            )}
-            {formats.length > 0 && (
-              <DetailSection title={labels.formatsLabel}>
-                <div className="flex flex-wrap gap-2">
-                  {formats.map((format, index) => <span key={index} className="rounded-full bg-neutral-100 px-3 py-1.5 text-[12px] font-medium text-neutral-700">{format}</span>)}
-                </div>
-              </DetailSection>
-            )}
-            {technologies.length > 0 && (
-              <DetailSection title={labels.deliveryLabel}>
-                <div className="flex flex-wrap gap-2">
-                  {technologies.map((technology, index) => <span key={index} className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-[12px] font-medium text-neutral-600">{technology}</span>)}
-                </div>
-              </DetailSection>
-            )}
-          </div>
-        </div>
       </div>
     </main>
   );
