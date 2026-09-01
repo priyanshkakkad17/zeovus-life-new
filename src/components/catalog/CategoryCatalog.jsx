@@ -244,13 +244,14 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
                 className="hidden border-t border-white/15 pt-7 pb-2 lg:block"
               >
                 <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[2px] text-white/50">{labels.highlightsHeading}</p>
-                <div className="flex flex-wrap gap-2">
+                <ul className="flex flex-col gap-2.5">
                   {cat.highlights.slice(0, 5).map((h, hi) => (
-                    <span key={hi} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[12px] font-medium text-white/80 backdrop-blur-sm">
+                    <li key={hi} className="flex items-center gap-3 text-[16px] font-medium text-white">
+                      <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white" />
                       {h}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </motion.div>
             )}
           </motion.div>
@@ -311,21 +312,6 @@ function ProductCard({ product, category, index, basePath, labels = {} }) {
           </>
         )}
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/45 to-transparent" />
-        <div className="absolute left-4 top-4 flex items-center gap-2">
-          <span className="rounded-full border border-white/30 bg-black/15 px-2.5 py-1 font-heading text-[9px] font-semibold uppercase tracking-[1.2px] text-white backdrop-blur-md">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          {product.status === 'Verified' && (
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-primary-light shadow-sm" title="Verified formulation">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="m5 12 4 4L19 6" /></svg>
-            </span>
-          )}
-        </div>
-        {product.brand_line && (
-          <span className="absolute bottom-4 left-4 max-w-[calc(100%-2rem)] truncate rounded-full bg-white/90 px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-[0.6px] text-primary-dark shadow-sm backdrop-blur-md">
-            {product.brand_line}
-          </span>
-        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -452,7 +438,6 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="mb-10 border-b border-neutral-100 pb-8"
               >
-                <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.4px] text-primary-light">{labels.productsLabel}</p>
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <h2 className="max-w-[850px] font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[50px]">
@@ -465,8 +450,6 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                       <span className="editorial-number block font-heading text-[30px] font-bold leading-none text-primary-light">{selectedCat.product_count}</span>
                       <span className="mt-1 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{labels.productsLabel}</span>
                     </div>
-                    <div className="h-9 w-px bg-neutral-200" />
-                    <p className="max-w-[120px] text-[12px] leading-relaxed text-neutral-500">{labels.footnote}</p>
                   </div>
                 </div>
               </motion.div>

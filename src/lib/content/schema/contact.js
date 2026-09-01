@@ -33,7 +33,7 @@ const contact = {
           id: 'intro',
           label: 'Intro paragraph',
           type: 'textarea',
-          default: 'Select the model that fits your business. Your choice pre-fills the enquiry form below.',
+          default: 'Select the model that fits your business.',
         },
         {
           id: 'items',

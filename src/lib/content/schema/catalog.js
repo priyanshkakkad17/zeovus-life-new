@@ -44,12 +44,6 @@ function catalogSchema({ id, label, preview, hero, labels }) {
           { id: 'keyActivesLabel', label: '"Key actives" label', type: 'text', default: 'Key actives' },
           { id: 'searchPlaceholder', label: 'Search placeholder', type: 'text', default: labels.searchPlaceholder },
           { id: 'emptyState', label: 'No-results message', type: 'textarea', default: 'No products match your search.' },
-          {
-            id: 'footnote',
-            label: 'Product grid footnote',
-            type: 'textarea',
-            default: 'Open a product to see its listed formats and delivery technology.',
-          },
         ],
       },
       {
@@ -61,8 +55,8 @@ function catalogSchema({ id, label, preview, hero, labels }) {
           { id: 'enquireHref', label: 'Enquiry button link', type: 'url', default: '/contact' },
           { id: 'keyActivesLabel', label: '"Key actives" heading', type: 'text', default: 'Key actives' },
           { id: 'secondaryLabel', label: '"Additional support" heading', type: 'text', default: 'Additional support' },
-          { id: 'formatsLabel', label: '"Available formats" heading', type: 'text', default: 'Available formats' },
-          { id: 'deliveryLabel', label: '"Delivery technology" heading', type: 'text', default: 'Delivery technology' },
+          { id: 'formatsLabel', label: '"Feasible manufacturing formats" heading', type: 'text', default: 'Feasible manufacturing formats' },
+          { id: 'deliveryLabel', label: '"Feasible delivery technology benefits" heading', type: 'text', default: 'Feasible delivery technology benefits' },
           { id: 'infoLabel', label: '"Product information" heading', type: 'text', default: 'Product information' },
         ],
       },

@@ -37,6 +37,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
   const innovation = content.innovation || {};
   const manufacturing = content.manufacturing || {};
   const process = content.process || {};
+  const qualityPromise = content.qualityPromise || {};
   const certsSection = content.certifications || {};
 
   const heroStats = hero.stats || [];
@@ -48,6 +49,9 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
   const nutraceuticalFormats = manufacturing.nutraFormats || [];
   const cosmeticsFormats = manufacturing.cosmeticsFormats || [];
   const processSteps = process.steps || [];
+  const qualityChecks = qualityPromise.checks || [];
+  const qualityParagraphs = qualityPromise.qualityParagraphs || [];
+  const qualityStats = qualityPromise.stats || [];
 
   const horizontalStageRef = useRef(null);
   const trackRef = useRef(null);
@@ -510,6 +514,153 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
           <div className="absolute bottom-0 left-12 right-12 hidden h-[2px] bg-neutral-200 lg:block">
             <div ref={progressRef} className="h-full origin-left scale-x-0 bg-primary-light" />
           </div>
+        </div>
+      </section>
+      )}
+
+      {/* ============ QUALITY PROMISE ============ */}
+      {qualityPromise.enabled !== false && (
+      <section className="relative overflow-hidden border-t border-neutral-100">
+        <div className="grid lg:grid-cols-2">
+
+          {/* LEFT PANEL — Our Promise + checklist */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="relative overflow-hidden bg-[#f5f9f6] px-6 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
+          >
+            {/* Ghost watermark */}
+            {qualityPromise.promiseWatermark && (
+              <span className="pointer-events-none absolute -top-4 right-0 select-none font-heading text-[130px] font-bold leading-none tracking-tight text-primary-dark/[0.05] sm:text-[170px]">
+                {qualityPromise.promiseWatermark}
+              </span>
+            )}
+
+            <div className="relative mx-auto max-w-[560px]">
+              {qualityPromise.promiseBadge && (
+                <span className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/[0.07] px-3.5 py-1.5 font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-dark">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary-light" />
+                  {qualityPromise.promiseBadge}
+                </span>
+              )}
+
+              <h2 className="mt-6 font-heading text-[34px] font-bold uppercase leading-[1.0] tracking-[-1px] text-primary-dark sm:text-[46px]">
+                {qualityPromise.promiseHeadingLead}
+                {qualityPromise.promiseHeadingAccent && (
+                  <>
+                    <br />
+                    {qualityPromise.promiseHeadingAccent}
+                  </>
+                )}
+              </h2>
+
+              {qualityPromise.promiseIntro && (
+                <p className="mt-5 max-w-[440px] text-[15px] leading-relaxed text-neutral-600">
+                  {qualityPromise.promiseIntro}
+                </p>
+              )}
+
+              <div className="mt-9 grid gap-3.5 sm:grid-cols-2">
+                {qualityChecks.map((check, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-start gap-3 rounded-xl border border-primary-dark/[0.06] bg-white px-4 py-3.5 shadow-[0_1px_3px_rgba(31,64,21,0.04)]"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary-light/12 text-primary-light">
+                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                    </span>
+                    <span className="text-[13.5px] font-medium leading-snug text-neutral-700">
+                      {check}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* RIGHT PANEL — Quality & Certifications */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="relative bg-primary-dark px-6 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
+          >
+            <div className="relative mx-auto max-w-[600px]">
+              <div className="flex items-start justify-between gap-6">
+                <div className="flex-1">
+                  {qualityPromise.qualityEyebrow && (
+                    <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[2px] text-secondary">
+                      {qualityPromise.qualityEyebrow}
+                    </p>
+                  )}
+                  <h2 className="font-heading text-[38px] font-bold uppercase leading-[0.98] tracking-[-1.5px] text-white sm:text-[52px]">
+                    {qualityPromise.qualityHeadingLead}
+                    {qualityPromise.qualityHeadingAccent && (
+                      <>
+                        <br />
+                        <span className="text-secondary">{qualityPromise.qualityHeadingAccent}</span>
+                      </>
+                    )}
+                  </h2>
+                </div>
+                {qualityPromise.sealImage && (
+                  <img
+                    src={qualityPromise.sealImage}
+                    alt={qualityPromise.sealAlt || ''}
+                    className="h-[110px] w-[110px] flex-shrink-0 object-contain sm:h-[140px] sm:w-[140px]"
+                  />
+                )}
+              </div>
+
+              <div className="mt-7 space-y-5 text-[14.5px] leading-[1.7] text-white/75 sm:text-[15px]">
+                {qualityParagraphs.map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+              </div>
+
+              {/* Stat cards */}
+              {qualityStats.length > 0 && (
+                <div className="mt-8 grid grid-cols-3 gap-3">
+                  {qualityStats.map((stat, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                      className="rounded-xl border border-white/10 bg-white/[0.05] px-4 py-5"
+                    >
+                      <span className="editorial-number block font-heading text-[38px] font-bold leading-none text-secondary sm:text-[44px]">
+                        {stat.value}
+                      </span>
+                      <span className="mt-2.5 block font-heading text-[9.5px] font-semibold uppercase tracking-[1px] leading-tight text-white/50">
+                        {stat.label}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+
+              {/* Closing quote */}
+              {qualityPromise.quote && (
+                <div className="mt-6 rounded-xl border-l-[3px] border-primary-light bg-white/[0.05] px-6 py-6">
+                  <p className="font-heading text-[16px] font-semibold leading-[1.55] tracking-[0.2px] text-white sm:text-[18px]">
+                    {qualityPromise.quote}
+                  </p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+
         </div>
       </section>
       )}

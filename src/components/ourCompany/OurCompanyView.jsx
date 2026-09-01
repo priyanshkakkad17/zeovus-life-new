@@ -197,25 +197,6 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
               </div>
             </motion.div>
 
-            {/* Statistics & Bullet Points - REVERTED */}
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Stats Cards */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                <div className="grid grid-cols-3 gap-4">
-                  {(story.stats || []).map((stat, index) => (
-                    <div key={index} className="bg-white p-6 rounded-xl text-center shadow-md">
-                      <p className="text-3xl font-display font-bold text-primary-light">{stat.value}</p>
-                      <p className="text-sm text-neutral-600">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
           </div>
         </div>
       </section>
@@ -376,7 +357,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
 
       {/* Note from Founders - Premium Editorial Redesign */}
       {founders.enabled !== false && (
-      <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fafaf8 0%, #f5f7f5 50%, #fafaf8 100%)' }}>
+      <section className="relative pt-12 pb-24 md:pt-16 md:pb-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fafaf8 0%, #f5f7f5 50%, #fafaf8 100%)' }}>
         
         {/* Subtle background texture */}
         <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #4A6F4A 1px, transparent 0)', backgroundSize: '36px 36px' }}></div>
@@ -425,7 +406,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
               >
                 {/* Opening quotation paragraph */}
                 {founders.openingParagraph && (
-                  <p className="text-[21px] md:text-[23px] text-[#2C3E2C] font-medium leading-[1.65] mb-8">
+                  <p className="text-[21px] md:text-[23px] text-neutral-600 font-normal leading-[1.65] mb-8">
                     &ldquo;{founders.openingParagraph}
                   </p>
                 )}
@@ -437,7 +418,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                   ))}
                   {founders.closingLine && (
                     <p className="mt-2">
-                      <span className="inline-block border-l-[3px] border-primary-light pl-4 text-[#2C3E2C] font-semibold text-[18px] md:text-[19px] leading-[1.6] italic">
+                      <span className="inline-block border-l-[3px] border-primary-light pl-4 text-neutral-600 font-normal text-[17px] md:text-[18px] leading-[1.8]">
                         {founders.closingLine}&rdquo;
                       </span>
                     </p>

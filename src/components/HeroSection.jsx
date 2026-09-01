@@ -196,24 +196,6 @@ export default function HeroSection({ content = {} }) {
             )}
           </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.8 }}
-          className="absolute bottom-0 right-0 hidden items-center gap-3 lg:flex"
-        >
-          <span className="font-heading text-[10px] uppercase tracking-[2px] text-white/40">
-            {content.scrollLabel}
-          </span>
-          <div className="flex h-10 w-[1px] items-end overflow-hidden bg-white/10">
-            <motion.div
-              className="w-full bg-white/50"
-              animate={{ height: ['0%', '100%', '0%'] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          </div>
-        </motion.div>
       </div>
     </section>
   );

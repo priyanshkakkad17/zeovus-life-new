@@ -30,12 +30,6 @@ function ProductImage({ product, colorFrom, colorTo }) {
           </div>
         </>
       )}
-      {product.status === 'Verified' && (
-        <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 font-heading text-[10px] font-semibold uppercase tracking-[0.8px] text-primary-dark shadow-sm backdrop-blur-md">
-          <svg className="h-3.5 w-3.5 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="m5 12 4 4L19 6" /></svg>
-          Verified
-        </span>
-      )}
     </div>
   );
 }
@@ -131,19 +125,17 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
               {product.subcategory_name && <><span className="h-1 w-1 rounded-full bg-primary-light/50" /><span>{product.subcategory_name}</span></>}
             </div>
             <h1 className="mt-5 font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[50px] lg:text-[58px]">{product.name}</h1>
-            {product.brand_line && <p className="mt-4 font-heading text-[13px] font-semibold uppercase tracking-[1.2px] text-primary-light">{product.brand_line}</p>}
             {product.primary_benefit && <p className="mt-6 max-w-[620px] text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{product.primary_benefit}</p>}
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-5 py-3 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
                 {labels.enquireLabel}
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17 17 7M7 7h10v10" /></svg>
               </Link>
-              <span className="inline-flex items-center rounded-[3px] border border-neutral-200 px-4 py-3 font-heading text-[10px] font-semibold uppercase tracking-[1px] text-neutral-500">Product ID {product.id}</span>
             </div>
           </div>
         </motion.div>
 
-        <div className="mt-16 grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="mt-16">
           <div className="space-y-9">
             {keyActives.length > 0 && (
               <DetailSection title={labels.keyActivesLabel}>
@@ -172,16 +164,6 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
               </DetailSection>
             )}
           </div>
-
-          <aside className="h-fit rounded-2xl bg-[#f5f9f6] p-6 sm:p-7">
-            <p className="font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-light">{labels.infoLabel}</p>
-            <dl className="mt-5 space-y-4 text-[13px]">
-              <div className="flex items-start justify-between gap-6 border-b border-primary-dark/[0.08] pb-3"><dt className="text-neutral-500">Category</dt><dd className="text-right font-medium text-primary-dark">{product.category_name}</dd></div>
-              {product.subcategory_name && <div className="flex items-start justify-between gap-6 border-b border-primary-dark/[0.08] pb-3"><dt className="text-neutral-500">Subcategory</dt><dd className="text-right font-medium text-primary-dark">{product.subcategory_name}</dd></div>}
-              {product.brand_line && <div className="flex items-start justify-between gap-6 border-b border-primary-dark/[0.08] pb-3"><dt className="text-neutral-500">Brand line</dt><dd className="text-right font-medium text-primary-dark">{product.brand_line}</dd></div>}
-              <div className="flex items-start justify-between gap-6"><dt className="text-neutral-500">Record status</dt><dd className="font-medium text-primary-dark">{product.status || '—'}</dd></div>
-            </dl>
-          </aside>
         </div>
       </div>
     </main>

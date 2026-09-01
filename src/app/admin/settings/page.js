@@ -195,13 +195,13 @@ export default function AdminSettings() {
       <div className="bg-white rounded-xl border border-neutral-200/60 shadow-sm p-6">
         <h2 className="font-display font-semibold text-neutral-900 mb-2">Bulk Product Import</h2>
         <p className="text-sm text-neutral-500 mb-4">
-          Paste JSON array of products. Each object should have: category_id, name, brand_line, key_actives, primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status.
+          Paste JSON array of products. Each object should have: category_id, name, key_actives, primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status.
         </p>
         <textarea
           value={bulkData}
           onChange={(e) => setBulkData(e.target.value)}
           rows={10}
-          placeholder={`[\n  {\n    "category_id": 1,\n    "name": "Zeomen 50+",\n    "brand_line": "Smart Men",\n    "key_actives": "CoQ10, L-Carnitine, Lutein",\n    "primary_benefit": "Healthy ageing multivitamin",\n    "status": "Verified"\n  }\n]`}
+          placeholder={`[\n  {\n    "category_id": 1,\n    "name": "Zeomen 50+",\n    "key_actives": "CoQ10, L-Carnitine, Lutein",\n    "primary_benefit": "Healthy ageing multivitamin",\n    "status": "Verified"\n  }\n]`}
           className="w-full px-4 py-3 rounded-lg border border-neutral-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-light/20 focus:border-primary-light resize-y"
         />
         <div className="flex items-center gap-4 mt-4">

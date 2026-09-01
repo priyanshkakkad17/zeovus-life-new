@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 export default function LayoutWrapper({ children, site }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
+  const hideFooterCta = pathname === '/contact';
 
   if (isAdmin) {
     return <>{children}</>;
@@ -16,7 +17,7 @@ export default function LayoutWrapper({ children, site }) {
     <>
       <Header site={site} />
       <main>{children}</main>
-      <Footer site={site} />
+      <Footer site={site} hideCta={hideFooterCta} />
     </>
   );
 }

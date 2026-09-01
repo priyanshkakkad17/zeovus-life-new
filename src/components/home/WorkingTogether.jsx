@@ -102,18 +102,6 @@ export default function WorkingTogether({ content = {} }) {
           })}
         </div>
 
-        {/* Bottom accent */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-14 flex items-center gap-4 border-t border-neutral-100 pt-8"
-        >
-          <div className="h-2 w-2 rounded-full bg-primary-light/40" />
-          <p className="text-[13px] text-neutral-500">{content.footnote}</p>
-        </motion.div>
-
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ export default function AdminProducts() {
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
-    category_id: '', subcategory_id: '', name: '', image_url: '', brand_line: '',
+    category_id: '', subcategory_id: '', name: '', image_url: '',
     key_actives: '', primary_benefit: '', secondary_benefits: '',
     manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft'
   });
@@ -47,7 +47,7 @@ export default function AdminProducts() {
   }
 
   function resetForm() {
-    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', brand_line: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft' });
+    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft' });
     setEditingProduct(null);
     setShowForm(false);
   }
@@ -58,7 +58,6 @@ export default function AdminProducts() {
       subcategory_id: product.subcategory_id || '',
       name: product.name,
       image_url: product.image_url || '',
-      brand_line: product.brand_line || '',
       key_actives: product.key_actives || '',
       primary_benefit: product.primary_benefit || '',
       secondary_benefits: product.secondary_benefits || '',
@@ -134,7 +133,6 @@ export default function AdminProducts() {
             <thead className="bg-neutral-50">
               <tr>
                 <th className="px-5 py-3 text-left font-medium text-neutral-500">Product</th>
-                <th className="px-5 py-3 text-left font-medium text-neutral-500">Brand</th>
                 <th className="px-5 py-3 text-left font-medium text-neutral-500">Category</th>
                 <th className="px-5 py-3 text-left font-medium text-neutral-500">Subcategory</th>
                 <th className="px-5 py-3 text-left font-medium text-neutral-500">Status</th>
@@ -143,7 +141,7 @@ export default function AdminProducts() {
             </thead>
             <tbody className="divide-y divide-neutral-100">
               {loading ? [...Array(5)].map((_, i) => (
-                <tr key={i}><td colSpan={6} className="px-5 py-4"><div className="h-4 bg-neutral-100 rounded animate-pulse w-3/4"></div></td></tr>
+                <tr key={i}><td colSpan={5} className="px-5 py-4"><div className="h-4 bg-neutral-100 rounded animate-pulse w-3/4"></div></td></tr>
               )) : products.length > 0 ? products.map(p => (
                 <tr key={p.id} className="hover:bg-neutral-50/50">
                   <td className="px-5 py-3">
@@ -161,7 +159,6 @@ export default function AdminProducts() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3"><span className="text-xs px-2 py-0.5 rounded-full bg-primary-light/10 text-primary-light font-medium">{p.brand_line || '—'}</span></td>
                   <td className="px-5 py-3 text-neutral-600 text-xs">{p.category_name}</td>
                   <td className="px-5 py-3 text-neutral-500 text-xs">{p.subcategory_name || '—'}</td>
                   <td className="px-5 py-3">
@@ -179,7 +176,7 @@ export default function AdminProducts() {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan={6} className="px-5 py-12 text-center text-neutral-400">No products found.</td></tr>
+                <tr><td colSpan={5} className="px-5 py-12 text-center text-neutral-400">No products found.</td></tr>
               )}
             </tbody>
           </table>
@@ -221,15 +218,9 @@ export default function AdminProducts() {
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Product Name *</label>
-                  <input type="text" value={formData.name} onChange={(e) => setFormData(f => ({ ...f, name: e.target.value }))} required className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Brand Line</label>
-                  <input type="text" value={formData.brand_line} onChange={(e) => setFormData(f => ({ ...f, brand_line: e.target.value }))} placeholder="Smart Men, Meltos..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Product Name *</label>
+                <input type="text" value={formData.name} onChange={(e) => setFormData(f => ({ ...f, name: e.target.value }))} required className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
               </div>
               <ImageField
                 label="Product Image"
