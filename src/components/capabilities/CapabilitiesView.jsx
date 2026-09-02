@@ -542,33 +542,34 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
         </div>
 
         <div ref={horizontalStageRef} className="relative lg:h-screen lg:overflow-hidden">
-          <div className="flex h-full items-end">
+          <div className="flex h-full items-center">
             <div
               ref={trackRef}
-              className="flex items-end gap-5 overflow-x-auto px-5 pb-10 snap-x snap-mandatory sm:gap-6 sm:px-8 lg:snap-none lg:overflow-visible lg:px-12 lg:pb-12"
+              className="flex items-stretch gap-5 overflow-x-auto px-5 pb-10 snap-x snap-mandatory sm:gap-6 sm:px-8 lg:snap-none lg:overflow-visible lg:px-12 lg:pb-0"
             >
               {processSteps.map((item, index) => (
                 <div
                   key={index}
-                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[340px] 2xl:w-[400px]"
+                  className="group relative flex w-[280px] flex-shrink-0 flex-col snap-start sm:w-[320px] lg:w-[340px] 2xl:w-[400px]"
                 >
                   {/* Text content — original layout */}
-                  <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-8">
-                    <span className="editorial-number font-heading text-[48px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[60px] lg:text-[68px]">
+                  <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-7">
+                    <span className="editorial-number font-heading text-[48px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[60px] lg:text-[56px] 2xl:text-[68px]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
+                    <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-4 lg:text-[20px] 2xl:text-[21px]">
                       {item.title}
                     </h4>
-                    <p className="mt-3 max-w-full text-[14px] leading-relaxed text-neutral-600">
+                    <p className="mt-3 max-w-full text-[14px] leading-relaxed text-neutral-600 lg:mt-2.5 lg:line-clamp-4 lg:text-[13.5px] 2xl:text-[14px]">
                       {item.description}
                     </p>
                   </div>
 
-                  {/* Image — 4:5 aspect ratio, square edges */}
-                  <div className="mt-5">
+                  {/* Image — portrait on mobile, height-capped on the pinned desktop stage
+                      so the whole card (number + title + copy + image) fits the viewport. */}
+                  <div className="mt-5 lg:mt-4 lg:flex-1">
                     {item.image ? (
-                      <div className="overflow-hidden aspect-[3/4]">
+                      <div className="h-full overflow-hidden aspect-[3/4] lg:aspect-auto lg:max-h-[42vh] lg:min-h-[220px]">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -576,7 +577,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                         />
                       </div>
                     ) : (
-                      <div className="aspect-[3/4]" />
+                      <div className="aspect-[3/4] lg:aspect-auto lg:h-full lg:max-h-[42vh] lg:min-h-[220px]" />
                     )}
                   </div>
                 </div>
