@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
@@ -8,6 +8,32 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * Small branded thumbnail placeholder for a format tile. If `src` is provided it
+ * renders the image; otherwise a subtle green motif slot (ready for real imagery).
+ */
+function FormatThumb({ src, alt = '', index = 0 }) {
+  return (
+    <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-primary-dark/[0.06] bg-[#eef4ee]">
+      {src ? (
+        <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover" />
+      ) : (
+        <>
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(120% 120% at 30% 20%, rgba(21,168,89,0.14) 0%, transparent 60%), linear-gradient(150deg, #f2f8f2 0%, #e6efe6 100%)' }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center text-primary-light/60">
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5z" />
+            </svg>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 function ArrowLink({ href, children }) {
   return (
@@ -28,7 +54,6 @@ function ArrowLink({ href, children }) {
 }
 
 export default function CapabilitiesView({ content = {}, certifications = [] }) {
-  const [activeSection, setActiveSection] = useState('innovation');
   const innovationRef = useRef(null);
   const manufacturingRef = useRef(null);
 
@@ -56,23 +81,6 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
   const horizontalStageRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
-
-  // Sticky index nav — highlight active pillar as user scrolls
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-30% 0px -60% 0px' }
-    );
-    if (innovationRef.current) observer.observe(innovationRef.current);
-    if (manufacturingRef.current) observer.observe(manufacturingRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   // GSAP horizontal-scroll storytelling for the process — desktop + motion-safe only
   useGSAP(() => {
@@ -195,123 +203,51 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
       {/* ============ TWO-PILLAR EDITORIAL LAYOUT ============ */}
       <section className="relative bg-white py-20 sm:py-26 lg:py-30">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-          <div className="lg:grid lg:grid-cols-[288px_1fr] lg:gap-20">
+          <div className="mx-auto max-w-[1180px]">
 
-            {/* Sticky index nav — desktop only */}
-            <div className="hidden lg:block">
-              <div className="sticky top-32">
-                <p className="mb-8 font-heading text-[10px] font-bold uppercase tracking-[3px] text-primary-light">
-                  Our capabilities
-                </p>
-
-                {/* Vertical progress rail with the two pillars */}
-                <div className="relative pl-8">
-                  {/* Rail track + active fill */}
-                  <span className="absolute left-[5px] top-1.5 bottom-[92px] w-px bg-neutral-200" aria-hidden="true" />
-                  <span
-                    className="absolute left-[5px] top-1.5 w-px bg-primary-light transition-all duration-500 ease-out"
-                    style={{ height: activeSection === 'manufacturing' ? 'calc(100% - 92px)' : '46px' }}
-                    aria-hidden="true"
-                  />
-
-                  {[
-                    { id: 'innovation', num: '01', label: pillars.oneLabel },
-                    { id: 'manufacturing', num: '02', label: pillars.twoLabel },
-                  ].map((item) => {
-                    const isActive = activeSection === item.id;
-                    return (
-                      <a key={item.id} href={`#${item.id}`} className="group relative block pb-12 last:pb-0">
-                        {/* Node dot on the rail */}
-                        <span
-                          className={`absolute -left-8 top-1.5 flex h-[11px] w-[11px] items-center justify-center rounded-full border-2 bg-white transition-all duration-400 ${
-                            isActive ? 'border-primary-light scale-110' : 'border-neutral-300 group-hover:border-primary-light/60'
-                          }`}
-                        >
-                          <span className={`h-[3px] w-[3px] rounded-full transition-colors duration-400 ${isActive ? 'bg-primary-light' : 'bg-transparent'}`} />
-                        </span>
-
-                        <span className={`editorial-number block font-heading text-[34px] font-bold leading-none transition-colors duration-400 ${isActive ? 'text-primary-light' : 'text-neutral-200 group-hover:text-neutral-300'}`}>
-                          {item.num}
-                        </span>
-                        <h4 className={`mt-2 font-heading text-[19px] font-bold uppercase leading-tight tracking-[-0.3px] transition-colors duration-400 ${isActive ? 'text-primary-dark' : 'text-neutral-400 group-hover:text-neutral-600'}`}>
-                          {item.label}
-                        </h4>
-                        {/* Active underline accent */}
-                        <span className={`mt-2.5 block h-px origin-left bg-primary-light transition-transform duration-500 ${isActive ? 'w-10 scale-x-100' : 'w-10 scale-x-0'}`} />
-                      </a>
-                    );
-                  })}
-                </div>
-
-                {/* Editorial closing statement */}
-                <div className="mt-4 rounded-2xl bg-[#f5f9f6] p-6">
-                  <svg className="mb-3 h-5 w-5 text-primary-light/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                  <p className="font-heading text-[15px] font-semibold leading-snug text-primary-dark">{pillars.note}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Content column */}
             <div className="space-y-24 lg:space-y-32">
-
-              {/* Mobile pillar note */}
-              {pillars.note && (
-                <div className="lg:hidden -mt-2 flex items-center gap-3 rounded-xl bg-[#f5f9f6] px-4 py-3.5">
-                  <span className="h-8 w-1 flex-shrink-0 rounded-full bg-primary-light/60" />
-                  <p className="font-heading text-[14px] font-semibold leading-snug text-primary-dark">{pillars.note}</p>
-                </div>
-              )}
 
               {/* ---- 01 Innovation ---- */}
               <div id="innovation" ref={innovationRef} className="[scroll-margin-top:110px]">
-                {/* Split-screen editorial hero: copy left, R&D image right */}
-                <div className="grid gap-10 lg:grid-cols-[48%_52%] lg:items-center lg:gap-14">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
-                      01 — {pillars.oneLabel}
-                    </p>
-                    <div className="mb-5 hidden items-baseline gap-3 lg:flex">
-                      <span className="editorial-number font-heading text-[13px] font-bold tracking-[2px] text-primary-light">01</span>
-                      <span className="font-heading text-[12px] font-bold uppercase tracking-[3px] text-neutral-400">{pillars.oneLabel}</span>
-                    </div>
-                    <h2 className="max-w-[640px] font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
-                      {innovation.heading}
-                    </h2>
-                    <p className="mt-6 max-w-[620px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
-                      {innovation.intro}
-                    </p>
-                  </motion.div>
+                {/* Section marker */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="mb-9 flex items-end gap-5 border-b border-neutral-200 pb-6"
+                >
+                  <span className="editorial-number font-heading text-[64px] font-bold leading-[0.8] tracking-[-2px] text-neutral-200 sm:text-[84px]">
+                    01
+                  </span>
+                  <div className="pb-1.5">
+                    <span className="block h-1 w-10 rounded-full bg-primary-light" />
+                    <span className="mt-3 block font-heading text-[22px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[26px]">
+                      {pillars.oneLabel}
+                    </span>
+                  </div>
+                </motion.div>
 
-                  {/* Large R&D visual */}
-                  <motion.figure
-                    initial={{ opacity: 0, y: 28 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    className="group relative overflow-hidden rounded-[24px] bg-[#f5f9f6]"
-                  >
-                    <div className="aspect-[4/3] w-full overflow-hidden">
-                      <img
-                        src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=80"
-                        alt="Zeovus Life formulation and R&D laboratory"
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                      />
-                    </div>
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-primary-dark/70 via-primary-dark/15 to-transparent" />
-                    <figcaption className="absolute bottom-5 left-5 flex items-center gap-2 font-heading text-[10px] font-bold uppercase tracking-[2px] text-white/90">
-                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                      Formulation R&amp;D
-                    </figcaption>
-                  </motion.figure>
-                </div>
+                {/* Editorial intro */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <h2 className="max-w-[820px] font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
+                    {innovation.heading}
+                  </h2>
+                  <p className="mt-6 max-w-[760px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                    {innovation.intro}
+                  </p>
+                  {pillars.note && (
+                    <p className="mt-5 inline-flex items-center gap-2.5 rounded-full bg-[#f5f9f6] px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-primary-dark">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary-light" />
+                      {pillars.note}
+                    </p>
+                  )}
+                </motion.div>
 
                 {/* Three supporting points — vertical editorial blocks */}
                 <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-neutral-100 bg-neutral-100 sm:grid-cols-3">
@@ -428,51 +364,39 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
 
               {/* ---- 02 Manufacturing ---- */}
               <div id="manufacturing" ref={manufacturingRef} className="[scroll-margin-top:110px]">
-                {/* Hero: copy left, large manufacturing image right */}
-                <div className="grid gap-10 lg:grid-cols-[46%_54%] lg:items-center lg:gap-14">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light lg:hidden">
-                      02 — {pillars.twoLabel}
-                    </p>
-                    <div className="mb-5 hidden items-baseline gap-3 lg:flex">
-                      <span className="editorial-number font-heading text-[13px] font-bold tracking-[2px] text-primary-light">02</span>
-                      <span className="font-heading text-[12px] font-bold uppercase tracking-[3px] text-neutral-400">{pillars.twoLabel}</span>
-                    </div>
-                    <h2 className="max-w-[640px] font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
-                      {manufacturing.heading}
-                    </h2>
-                    <p className="mt-6 max-w-[680px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
-                      {manufacturing.intro}
-                    </p>
-                  </motion.div>
+                {/* Section marker */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="mb-9 flex items-end gap-5 border-b border-neutral-200 pb-6"
+                >
+                  <span className="editorial-number font-heading text-[64px] font-bold leading-[0.8] tracking-[-2px] text-neutral-200 sm:text-[84px]">
+                    02
+                  </span>
+                  <div className="pb-1.5">
+                    <span className="block h-1 w-10 rounded-full bg-primary-light" />
+                    <span className="mt-3 block font-heading text-[22px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[26px]">
+                      {pillars.twoLabel}
+                    </span>
+                  </div>
+                </motion.div>
 
-                  <motion.figure
-                    initial={{ opacity: 0, y: 28 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    className="group relative overflow-hidden rounded-[24px] bg-[#f5f9f6]"
-                  >
-                    <div className="aspect-[16/10] w-full overflow-hidden">
-                      <img
-                        src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=1500&q=80"
-                        alt="Zeovus Life manufacturing facility at scale"
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                      />
-                    </div>
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-primary-dark/70 via-primary-dark/15 to-transparent" />
-                    <figcaption className="absolute bottom-5 left-5 flex items-center gap-2 font-heading text-[10px] font-bold uppercase tracking-[2px] text-white/90">
-                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                      Manufacturing at scale
-                    </figcaption>
-                  </motion.figure>
-                </div>
+                {/* Editorial intro */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <h2 className="max-w-[820px] font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
+                    {manufacturing.heading}
+                  </h2>
+                  <p className="mt-6 max-w-[760px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+                    {manufacturing.intro}
+                  </p>
+                </motion.div>
 
                 {/* Three supporting statements — compact editorial blocks */}
                 <div className="mt-12 grid gap-5 sm:grid-cols-3">
@@ -493,66 +417,47 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
 
                 {/* ===== NUTRACEUTICAL FORMATS ZONE ===== */}
                 <div className="mt-16 lg:mt-20">
-                  <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-12">
-                    <div className="lg:order-1">
-                      <div className="mb-6 flex items-baseline justify-between border-b border-neutral-100 pb-4">
-                        <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
-                          {manufacturing.nutraHeading}
-                        </h3>
-                        <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
-                          {nutraceuticalFormats.length} formats
-                        </span>
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        {nutraceuticalFormats.map((f, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, y: 14 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.45, delay: (i % 2) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                            className="group rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
-                          >
-                            <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
-                              {String(i + 1).padStart(2, '0')}
-                            </span>
-                            <h4 className="mt-2 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
-                              {f.name}
-                            </h4>
-                            <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
-                              {f.desc}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </div>
-                      {manufacturing.nutraCtaLabel && (
-                        <div className="mt-7">
-                          <ArrowLink href={manufacturing.nutraCtaHref || '/nutraceuticals'}>
-                            {manufacturing.nutraCtaLabel}
-                          </ArrowLink>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Nutraceutical formats image */}
-                    <motion.figure
-                      initial={{ opacity: 0, y: 24 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                      className="group relative overflow-hidden rounded-[24px] bg-[#f5f9f6] lg:sticky lg:top-32"
-                    >
-                      <div className="aspect-[3/4] w-full overflow-hidden">
-                        <img
-                          src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&w=1000&q=80"
-                          alt="Nutraceutical formats — capsules, tablets, softgels and powders"
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                        />
-                      </div>
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/55 to-transparent" />
-                    </motion.figure>
+                  <div className="mb-6 flex items-baseline justify-between border-b border-neutral-100 pb-4">
+                    <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
+                      {manufacturing.nutraHeading}
+                    </h3>
+                    <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
+                      {nutraceuticalFormats.length} formats
+                    </span>
                   </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {nutraceuticalFormats.map((f, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.45, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        className="group flex h-full flex-col rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
+                      >
+                        <div className="flex items-center gap-3.5">
+                          <FormatThumb src={f.image} alt={f.name} index={i} />
+                          <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+                        <h4 className="mt-3.5 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
+                          {f.name}
+                        </h4>
+                        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
+                          {f.desc}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                  {manufacturing.nutraCtaLabel && (
+                    <div className="mt-7">
+                      <ArrowLink href={manufacturing.nutraCtaHref || '/nutraceuticals'}>
+                        {manufacturing.nutraCtaLabel}
+                      </ArrowLink>
+                    </div>
+                  )}
                 </div>
 
                 {/* Elegant divider between divisions */}
@@ -563,66 +468,47 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
 
                 {/* ===== COSMETICS FORMATS ZONE ===== */}
                 <div className="mt-10">
-                  <div className="grid gap-8 lg:grid-cols-[360px_1fr] lg:items-start lg:gap-12">
-                    {/* Cosmetics formats image */}
-                    <motion.figure
-                      initial={{ opacity: 0, y: 24 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                      className="group relative order-2 overflow-hidden rounded-[24px] bg-[#f5f9f6] lg:order-1 lg:sticky lg:top-32"
-                    >
-                      <div className="aspect-[3/4] w-full overflow-hidden">
-                        <img
-                          src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=80"
-                          alt="Cosmetic formulation textures — creams, serums and lotions"
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                        />
-                      </div>
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/55 to-transparent" />
-                    </motion.figure>
-
-                    <div className="order-1 lg:order-2">
-                      <div className="mb-6 flex items-baseline justify-between border-b border-neutral-100 pb-4">
-                        <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
-                          {manufacturing.cosmeticsHeading}
-                        </h3>
-                        <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
-                          {cosmeticsFormats.length} formats
-                        </span>
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        {cosmeticsFormats.map((f, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, y: 14 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.45, delay: (i % 2) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                            className="group rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
-                          >
-                            <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
-                              {String(i + 1).padStart(2, '0')}
-                            </span>
-                            <h4 className="mt-2 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
-                              {f.name}
-                            </h4>
-                            <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
-                              {f.desc}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </div>
-                      {manufacturing.cosmeticsCtaLabel && (
-                        <div className="mt-7">
-                          <ArrowLink href={manufacturing.cosmeticsCtaHref || '/cosmetics'}>
-                            {manufacturing.cosmeticsCtaLabel}
-                          </ArrowLink>
-                        </div>
-                      )}
-                    </div>
+                  <div className="mb-6 flex items-baseline justify-between border-b border-neutral-100 pb-4">
+                    <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
+                      {manufacturing.cosmeticsHeading}
+                    </h3>
+                    <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
+                      {cosmeticsFormats.length} formats
+                    </span>
                   </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {cosmeticsFormats.map((f, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.45, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        className="group flex h-full flex-col rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
+                      >
+                        <div className="flex items-center gap-3.5">
+                          <FormatThumb src={f.image} alt={f.name} index={i} />
+                          <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+                        <h4 className="mt-3.5 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
+                          {f.name}
+                        </h4>
+                        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
+                          {f.desc}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                  {manufacturing.cosmeticsCtaLabel && (
+                    <div className="mt-7">
+                      <ArrowLink href={manufacturing.cosmeticsCtaHref || '/cosmetics'}>
+                        {manufacturing.cosmeticsCtaLabel}
+                      </ArrowLink>
+                    </div>
+                  )}
                 </div>
 
               </div>
@@ -721,13 +607,6 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden bg-[#f5f9f6] px-6 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
           >
-            {/* Ghost watermark */}
-            {qualityPromise.promiseWatermark && (
-              <span className="pointer-events-none absolute -top-4 right-0 select-none font-heading text-[130px] font-bold leading-none tracking-tight text-primary-dark/[0.05] sm:text-[170px]">
-                {qualityPromise.promiseWatermark}
-              </span>
-            )}
-
             <div className="relative mx-auto max-w-[560px]">
               {qualityPromise.promiseBadge && (
                 <span className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/[0.07] px-3.5 py-1.5 font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-dark">
