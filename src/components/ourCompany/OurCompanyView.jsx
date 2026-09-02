@@ -384,13 +384,13 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                 </p>
 
                 {/* Headline - Primary Anchor */}
-                <h3 className="text-[44px] md:text-[52px] lg:text-[56px] font-display font-bold text-[#2C3E2C] leading-[1.05] tracking-tight mb-8">
+                <h3 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-display font-bold text-[#2C3E2C] leading-[1.05] tracking-tight mb-8">
                   {founders.heading}
                 </h3>
                 
                 {/* Large decorative quotation mark */}
                 <div className="relative">
-                  <span className="text-[160px] md:text-[180px] font-serif font-bold text-primary-light/[0.08] leading-none select-none absolute -top-8 -left-2">
+                  <span className="pointer-events-none text-[110px] md:text-[150px] lg:text-[180px] font-serif font-bold text-primary-light/[0.08] leading-none select-none absolute -top-6 -left-1">
                     "
                   </span>
                 </div>
@@ -541,34 +541,45 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
               >
-                <h2 className="font-display font-bold uppercase text-[#f5f2e8] leading-[0.95] tracking-[-1px] text-[44px] sm:text-[56px] md:text-[64px] lg:text-[80px]">
-                  {(zqa.eyebrow || 'Global Standards').split(' ').map((word, index) => (
-                    <span key={index} className="block">{word}</span>
-                  ))}
+                <h2 className="max-w-[10ch] font-display font-bold uppercase text-[#f5f2e8] leading-[1.02] tracking-[-0.5px] text-[30px] sm:text-[38px] md:text-[46px] lg:text-[56px]">
+                  {zqa.eyebrow || 'Global Standards'}
                 </h2>
               </motion.div>
 
-              {/* ZQA Seal - Stamp animation */}
+              {/* ZQA Seal - Stamp-press animation (matches cosmetics hero) */}
               <motion.div
-                initial={{ scale: 2.4, opacity: 0, rotate: -18 }}
+                initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
                 whileInView={{
-                  scale: [2.4, 0.92, 1.04, 1],
                   opacity: [0, 1, 1, 1],
-                  rotate: [-18, -8, -10, -8],
+                  scale: [2.5, 0.8, 1.07, 1],
+                  rotate: [-24, -13, -9, -8],
+                  filter: ['blur(4px)', 'blur(0.4px)', 'blur(0px)', 'blur(0px)'],
                 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.6,
                   delay: 0.3,
+                  duration: 0.52,
                   times: [0, 0.55, 0.8, 1],
-                  ease: 'easeOut',
+                  ease: [0.34, 1.56, 0.64, 1],
                 }}
-                className="shrink-0"
+                className="relative shrink-0"
+                style={{ transformOrigin: 'center' }}
               >
+                {/* Ink bleed halo that appears on impact */}
+                <motion.span
+                  aria-hidden="true"
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  whileInView={{ opacity: [0, 0.4, 0], scale: [0.7, 1.15, 1.35] }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: 'radial-gradient(circle, rgba(127,175,127,0.35) 0%, transparent 70%)' }}
+                />
                 <img
                   src={zqa.sealImage || '/zqa/seal5.png'}
                   alt="ZQA Seal"
-                  className="w-32 h-32 md:w-44 md:h-44 lg:w-56 lg:h-56 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)]"
+                  draggable={false}
+                  className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 select-none object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)]"
                 />
               </motion.div>
             </div>
@@ -580,7 +591,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.15 }}
             >
-              <div className="space-y-5 text-[#e6e9df]/85 text-[20px] md:text-[23px] leading-[1.85]">
+              <div className="space-y-4 text-[#e6e9df]/85 text-[15px] md:text-[16px] leading-[1.8]">
                 {(zqa.paragraphs || []).map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}

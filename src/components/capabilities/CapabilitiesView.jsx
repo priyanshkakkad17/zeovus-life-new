@@ -682,11 +682,41 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                   </h2>
                 </div>
                 {qualityPromise.sealImage && (
-                  <img
-                    src={qualityPromise.sealImage}
-                    alt={qualityPromise.sealAlt || ''}
-                    className="h-[110px] w-[110px] flex-shrink-0 object-contain sm:h-[140px] sm:w-[140px]"
-                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
+                    whileInView={{
+                      opacity: [0, 1, 1, 1],
+                      scale: [2.5, 0.8, 1.07, 1],
+                      rotate: [-24, -13, -9, -8],
+                      filter: ['blur(4px)', 'blur(0.4px)', 'blur(0px)', 'blur(0px)'],
+                    }}
+                    viewport={{ once: true }}
+                    transition={{
+                      delay: 0.3,
+                      duration: 0.52,
+                      times: [0, 0.55, 0.8, 1],
+                      ease: [0.34, 1.56, 0.64, 1],
+                    }}
+                    className="relative flex-shrink-0"
+                    style={{ transformOrigin: 'center' }}
+                  >
+                    {/* Ink bleed halo that appears on impact */}
+                    <motion.span
+                      aria-hidden="true"
+                      initial={{ opacity: 0, scale: 0.7 }}
+                      whileInView={{ opacity: [0, 0.4, 0], scale: [0.7, 1.15, 1.35] }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: 'radial-gradient(circle, rgba(127,175,127,0.35) 0%, transparent 70%)' }}
+                    />
+                    <img
+                      src={qualityPromise.sealImage}
+                      alt={qualityPromise.sealAlt || ''}
+                      draggable={false}
+                      className="relative h-[110px] w-[110px] select-none object-contain sm:h-[140px] sm:w-[140px]"
+                    />
+                  </motion.div>
                 )}
               </div>
 
