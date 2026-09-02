@@ -578,13 +578,13 @@ export default function CategoryCatalog({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+              <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">
                 {titleLead}
                 <br />
                 <span className="text-secondary">{titleAccent}</span>
               </h1>
               {heroSubtitle && (
-                <p className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px]">
+                <p className="mt-6 max-w-[600px] text-[16px] leading-relaxed text-neutral-300 sm:text-[17px] xl:text-[18px]">
                   {heroSubtitle}
                 </p>
               )}

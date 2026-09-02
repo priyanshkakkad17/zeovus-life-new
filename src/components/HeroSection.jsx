@@ -160,7 +160,7 @@ export default function HeroSection({ content = {} }) {
             initial="hidden"
             animate="visible"
           >
-            <h1 className="font-heading text-[42px] font-black uppercase leading-[0.9] tracking-[-2px] sm:text-[58px] md:text-[72px] lg:text-[88px]">
+            <h1 className="font-heading text-[42px] font-black uppercase leading-[0.9] tracking-[-2px] sm:text-[58px] md:text-[72px] lg:text-[88px] 2xl:text-[104px]">
               <motion.span
                 variants={item}
                 className="block text-[#f7f2e6]"

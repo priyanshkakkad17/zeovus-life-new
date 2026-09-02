@@ -68,7 +68,7 @@ export default function TwoDivisions({ content = {} }) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-14 text-center lg:mb-16"
         >
-          <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px]">
+          <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[42px] md:text-[52px] 2xl:text-[60px]">
             {content.heading}
           </h2>
         </motion.div>

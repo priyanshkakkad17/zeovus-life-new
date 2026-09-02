@@ -144,7 +144,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
 
-              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px]">
+              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">
                 {hero.titleLead}
                 <br />
                 <span className="text-secondary">{hero.titleAccent}</span>
