@@ -59,11 +59,11 @@ export default function Header({ site }) {
 
           {brand.showTagline !== false && brand.tagline && (
             <>
-              {/* Divider */}
-              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:ml-5 lg:h-9" />
+              {/* Divider — hidden in the lg range where the nav needs the space, back at xl */}
+              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden xl:ml-5 xl:block xl:h-9" />
 
               {/* Tagline */}
-              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:ml-5 lg:max-w-none lg:whitespace-nowrap lg:text-[15px]">
+              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden xl:ml-5 xl:block xl:max-w-none xl:whitespace-nowrap xl:text-[15px]">
                 {brand.tagline}
               </p>
             </>
@@ -71,7 +71,7 @@ export default function Header({ site }) {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 lg:flex xl:gap-2">
+        <nav className="hidden items-center gap-0.5 lg:flex xl:gap-2">
           {navItems.map((item) => {
             const active = isActive(item.href);
 
@@ -79,7 +79,7 @@ export default function Header({ site }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`rounded-md px-3 py-3 font-heading text-[11px] font-semibold uppercase tracking-[0.7px] transition-all duration-300 xl:px-5 xl:text-[13px] xl:tracking-[1px] ${
+                className={`whitespace-nowrap rounded-md px-2.5 py-2.5 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] transition-all duration-300 lg:text-[12px] xl:px-5 xl:py-3 xl:text-[13px] xl:tracking-[1px] ${
                   active
                     ? 'bg-primary-dark text-[#e8f5ed]'
                     : 'text-primary-dark hover:bg-[#d4ede0]/70'

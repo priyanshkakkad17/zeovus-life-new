@@ -532,10 +532,10 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
             <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
               {process.eyebrow}
             </p>
-            <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px]">
+            <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px] 2xl:text-[48px]">
               {process.heading}
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+            <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px] xl:text-[17px]">
               {process.intro}
             </p>
           </motion.div>
@@ -550,17 +550,17 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
               {processSteps.map((item, index) => (
                 <div
                   key={index}
-                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[380px]"
+                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[340px] xl:w-[380px] 2xl:w-[420px]"
                 >
                   {/* Text content — original layout */}
                   <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-8">
-                    <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[76px]">
+                    <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[72px] xl:text-[76px]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
                       {item.title}
                     </h4>
-                    <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-neutral-600">
+                    <p className="mt-3 max-w-full text-[14px] leading-relaxed text-neutral-600">
                       {item.description}
                     </p>
                   </div>
