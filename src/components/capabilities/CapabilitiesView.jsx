@@ -195,35 +195,74 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
       {/* ============ TWO-PILLAR EDITORIAL LAYOUT ============ */}
       <section className="relative bg-white py-20 sm:py-26 lg:py-30">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-          <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-16">
+          <div className="lg:grid lg:grid-cols-[288px_1fr] lg:gap-20">
 
             {/* Sticky index nav — desktop only */}
             <div className="hidden lg:block">
-              <div className="sticky top-32 space-y-10">
-                <a href="#innovation" className="group block">
-                  <span className={`font-heading text-[11px] font-semibold uppercase tracking-[2px] transition-colors duration-300 ${activeSection === 'innovation' ? 'text-primary-light' : 'text-neutral-400'}`}>
-                    01
-                  </span>
-                  <h4 className={`mt-1 font-heading text-[18px] font-bold uppercase transition-colors duration-300 ${activeSection === 'innovation' ? 'text-primary-dark' : 'text-neutral-400'}`}>
-                    {pillars.oneLabel}
-                  </h4>
-                </a>
-                <a href="#manufacturing" className="group block">
-                  <span className={`font-heading text-[11px] font-semibold uppercase tracking-[2px] transition-colors duration-300 ${activeSection === 'manufacturing' ? 'text-primary-light' : 'text-neutral-400'}`}>
-                    02
-                  </span>
-                  <h4 className={`mt-1 font-heading text-[18px] font-bold uppercase transition-colors duration-300 ${activeSection === 'manufacturing' ? 'text-primary-dark' : 'text-neutral-400'}`}>
-                    {pillars.twoLabel}
-                  </h4>
-                </a>
-                <div className="border-t border-neutral-100 pt-6">
-                  <p className="text-[13px] leading-relaxed text-neutral-500">{pillars.note}</p>
+              <div className="sticky top-32">
+                <p className="mb-8 font-heading text-[10px] font-bold uppercase tracking-[3px] text-primary-light">
+                  Our capabilities
+                </p>
+
+                {/* Vertical progress rail with the two pillars */}
+                <div className="relative pl-8">
+                  {/* Rail track + active fill */}
+                  <span className="absolute left-[5px] top-1.5 bottom-[92px] w-px bg-neutral-200" aria-hidden="true" />
+                  <span
+                    className="absolute left-[5px] top-1.5 w-px bg-primary-light transition-all duration-500 ease-out"
+                    style={{ height: activeSection === 'manufacturing' ? 'calc(100% - 92px)' : '46px' }}
+                    aria-hidden="true"
+                  />
+
+                  {[
+                    { id: 'innovation', num: '01', label: pillars.oneLabel },
+                    { id: 'manufacturing', num: '02', label: pillars.twoLabel },
+                  ].map((item) => {
+                    const isActive = activeSection === item.id;
+                    return (
+                      <a key={item.id} href={`#${item.id}`} className="group relative block pb-12 last:pb-0">
+                        {/* Node dot on the rail */}
+                        <span
+                          className={`absolute -left-8 top-1.5 flex h-[11px] w-[11px] items-center justify-center rounded-full border-2 bg-white transition-all duration-400 ${
+                            isActive ? 'border-primary-light scale-110' : 'border-neutral-300 group-hover:border-primary-light/60'
+                          }`}
+                        >
+                          <span className={`h-[3px] w-[3px] rounded-full transition-colors duration-400 ${isActive ? 'bg-primary-light' : 'bg-transparent'}`} />
+                        </span>
+
+                        <span className={`editorial-number block font-heading text-[34px] font-bold leading-none transition-colors duration-400 ${isActive ? 'text-primary-light' : 'text-neutral-200 group-hover:text-neutral-300'}`}>
+                          {item.num}
+                        </span>
+                        <h4 className={`mt-2 font-heading text-[19px] font-bold uppercase leading-tight tracking-[-0.3px] transition-colors duration-400 ${isActive ? 'text-primary-dark' : 'text-neutral-400 group-hover:text-neutral-600'}`}>
+                          {item.label}
+                        </h4>
+                        {/* Active underline accent */}
+                        <span className={`mt-2.5 block h-px origin-left bg-primary-light transition-transform duration-500 ${isActive ? 'w-10 scale-x-100' : 'w-10 scale-x-0'}`} />
+                      </a>
+                    );
+                  })}
+                </div>
+
+                {/* Editorial closing statement */}
+                <div className="mt-4 rounded-2xl bg-[#f5f9f6] p-6">
+                  <svg className="mb-3 h-5 w-5 text-primary-light/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                  <p className="font-heading text-[15px] font-semibold leading-snug text-primary-dark">{pillars.note}</p>
                 </div>
               </div>
             </div>
 
             {/* Content column */}
             <div className="space-y-24 lg:space-y-32">
+
+              {/* Mobile pillar note */}
+              {pillars.note && (
+                <div className="lg:hidden -mt-2 flex items-center gap-3 rounded-xl bg-[#f5f9f6] px-4 py-3.5">
+                  <span className="h-8 w-1 flex-shrink-0 rounded-full bg-primary-light/60" />
+                  <p className="font-heading text-[14px] font-semibold leading-snug text-primary-dark">{pillars.note}</p>
+                </div>
+              )}
 
               {/* ---- 01 Innovation ---- */}
               <div id="innovation" ref={innovationRef} className="[scroll-margin-top:110px]">
