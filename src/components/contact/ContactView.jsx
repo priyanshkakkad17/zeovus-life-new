@@ -3,6 +3,40 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
+const officeContacts = [
+  {
+    key: 'india',
+    country: 'India',
+    person: 'Kushagra Didwania',
+    phone: '+91 9721062811',
+    email: 'info@zeovusfood.com',
+    address: [
+      'Unit No. 419, 4th Floor, Master Mind V',
+      'Royal Palms Estate, Aarey Milk Colony',
+      'Goregaon (East), Mumbai - 400065',
+    ],
+    image: '/contact/india.png',
+  },
+  {
+    key: 'usa',
+    country: 'USA',
+    person: 'Vishal Mehta',
+    phone: '+1 856-313-7067',
+    email: null,
+    address: ['11634 Ecclesia Drive', 'Tampa, Florida 33626', 'USA'],
+    image: '/contact/usa.png',
+  },
+  {
+    key: 'qatar',
+    country: 'Qatar',
+    person: 'Karishma Desai',
+    phone: '+974 3374 3896',
+    email: null,
+    address: ['West Bay, Doha, Qatar'],
+    image: '/contact/qatar.png',
+  },
+];
+
 export default function ContactView({ content = {} }) {
   const hero = content.hero || {};
   const options = content.options || {};
@@ -269,6 +303,117 @@ export default function ContactView({ content = {} }) {
                 </form>
               )}
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CONTACT US — OFFICES ============ */}
+      <section id="contact" className="relative bg-white py-20 sm:py-24">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12 max-w-[640px]"
+          >
+            <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
+              Get in touch
+            </p>
+            <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px]">
+              Contact Us
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
+              Reach out to our India, USA, or Qatar team for product, distribution, partnership, and business enquiries.
+            </p>
+          </motion.div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {officeContacts.map((contact, index) => (
+              <motion.div
+                key={contact.key}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative h-[520px] overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(18,45,35,0.15)]"
+              >
+                {/* Background image */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  style={{ backgroundImage: `url("${contact.image}")` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/95 via-primary-dark/45 to-primary-dark/10" />
+
+                {/* Content */}
+                <div className="relative z-10 flex h-full flex-col p-7 text-white md:p-8">
+                  {/* Header */}
+                  <div className="h-[132px] shrink-0">
+                    <p className="font-heading text-[11px] font-semibold uppercase tracking-[2.5px] text-secondary">
+                      Zeovus Life
+                    </p>
+                    <h3 className="mt-3 break-words font-heading text-[42px] font-bold uppercase leading-none tracking-[-1px] text-white [overflow-wrap:anywhere] md:text-[52px]">
+                      {contact.country}
+                    </h3>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="shrink-0 border-t border-white/25" />
+
+                  {/* Details */}
+                  <div className="flex-1 pt-6">
+                    <div className="grid grid-cols-2 gap-x-6">
+                      <div className="min-w-0">
+                        <p className="font-heading text-[11px] font-medium uppercase tracking-[1.5px] text-white/55">
+                          Contact Person
+                        </p>
+                        <p className="mt-2 text-[15px] font-semibold text-white">{contact.person}</p>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-heading text-[11px] font-medium uppercase tracking-[1.5px] text-white/55">
+                          Phone
+                        </p>
+                        <a
+                          href={`tel:${contact.phone.replace(/[\s-]/g, '')}`}
+                          className="mt-2 inline-block text-[15px] font-semibold text-white transition hover:text-secondary"
+                        >
+                          {contact.phone}
+                        </a>
+                      </div>
+                    </div>
+
+                    {contact.email && (
+                      <div className="mt-5">
+                        <p className="font-heading text-[11px] font-medium uppercase tracking-[1.5px] text-white/55">
+                          Email
+                        </p>
+                        <a
+                          href={`mailto:${contact.email}`}
+                          className="mt-2 inline-block break-all text-[15px] font-semibold text-white transition hover:text-secondary"
+                        >
+                          {contact.email}
+                        </a>
+                      </div>
+                    )}
+
+                    <div className="mt-5">
+                      <p className="font-heading text-[11px] font-medium uppercase tracking-[1.5px] text-white/55">
+                        Address
+                      </p>
+                      <address className="mt-2 not-italic text-[15px] leading-7 text-white/90">
+                        {contact.address.map((line) => (
+                          <span key={line} className="block">
+                            {line}
+                          </span>
+                        ))}
+                      </address>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/15" />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
