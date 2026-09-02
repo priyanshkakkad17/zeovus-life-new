@@ -59,12 +59,13 @@ export default function Header({ site }) {
 
           {brand.showTagline !== false && brand.tagline && (
             <>
-              {/* Divider — shown on tablet, hidden through the lg/xl range where the nav
-                  needs the full width (1280px is the target laptop viewport), back at 2xl. */}
-              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
+              {/* Divider — shown from tablet up. Hidden only in the lg range (1024–1279px)
+                  where the nav is tightest; back at xl (1280px, the target laptop). */}
+              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden xl:block xl:ml-4 xl:h-9 2xl:ml-5" />
 
-              {/* Tagline */}
-              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:whitespace-nowrap 2xl:text-[15px]">
+              {/* Tagline — compact and width-capped at xl (wraps to 2 lines so it never
+                  pushes into the nav), full single-line size only at 2xl. */}
+              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden xl:ml-4 xl:block xl:max-w-[150px] xl:text-[11px] 2xl:ml-5 2xl:max-w-none 2xl:whitespace-nowrap 2xl:text-[15px]">
                 {brand.tagline}
               </p>
             </>
