@@ -59,19 +59,21 @@ export default function Header({ site }) {
 
           {brand.showTagline !== false && brand.tagline && (
             <>
-              {/* Divider — hidden in the lg range where the nav needs the space, back at xl */}
-              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden xl:ml-5 xl:block xl:h-9" />
+              {/* Divider — shown on tablet, hidden through the lg/xl range where the nav
+                  needs the full width (1280px is the target laptop viewport), back at 2xl. */}
+              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
 
               {/* Tagline */}
-              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden xl:ml-5 xl:block xl:max-w-none xl:whitespace-nowrap xl:text-[15px]">
+              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:whitespace-nowrap 2xl:text-[15px]">
                 {brand.tagline}
               </p>
             </>
           )}
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-0.5 lg:flex xl:gap-2">
+        {/* Desktop Navigation — compact through the lg/xl range (1024–1535px, includes the
+            1280px target laptop), roomier only at 2xl (1536px+). */}
+        <nav className="hidden items-center gap-1 lg:flex xl:gap-1.5 2xl:gap-2">
           {navItems.map((item) => {
             const active = isActive(item.href);
 
@@ -79,7 +81,7 @@ export default function Header({ site }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`whitespace-nowrap rounded-md px-2.5 py-2.5 font-heading text-[11px] font-semibold uppercase tracking-[0.5px] transition-all duration-300 lg:text-[12px] xl:px-5 xl:py-3 xl:text-[13px] xl:tracking-[1px] ${
+                className={`whitespace-nowrap rounded-md px-3 py-2.5 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-all duration-300 2xl:px-5 2xl:py-3 2xl:text-[13px] 2xl:tracking-[1px] ${
                   active
                     ? 'bg-primary-dark text-[#e8f5ed]'
                     : 'text-primary-dark hover:bg-[#d4ede0]/70'

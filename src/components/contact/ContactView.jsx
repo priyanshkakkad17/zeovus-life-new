@@ -105,7 +105,7 @@ export default function ContactView({ content = {} }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h1 className="max-w-[760px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[62px] xl:text-[70px] 2xl:text-[78px]">
+              <h1 className="max-w-[760px] font-heading text-[36px] font-bold uppercase leading-[1.04] tracking-[-1.5px] sm:text-[48px] lg:text-[58px] 2xl:text-[72px]">
                 {hero.titleLead}
                 <br />
                 <span className="text-secondary lg:whitespace-nowrap">{hero.titleAccent}</span>

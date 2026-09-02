@@ -40,7 +40,7 @@ html {
 
 html,
 body {
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: hidden;
   font-family: var(--font-sans);
   margin: 0;
@@ -49,6 +49,12 @@ body {
   line-height: 1.6;
   letter-spacing: 0.02em;
   scrollbar-width: none;
+}
+
+/* Defensive responsive media: images/videos never exceed their container. */
+img,
+video {
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {

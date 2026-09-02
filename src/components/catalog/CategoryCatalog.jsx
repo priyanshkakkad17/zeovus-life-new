@@ -219,7 +219,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
             className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20"
           >
             <div className="mb-8 sm:mb-10 lg:mb-12">
-              <h2 className="max-w-[750px] font-heading text-[40px] font-bold leading-[1.06] tracking-[-0.5px] text-white sm:text-[54px] lg:text-[66px] xl:text-[74px]">
+              <h2 className="max-w-[750px] font-heading text-[38px] font-bold leading-[1.06] tracking-[-0.5px] text-white sm:text-[50px] lg:text-[60px] 2xl:text-[72px]">
                 {cat.name}
               </h2>
               <p className="mt-5 max-w-[500px] text-[15px] leading-[1.75] text-white/75 sm:text-[16px]">
@@ -578,7 +578,7 @@ export default function CategoryCatalog({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h1 className="max-w-[720px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">
+              <h1 className="max-w-[720px] font-heading text-[36px] font-bold uppercase leading-[1.04] tracking-[-1.5px] sm:text-[48px] lg:text-[58px] 2xl:text-[72px]">
                 {titleLead}
                 <br />
                 <span className="text-secondary">{titleAccent}</span>

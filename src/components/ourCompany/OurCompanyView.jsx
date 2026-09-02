@@ -55,7 +55,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
 
-              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px] text-white">
+              <h1 className="max-w-[820px] font-heading text-[36px] font-bold uppercase leading-[1.04] tracking-[-1.5px] sm:text-[48px] lg:text-[58px] 2xl:text-[72px] text-white">
                 {heroTitle}
               </h1>
               <p className="mt-7 max-w-[600px] text-[16px] leading-relaxed text-white/80 sm:text-[17px]">

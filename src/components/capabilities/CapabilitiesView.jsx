@@ -144,7 +144,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
 
-              <h1 className="max-w-[820px] font-heading text-[38px] font-bold uppercase leading-[1.02] tracking-[-1.5px] sm:text-[52px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">
+              <h1 className="max-w-[820px] font-heading text-[36px] font-bold uppercase leading-[1.04] tracking-[-1.5px] sm:text-[48px] lg:text-[58px] 2xl:text-[72px]">
                 {hero.titleLead}
                 <br />
                 <span className="text-secondary">{hero.titleAccent}</span>
@@ -550,11 +550,11 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
               {processSteps.map((item, index) => (
                 <div
                   key={index}
-                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[340px] xl:w-[380px] 2xl:w-[420px]"
+                  className="group relative w-[280px] flex-shrink-0 snap-start sm:w-[320px] lg:w-[340px] 2xl:w-[400px]"
                 >
                   {/* Text content — original layout */}
                   <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-8">
-                    <span className="editorial-number font-heading text-[52px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[64px] lg:text-[72px] xl:text-[76px]">
+                    <span className="editorial-number font-heading text-[48px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[60px] lg:text-[68px]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <h4 className="mt-5 font-heading text-[17px] font-bold uppercase tracking-[-0.3px] text-primary-dark sm:text-[19px] lg:mt-6 lg:text-[21px]">
