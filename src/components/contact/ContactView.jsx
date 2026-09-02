@@ -362,7 +362,7 @@ export default function ContactView({ content = {} }) {
 
                   {/* Details */}
                   <div className="flex-1 pt-6">
-                    <div className="grid grid-cols-2 gap-x-6">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:gap-x-6">
                       <div className="min-w-0">
                         <p className="font-heading text-[11px] font-medium uppercase tracking-[1.5px] text-white/55">
                           Contact Person

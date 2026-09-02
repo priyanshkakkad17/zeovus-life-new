@@ -182,11 +182,11 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+                className="flex flex-wrap gap-x-8 gap-y-6 border-t border-white/10 pt-8 sm:gap-x-10 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
               >
                 {heroStats.map((stat, i) => (
                   <div key={i}>
-                    <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">
+                    <span className="editorial-number block font-heading text-[36px] font-bold text-secondary sm:text-[42px] lg:text-[50px]">
                       {stat.value}
                     </span>
                     <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">
@@ -728,7 +728,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
 
               {/* Stat cards */}
               {qualityStats.length > 0 && (
-                <div className="mt-8 grid grid-cols-3 gap-3">
+                <div className="mt-8 grid grid-cols-3 gap-2.5 sm:gap-3">
                   {qualityStats.map((stat, i) => (
                     <motion.div
                       key={i}
@@ -736,9 +736,9 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                      className="rounded-xl border border-white/10 bg-white/[0.05] px-4 py-5"
+                      className="rounded-xl border border-white/10 bg-white/[0.05] px-3 py-4 sm:px-4 sm:py-5"
                     >
-                      <span className="editorial-number block font-heading text-[38px] font-bold leading-none text-secondary sm:text-[44px]">
+                      <span className="editorial-number block font-heading text-[26px] font-bold leading-none text-secondary sm:text-[38px] lg:text-[44px]">
                         {stat.value}
                       </span>
                       <span className="mt-2.5 block font-heading text-[9.5px] font-semibold uppercase tracking-[1px] leading-tight text-white/50">

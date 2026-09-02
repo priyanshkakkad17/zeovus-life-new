@@ -38,7 +38,7 @@ export default function Header({ site }) {
       }`}
     >
       {/* Main Navbar */}
-      <div className="mx-auto flex h-[90px] max-w-[1500px] items-center justify-between px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto flex h-[72px] max-w-[1500px] items-center justify-between px-5 sm:px-8 sm:h-[80px] lg:h-[90px] lg:px-12">
         {/* Left: Logo + Tagline */}
         <div className="flex min-w-0 items-center">
           {/* Logo */}
@@ -53,7 +53,7 @@ export default function Header({ site }) {
               width={160}
               height={60}
               priority
-              className="h-[60px] w-auto max-w-[140px] object-contain lg:h-[65px] lg:max-w-[160px]"
+              className="h-[46px] w-auto max-w-[120px] object-contain sm:h-[56px] sm:max-w-[140px] lg:h-[65px] lg:max-w-[160px]"
             />
           </Link>
 
@@ -63,7 +63,7 @@ export default function Header({ site }) {
               <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:ml-5 lg:h-9" />
 
               {/* Tagline */}
-              <p className="ml-4 hidden max-w-[200px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-none md:whitespace-nowrap md:text-[13px] lg:ml-5 lg:text-[15px]">
+              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:ml-5 lg:max-w-none lg:whitespace-nowrap lg:text-[15px]">
                 {brand.tagline}
               </p>
             </>

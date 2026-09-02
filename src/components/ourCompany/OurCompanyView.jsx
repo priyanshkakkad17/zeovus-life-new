@@ -82,11 +82,11 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="flex gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+                className="flex flex-wrap gap-x-8 gap-y-6 border-t border-white/10 pt-8 sm:gap-x-10 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
               >
                 {heroStats.map((stat, i) => (
                   <div key={i}>
-                    <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">
+                    <span className="editorial-number block font-heading text-[36px] font-bold text-secondary sm:text-[42px] lg:text-[50px]">
                       {stat.value}
                     </span>
                     <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-white/70">
@@ -720,13 +720,13 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
             transition={{ delay: 0.15 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-3 sm:gap-6">
               {(socialImpact.pillars || []).map((pillar, index) => (
                 <div key={index} className="text-center">
-                  <div className="w-14 h-14 bg-secondary/15 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <ContentIcon name={pillar.icon} className="w-6 h-6 text-secondary" />
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/15 sm:h-14 sm:w-14">
+                    <ContentIcon name={pillar.icon} className="h-5 w-5 text-secondary sm:h-6 sm:w-6" />
                   </div>
-                  <p className="text-sm font-medium text-primary-dark">{pillar.label}</p>
+                  <p className="text-[12px] font-medium text-primary-dark sm:text-sm">{pillar.label}</p>
                 </div>
               ))}
             </div>

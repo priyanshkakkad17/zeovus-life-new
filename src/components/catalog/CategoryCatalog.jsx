@@ -607,11 +607,11 @@ export default function CategoryCatalog({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
+                className="flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/10 pt-8 sm:gap-x-10 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0"
               >
                 {hero.stats?.map((stat) => (
                   <div key={stat.label}>
-                    <span className="editorial-number block font-heading text-[42px] font-bold text-secondary lg:text-[50px]">{stat.value}</span>
+                    <span className="editorial-number block font-heading text-[36px] font-bold text-secondary sm:text-[42px] lg:text-[50px]">{stat.value}</span>
                     <span className="mt-2 block font-heading text-[11px] uppercase tracking-[2px] text-neutral-400">{stat.label}</span>
                   </div>
                 ))}
