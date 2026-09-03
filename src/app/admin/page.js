@@ -5,6 +5,10 @@ import Link from 'next/link';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ categories: 0, products: 0, verified: 0 });
+  const [byDivision, setByDivision] = useState({
+    nutraceuticals: { categories: 0, products: 0 },
+    cosmetics: { categories: 0, products: 0 },
+  });
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -19,6 +23,14 @@ export default function AdminDashboard() {
         setCategories(data);
         const totalProducts = data.reduce((sum, c) => sum + (c.product_count || 0), 0);
         setStats({ categories: data.length, products: totalProducts, verified: totalProducts });
+
+        const divisions = { nutraceuticals: { categories: 0, products: 0 }, cosmetics: { categories: 0, products: 0 } };
+        for (const c of data) {
+          const div = c.division === 'cosmetics' ? 'cosmetics' : 'nutraceuticals';
+          divisions[div].categories += 1;
+          divisions[div].products += c.product_count || 0;
+        }
+        setByDivision(divisions);
       }
     } catch (err) {}
   }
@@ -76,6 +88,45 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* Division breakdown */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+        <div className="bg-white rounded-xl p-6 border border-neutral-200/60 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display font-semibold text-neutral-900">Nutraceuticals</h3>
+            <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Division</span>
+          </div>
+          <div className="flex gap-8">
+            <div>
+              <p className="text-2xl font-display font-bold text-neutral-900 editorial-number">{byDivision.nutraceuticals.products}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">Products</p>
+            </div>
+            <div>
+              <p className="text-2xl font-display font-bold text-neutral-900 editorial-number">{byDivision.nutraceuticals.categories}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">Categories</p>
+            </div>
+          </div>
+          <Link href="/admin/products" className="mt-4 inline-block text-sm text-primary-light hover:text-primary-dark font-medium">Manage →</Link>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 border border-neutral-200/60 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display font-semibold text-neutral-900">Cosmetics</h3>
+            <span className="rounded-full bg-pink-50 px-2.5 py-0.5 text-xs font-medium text-pink-700">Division</span>
+          </div>
+          <div className="flex gap-8">
+            <div>
+              <p className="text-2xl font-display font-bold text-neutral-900 editorial-number">{byDivision.cosmetics.products}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">Products</p>
+            </div>
+            <div>
+              <p className="text-2xl font-display font-bold text-neutral-900 editorial-number">{byDivision.cosmetics.categories}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">Categories</p>
+            </div>
+          </div>
+          <Link href="/admin/products" className="mt-4 inline-block text-sm text-primary-light hover:text-primary-dark font-medium">Manage →</Link>
+        </div>
+      </div>
+
       {/* Categories table */}
       <div className="bg-white rounded-xl border border-neutral-200/60 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-neutral-200/60 flex items-center justify-between">
@@ -108,6 +159,7 @@ export default function AdminDashboard() {
                         style={{ background: `linear-gradient(135deg, ${cat.color_from}, ${cat.color_to})` }}
                       />
                       <span className="font-medium text-neutral-800">{cat.name}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium capitalize ${cat.division === 'cosmetics' ? 'bg-pink-50 text-pink-700' : 'bg-blue-50 text-blue-700'}`}>{cat.division || 'nutraceuticals'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-3 text-neutral-500">{cat.subcategories?.length || 0}</td>

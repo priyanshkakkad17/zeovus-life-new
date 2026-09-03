@@ -121,9 +121,28 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
   const colorFrom = product.color_from || '#15A859';
   const colorTo = product.color_to || '#1A475C';
   const keyActives = splitValues(product.key_actives, ',');
-  const formats = splitValues(product.manufacturing_formats, '|');
   const technologies = splitValues(product.dds_delivery_tech, '|');
   const backHref = `${basePath}?category=${product.category_slug}`;
+
+  // A cosmetics (QUES skincare) product carries a `what_makes_potent` or
+  // `description` value; those never appear on nutraceutical rows.
+  const isCosmetic = Boolean(product.what_makes_potent || product.description);
+  // Nutraceutical formats are pipe-separated; cosmetics sizes are comma-separated.
+  const formats = splitValues(product.manufacturing_formats, isCosmetic ? ',' : '|');
+  const formatsHeading = isCosmetic ? (labels.sizesLabel || 'Available sizes') : labels.formatsLabel;
+
+  // Cosmetics (QUES skincare) fields. "What makes it potent" bullets are stored
+  // with leading • characters and/or newlines — split on either.
+  const potencyBullets = product.what_makes_potent
+    ? product.what_makes_potent
+        .split(/\n|•/)
+        .map((item) => item.replace(/^[•\s]+/, '').trim())
+        .filter(Boolean)
+    : [];
+  const concerns = splitValues(product.concerns_addressed, ',');
+  // The main descriptive paragraph — cosmetics use `description`, nutraceuticals
+  // fall back to `primary_benefit`.
+  const intro = product.description || product.primary_benefit;
 
   return (
     <main className="min-h-screen bg-white pb-20 pt-28 sm:pt-32">
@@ -133,21 +152,33 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
           {labels.backLabel} {product.category_name}
         </Link>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Sticky big product image — Minimalist-style */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <ProductImage product={product} colorFrom={colorFrom} colorTo={colorTo} />
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
+              <ProductImage product={product} colorFrom={colorFrom} colorTo={colorTo} />
+            </motion.div>
           </div>
 
           {/* Scrolling product info column */}
           <div className="flex flex-col">
             <div className="lg:pt-6">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-heading text-[10px] font-bold uppercase tracking-[1.5px] text-primary-light">
-                <span>{product.category_name}</span>
-                {product.subcategory_name && <><span className="h-1 w-1 rounded-full bg-primary-light/50" /><span>{product.subcategory_name}</span></>}
-              </div>
-              <h1 className="mt-5 font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[46px] lg:text-[52px]">{product.name}</h1>
-              {product.primary_benefit && <p className="mt-6 text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{product.primary_benefit}</p>}
+              <h1 className="font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[46px] lg:text-[52px]">{product.name}</h1>
+              {intro && <p className="mt-6 text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{intro}</p>}
+              {(product.skin_hair_type || product.suitable_for) && (
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {product.skin_hair_type && (
+                    <span className="rounded-full border border-primary-light/20 bg-primary-light/[0.06] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-primary-dark">
+                      {product.skin_hair_type}
+                    </span>
+                  )}
+                  {product.suitable_for && (
+                    <span className="rounded-full border border-neutral-200 bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500">
+                      {product.suitable_for}
+                    </span>
+                  )}
+                </div>
+              )}
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-6 py-3.5 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
                   {labels.enquireLabel}
@@ -158,9 +189,19 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
 
             {/* Sectioned detail rows */}
             <div className="mt-10">
+              {potencyBullets.length > 0 && (
+                <DetailSection title={labels.potentLabel || 'What makes it potent'}>
+                  <BulletList items={potencyBullets} />
+                </DetailSection>
+              )}
               {keyActives.length > 0 && (
                 <DetailSection title={labels.keyActivesLabel}>
                   <BulletList items={keyActives} />
+                </DetailSection>
+              )}
+              {concerns.length > 0 && (
+                <DetailSection title={labels.concernsLabel || 'Concerns addressed'}>
+                  <BulletList items={concerns} columns />
                 </DetailSection>
               )}
               {product.secondary_benefits && (
@@ -169,7 +210,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
                 </DetailSection>
               )}
               {formats.length > 0 && (
-                <DetailSection title={labels.formatsLabel}>
+                <DetailSection title={formatsHeading}>
                   <BulletList items={formats} columns />
                 </DetailSection>
               )}
@@ -180,7 +221,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </main>
   );

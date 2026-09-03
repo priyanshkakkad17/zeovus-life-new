@@ -35,6 +35,47 @@ function FormatThumb({ src, alt = '', index = 0 }) {
   );
 }
 
+/**
+ * Flip card for a manufacturing format. Front shows the thumbnail + name; the
+ * back reveals the full "card brief" description. Flips on hover (desktop) and
+ * on tap/focus (touch + keyboard). No content is truncated.
+ */
+function FormatFlipCard({ format, index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.45, delay: (index % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
+      className="group h-full [perspective:1400px]"
+      tabIndex={0}
+    >
+      <div className="relative h-full min-h-[220px] w-full rounded-[18px] transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus:[transform:rotateY(180deg)]">
+        {/* Front */}
+        <div className="absolute inset-0 flex flex-col rounded-[18px] border border-neutral-200/70 bg-white p-5 [backface-visibility:hidden]">
+          <div className="flex items-center gap-3.5">
+            <FormatThumb src={format.image} alt={format.name} index={index} />
+          </div>
+          <h4 className="mt-3.5 font-heading text-[15px] font-bold uppercase leading-snug tracking-[-0.2px] text-primary-dark">
+            {format.name}
+          </h4>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 flex flex-col rounded-[18px] border border-primary-light/40 bg-primary-dark p-5 text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <h4 className="font-heading text-[13px] font-bold uppercase leading-snug tracking-[-0.2px] text-secondary">
+            {format.name}
+          </h4>
+          <span className="mt-2 block h-px w-8 bg-secondary/50" />
+          <p className="mt-3 text-[13px] leading-relaxed text-white/80">
+            {format.desc}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function ArrowLink({ href, children }) {
   return (
     <Link
@@ -217,12 +258,9 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="mb-9 flex items-end gap-5 border-b border-neutral-200 pb-6"
                 >
-                  <span className="editorial-number font-heading text-[64px] font-bold leading-[0.8] tracking-[-2px] text-neutral-200 sm:text-[84px]">
-                    01
-                  </span>
                   <div className="pb-1.5">
                     <span className="block h-1 w-10 rounded-full bg-primary-light" />
-                    <span className="mt-3 block font-heading text-[22px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[26px]">
+                    <span className="mt-3 block font-heading text-[32px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
                       {pillars.oneLabel}
                     </span>
                   </div>
@@ -235,7 +273,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <h2 className="max-w-[820px] font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
+                  <h2 className="whitespace-pre-line font-heading text-[30px] font-bold uppercase leading-[1.04] tracking-[-1px] text-primary-dark sm:text-[40px] lg:text-[44px]">
                     {innovation.heading}
                   </h2>
                   <p className="mt-6 max-w-[760px] text-[15px] leading-relaxed text-neutral-600 sm:text-[16px]">
@@ -250,25 +288,6 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                 </motion.div>
 
                 {/* Three supporting points — vertical editorial blocks */}
-                <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-neutral-100 bg-neutral-100 sm:grid-cols-3">
-                  {innovationFacts.map((fact, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 16 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                      className="bg-white p-6 sm:p-7"
-                    >
-                      <span className="editorial-number font-heading text-[13px] font-bold tracking-[1.5px] text-primary-light">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="mt-3 block h-px w-8 bg-primary-light/40" />
-                      <p className="mt-4 text-[14px] leading-relaxed text-neutral-600">{fact}</p>
-                    </motion.div>
-                  ))}
-                </div>
-
                 {/* Technical content — two lightweight panels over a subtle science backdrop */}
                 <div className="relative mt-14">
                   {/* Subtle scientific background pattern */}
@@ -286,7 +305,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                     <rect width="100%" height="100%" fill="url(#cap-molecule)" />
                   </svg>
 
-                  <div className="relative grid gap-10 sm:grid-cols-2 sm:gap-12">
+                  <div className="relative grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
                     <motion.div
                       initial={{ opacity: 0, y: 16 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -326,40 +345,28 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                         ))}
                       </ul>
                     </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <h3 className="font-heading text-[13px] font-bold uppercase tracking-[1.5px] text-primary-dark">
+                        {innovation.regulatoryHeading}
+                      </h3>
+                      <span className="mt-2.5 block h-px w-full bg-primary-light/30" />
+                      <ul className="mt-1">
+                        {regulatoryScience.map((line, i) => (
+                          <li key={i} className="flex gap-3 border-b border-neutral-100 py-3.5 last:border-b-0">
+                            <span className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary-light" />
+                            <span className="text-[14px] leading-relaxed text-neutral-600">{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
                   </div>
                 </div>
-
-                {/* Pull-quote break */}
-                <motion.blockquote
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="mt-14 border-l-2 border-primary-light pl-6 font-heading text-[20px] font-semibold leading-snug text-primary-dark sm:text-[24px]"
-                >
-                  {innovation.quote}
-                </motion.blockquote>
-
-                {/* Regulatory Science inset */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                  className="mt-14 border-l-2 border-primary-dark/20 bg-[#f5f9f6] px-6 py-7 sm:px-8 sm:py-8"
-                >
-                  <h4 className="mb-4 font-heading text-[13px] font-bold uppercase tracking-[2px] text-primary-dark">
-                    {innovation.regulatoryHeading}
-                  </h4>
-                  <ul className="space-y-3">
-                    {regulatoryScience.map((line, i) => (
-                      <li key={i} className="flex gap-3">
-                        <span className="mt-[2px] text-primary-light">—</span>
-                        <span className="text-[14px] leading-relaxed text-neutral-600">{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
               </div>
 
               {/* ---- 02 Manufacturing ---- */}
@@ -372,12 +379,9 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="mb-9 flex items-end gap-5 border-b border-neutral-200 pb-6"
                 >
-                  <span className="editorial-number font-heading text-[64px] font-bold leading-[0.8] tracking-[-2px] text-neutral-200 sm:text-[84px]">
-                    02
-                  </span>
                   <div className="pb-1.5">
                     <span className="block h-1 w-10 rounded-full bg-primary-light" />
-                    <span className="mt-3 block font-heading text-[22px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[26px]">
+                    <span className="mt-3 block font-heading text-[32px] font-bold uppercase leading-none tracking-[1px] text-primary-dark sm:text-[40px] lg:text-[46px]">
                       {pillars.twoLabel}
                     </span>
                   </div>
@@ -421,34 +425,11 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                     <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
                       {manufacturing.nutraHeading}
                     </h3>
-                    <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
-                      {nutraceuticalFormats.length} formats
-                    </span>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {nutraceuticalFormats.map((f, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.45, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                        className="group flex h-full flex-col rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
-                      >
-                        <div className="flex items-center gap-3.5">
-                          <FormatThumb src={f.image} alt={f.name} index={i} />
-                          <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                        </div>
-                        <h4 className="mt-3.5 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
-                          {f.name}
-                        </h4>
-                        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
-                          {f.desc}
-                        </p>
-                      </motion.div>
+                      <FormatFlipCard key={i} format={f} index={i} />
                     ))}
                   </div>
                   {manufacturing.nutraCtaLabel && (
@@ -472,34 +453,11 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                     <h3 className="font-heading text-[22px] font-bold uppercase tracking-[-0.5px] text-primary-dark sm:text-[26px]">
                       {manufacturing.cosmeticsHeading}
                     </h3>
-                    <span className="font-heading text-[11px] font-semibold uppercase tracking-[1.5px] text-primary-light">
-                      {cosmeticsFormats.length} formats
-                    </span>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {cosmeticsFormats.map((f, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.45, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                        className="group flex h-full flex-col rounded-[18px] border border-neutral-200/70 bg-white p-5 transition-all duration-300 hover:border-primary-light/40 hover:shadow-[0_8px_24px_rgba(31,64,21,0.06)]"
-                      >
-                        <div className="flex items-center gap-3.5">
-                          <FormatThumb src={f.image} alt={f.name} index={i} />
-                          <span className="editorial-number font-heading text-[11px] font-bold tracking-[1.5px] text-primary-light">
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                        </div>
-                        <h4 className="mt-3.5 font-heading text-[15px] font-bold uppercase tracking-[-0.2px] text-primary-dark">
-                          {f.name}
-                        </h4>
-                        <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
-                          {f.desc}
-                        </p>
-                      </motion.div>
+                      <FormatFlipCard key={i} format={f} index={i} />
                     ))}
                   </div>
                   {manufacturing.cosmeticsCtaLabel && (
@@ -535,9 +493,6 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
             <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px] 2xl:text-[48px]">
               {process.heading}
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-neutral-600 sm:text-[16px] xl:text-[17px]">
-              {process.intro}
-            </p>
           </motion.div>
         </div>
 

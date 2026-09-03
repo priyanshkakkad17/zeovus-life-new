@@ -446,13 +446,10 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
               transition={{ duration: 0.6 }}
               className="mb-14"
             >
-              <p className="text-primary-light font-semibold text-[11px] tracking-[0.25em] uppercase mb-4">
-                {audience.eyebrow}
-              </p>
               <h2 className="text-[40px] md:text-[52px] lg:text-[60px] font-display font-bold text-primary-dark leading-[1.05] tracking-tight mb-5 uppercase">
                 {audience.heading}
               </h2>
-              <p className="text-neutral-600 text-[16px] md:text-[17px] leading-[1.7] max-w-[640px]">
+              <p className="text-neutral-600 text-[16px] md:text-[17px] leading-[1.7] whitespace-nowrap">
                 {audience.intro}
               </p>
             </motion.div>
