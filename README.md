@@ -3,7 +3,7 @@
 A modern, responsive website for Zeovus Life - a B2B nutraceutical and cosmetic manufacturer. Built with Next.js 14 and styled to match the Zeovus Food website design patterns while maintaining the Life brand identity.
 
 ## 🎨 Design System
-
+ 
 ### Colors
 Based on `Zeovus-life-Website/design.md`:
 - **Primary Dark**: `#1F4015` (Deep Green)
