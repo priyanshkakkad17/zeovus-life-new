@@ -86,8 +86,7 @@ const home = {
           id: 'intro',
           label: 'Intro paragraph',
           type: 'textarea',
-          default:
-            'Proven formulations across categories, backed by science and manufactured to global standards.',
+          default: '',
         },
         {
           id: 'items',

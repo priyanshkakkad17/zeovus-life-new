@@ -12,7 +12,13 @@ export async function generateMetadata() {
   return {
     title: seo.title || 'Zeovus Life',
     description: seo.description || '',
-    icons: { icon: seo.favicon || '/logo.png' },
+    icons: {
+      icon: [
+        { url: '/Tab-Fevicon-clean.png', type: 'image/png' },
+      ],
+      shortcut: '/Tab-Fevicon-clean.png',
+      apple: '/Tab-Fevicon-clean.png',
+    },
     ...(seo.siteUrl ? { metadataBase: safeUrl(seo.siteUrl) } : {}),
   };
 }
