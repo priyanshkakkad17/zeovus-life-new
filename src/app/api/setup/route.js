@@ -88,15 +88,19 @@ export async function POST() {
       await connection.query('ALTER TABLE products ADD COLUMN image_url VARCHAR(2048) DEFAULT NULL AFTER name');
     }
 
-    // Cosmetics (QUES skincare) fields. Nullable so nutraceutical rows are unaffected.
-    const cosmeticColumns = [
+    // Division-specific product fields, nullable so the other division is unaffected.
+    // - Cosmetics (QUES skincare): description, skin_hair_type, concerns_addressed, suitable_for, what_makes_potent
+    // - Nutraceuticals: recommended_dosage, mechanism_of_action
+    const extraColumns = [
       ['description', 'TEXT'],
       ['skin_hair_type', 'VARCHAR(255) DEFAULT NULL'],
       ['concerns_addressed', 'VARCHAR(512) DEFAULT NULL'],
       ['suitable_for', 'VARCHAR(255) DEFAULT NULL'],
       ['what_makes_potent', 'TEXT'],
+      ['recommended_dosage', 'TEXT'],
+      ['mechanism_of_action', 'TEXT'],
     ];
-    for (const [column, definition] of cosmeticColumns) {
+    for (const [column, definition] of extraColumns) {
       const [existing] = await connection.query(`SHOW COLUMNS FROM products LIKE '${column}'`);
       if (existing.length === 0) {
         await connection.query(`ALTER TABLE products ADD COLUMN ${column} ${definition}`);

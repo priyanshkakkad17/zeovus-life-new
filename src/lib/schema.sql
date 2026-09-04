@@ -46,6 +46,9 @@ CREATE TABLE IF NOT EXISTS products (
   concerns_addressed VARCHAR(512) DEFAULT NULL,
   suitable_for VARCHAR(255) DEFAULT NULL,
   what_makes_potent TEXT,
+  -- Nutraceutical-only fields, nullable for cosmetics products.
+  recommended_dosage TEXT,
+  mechanism_of_action TEXT,
   status ENUM('Verified', 'Corrected', 'Draft') DEFAULT 'Verified',
   is_active BOOLEAN DEFAULT TRUE,
   sort_order INT DEFAULT 0,

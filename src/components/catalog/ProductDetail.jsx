@@ -3,11 +3,15 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { resolveBottleImage } from '@/lib/bottleImages';
 
 function splitValues(value, separator) {
-  return value ? value.split(separator).map((item) => item.trim()).filter(Boolean) : [];
+  if (!value) return [];
+  // Always treat newlines as separators too — the nutraceutical catalogue stores
+  // formats/technologies one per line, while cosmetics use commas.
+  const pattern = new RegExp(`[\\n${separator === ',' ? ',' : '|'}]`);
+  return value.split(pattern).map((item) => item.trim()).filter(Boolean);
 }
 
 function ProductImage({ product, colorFrom, colorTo }) {
@@ -35,15 +39,57 @@ function ProductImage({ product, colorFrom, colorTo }) {
   );
 }
 
-function DetailSection({ title, children }) {
+function AccordionIcon({ open }) {
   return (
-    <section className="grid gap-4 border-t border-neutral-200 py-9 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] md:gap-12">
-      <h2 className="flex items-center gap-2.5 font-heading text-[13px] font-bold uppercase tracking-[1.8px] text-primary-dark">
-        <span className="h-3 w-[3px] rounded-full bg-primary-light" />
-        {title}
+    <span className="relative flex h-5 w-5 shrink-0 items-center justify-center text-primary-light">
+      {/* horizontal bar — always present */}
+      <span className="absolute h-[1.5px] w-3.5 rounded-full bg-current" />
+      {/* vertical bar — rotates/fades out when open, forming + / − */}
+      <span
+        className={`absolute h-3.5 w-[1.5px] rounded-full bg-current transition-all duration-300 ease-out ${
+          open ? 'rotate-90 opacity-0' : 'rotate-0 opacity-100'
+        }`}
+      />
+    </span>
+  );
+}
+
+/**
+ * A single collapsible accordion row. Controlled by the parent so that only one
+ * section stays open at a time.
+ */
+function AccordionSection({ title, open, onToggle, children }) {
+  return (
+    <div className="border-t border-neutral-200 last:border-b">
+      <h2>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          className="group flex w-full items-center justify-between gap-4 py-6 text-left"
+        >
+          <span className="flex items-center gap-2.5 font-heading text-[13px] font-bold uppercase tracking-[1.8px] text-primary-dark transition-colors group-hover:text-primary-light">
+            <span className="h-3 w-[3px] rounded-full bg-primary-light" />
+            {title}
+          </span>
+          <AccordionIcon open={open} />
+        </button>
       </h2>
-      <div>{children}</div>
-    </section>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="pb-8 pl-[13px]">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -69,6 +115,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [openSection, setOpenSection] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -124,9 +171,11 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
   const technologies = splitValues(product.dds_delivery_tech, '|');
   const backHref = `${basePath}?category=${product.category_slug}`;
 
-  // A cosmetics (QUES skincare) product carries a `what_makes_potent` or
-  // `description` value; those never appear on nutraceutical rows.
-  const isCosmetic = Boolean(product.what_makes_potent || product.description);
+  // Prefer the category division (reliable) and fall back to field-shape
+  // detection for older rows that predate the division column.
+  const isCosmetic = product.division
+    ? product.division === 'cosmetics'
+    : Boolean(product.what_makes_potent);
   // Nutraceutical formats are pipe-separated; cosmetics sizes are comma-separated.
   const formats = splitValues(product.manufacturing_formats, isCosmetic ? ',' : '|');
   const formatsHeading = isCosmetic ? (labels.sizesLabel || 'Available sizes') : labels.formatsLabel;
@@ -143,6 +192,42 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
   // The main descriptive paragraph — cosmetics use `description`, nutraceuticals
   // fall back to `primary_benefit`.
   const intro = product.description || product.primary_benefit;
+
+  // Build the accordion sections in order, including only those with content.
+  const sections = [
+    potencyBullets.length > 0 && {
+      title: labels.potentLabel || 'What makes it potent',
+      content: <BulletList items={potencyBullets} />,
+    },
+    keyActives.length > 0 && {
+      title: labels.keyActivesLabel || 'Key actives',
+      content: <BulletList items={keyActives} />,
+    },
+    concerns.length > 0 && {
+      title: labels.concernsLabel || 'Concerns addressed',
+      content: <BulletList items={concerns} columns />,
+    },
+    product.secondary_benefits && {
+      title: labels.secondaryLabel || 'Secondary benefits',
+      content: <p className="text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>,
+    },
+    formats.length > 0 && {
+      title: formatsHeading || 'Formats',
+      content: <BulletList items={formats} columns />,
+    },
+    technologies.length > 0 && {
+      title: labels.deliveryLabel || 'Delivery technology',
+      content: <BulletList items={technologies} columns />,
+    },
+    product.recommended_dosage && {
+      title: labels.dosageLabel || 'Recommended dosage',
+      content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.recommended_dosage}</p>,
+    },
+    product.mechanism_of_action && {
+      title: labels.mechanismLabel || 'Mechanism of action',
+      content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.mechanism_of_action}</p>,
+    },
+  ].filter(Boolean);
 
   return (
     <main className="min-h-screen bg-white pb-20 pt-28 sm:pt-32">
@@ -187,38 +272,18 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
               </div>
             </div>
 
-            {/* Sectioned detail rows */}
+            {/* Collapsible detail accordion — one section open at a time */}
             <div className="mt-10">
-              {potencyBullets.length > 0 && (
-                <DetailSection title={labels.potentLabel || 'What makes it potent'}>
-                  <BulletList items={potencyBullets} />
-                </DetailSection>
-              )}
-              {keyActives.length > 0 && (
-                <DetailSection title={labels.keyActivesLabel}>
-                  <BulletList items={keyActives} />
-                </DetailSection>
-              )}
-              {concerns.length > 0 && (
-                <DetailSection title={labels.concernsLabel || 'Concerns addressed'}>
-                  <BulletList items={concerns} columns />
-                </DetailSection>
-              )}
-              {product.secondary_benefits && (
-                <DetailSection title={labels.secondaryLabel}>
-                  <p className="text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>
-                </DetailSection>
-              )}
-              {formats.length > 0 && (
-                <DetailSection title={formatsHeading}>
-                  <BulletList items={formats} columns />
-                </DetailSection>
-              )}
-              {technologies.length > 0 && (
-                <DetailSection title={labels.deliveryLabel}>
-                  <BulletList items={technologies} columns />
-                </DetailSection>
-              )}
+              {sections.map((section, index) => (
+                <AccordionSection
+                  key={section.title}
+                  title={section.title}
+                  open={openSection === index}
+                  onToggle={() => setOpenSection((current) => (current === index ? -1 : index))}
+                >
+                  {section.content}
+                </AccordionSection>
+              ))}
             </div>
           </div>
         </div>

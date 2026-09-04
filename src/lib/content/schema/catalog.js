@@ -60,6 +60,8 @@ function catalogSchema({ id, label, preview, hero, labels }) {
           { id: 'formatsLabel', label: '"Feasible manufacturing formats" heading', type: 'text', default: 'Feasible manufacturing formats' },
           { id: 'sizesLabel', label: '"Available sizes" heading (cosmetics)', type: 'text', default: 'Available sizes' },
           { id: 'deliveryLabel', label: '"Feasible delivery technology benefits" heading', type: 'text', default: 'Feasible delivery technology benefits' },
+          { id: 'dosageLabel', label: '"Recommended dosage" heading', type: 'text', default: 'Recommended dosage' },
+          { id: 'mechanismLabel', label: '"Mechanism of action" heading', type: 'text', default: 'Mechanism of action' },
           { id: 'infoLabel', label: '"Product information" heading', type: 'text', default: 'Product information' },
         ],
       },

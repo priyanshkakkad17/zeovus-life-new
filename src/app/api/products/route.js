@@ -88,7 +88,8 @@ export async function POST(request) {
       category_id, subcategory_id, name, image_url, brand_line,
       key_actives, primary_benefit, secondary_benefits,
       manufacturing_formats, dds_delivery_tech, status,
-      description, skin_hair_type, concerns_addressed, suitable_for, what_makes_potent
+      description, skin_hair_type, concerns_addressed, suitable_for, what_makes_potent,
+      recommended_dosage, mechanism_of_action
     } = body;
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -96,14 +97,16 @@ export async function POST(request) {
     const result = await query(`
       INSERT INTO products (category_id, subcategory_id, name, image_url, slug, brand_line, key_actives, 
         primary_benefit, secondary_benefits, manufacturing_formats, dds_delivery_tech, status,
-        description, skin_hair_type, concerns_addressed, suitable_for, what_makes_potent)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        description, skin_hair_type, concerns_addressed, suitable_for, what_makes_potent,
+        recommended_dosage, mechanism_of_action)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       category_id, subcategory_id || null, name, image_url || null, slug, brand_line || null,
       key_actives || null, primary_benefit || null, secondary_benefits || null,
       manufacturing_formats || null, dds_delivery_tech || null, status || 'Draft',
       description || null, skin_hair_type || null, concerns_addressed || null,
-      suitable_for || null, what_makes_potent || null
+      suitable_for || null, what_makes_potent || null,
+      recommended_dosage || null, mechanism_of_action || null
     ]);
 
     return Response.json({ success: true, id: result.insertId });

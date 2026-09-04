@@ -19,7 +19,8 @@ export default function AdminProducts() {
     category_id: '', subcategory_id: '', name: '', image_url: '',
     key_actives: '', primary_benefit: '', secondary_benefits: '',
     manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft',
-    description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: ''
+    description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: '',
+    recommended_dosage: '', mechanism_of_action: ''
   });
 
   useEffect(() => { fetchCategories(); }, []);
@@ -57,7 +58,7 @@ export default function AdminProducts() {
   }
 
   function resetForm() {
-    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft', description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: '' });
+    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft', description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: '', recommended_dosage: '', mechanism_of_action: '' });
     setEditingProduct(null);
     setShowForm(false);
   }
@@ -78,7 +79,9 @@ export default function AdminProducts() {
       skin_hair_type: product.skin_hair_type || '',
       concerns_addressed: product.concerns_addressed || '',
       suitable_for: product.suitable_for || '',
-      what_makes_potent: product.what_makes_potent || ''
+      what_makes_potent: product.what_makes_potent || '',
+      recommended_dosage: product.recommended_dosage || '',
+      mechanism_of_action: product.mechanism_of_action || ''
     });
     setEditingProduct(product);
     setShowForm(true);
@@ -305,6 +308,13 @@ export default function AdminProducts() {
                 </>
               ) : (
                 <>
+                  <div className="rounded-lg bg-blue-50/60 border border-blue-100 px-3 py-2 text-xs font-medium text-blue-700">
+                    Nutraceutical product — formulation fields
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+                    <textarea value={formData.description} onChange={(e) => setFormData(f => ({ ...f, description: e.target.value }))} rows={4} placeholder="Main descriptive paragraph shown on the product page..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Key Actives</label>
                     <textarea value={formData.key_actives} onChange={(e) => setFormData(f => ({ ...f, key_actives: e.target.value }))} rows={2} placeholder="Comma separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
@@ -321,11 +331,19 @@ export default function AdminProducts() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Manufacturing Formats</label>
-                    <textarea value={formData.manufacturing_formats} onChange={(e) => setFormData(f => ({ ...f, manufacturing_formats: e.target.value }))} rows={2} placeholder="Pipe separated: Tablet | Capsule..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                    <textarea value={formData.manufacturing_formats} onChange={(e) => setFormData(f => ({ ...f, manufacturing_formats: e.target.value }))} rows={2} placeholder="Pipe or newline separated: Tablet | Capsule..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">DDS / Delivery Technology</label>
-                    <textarea value={formData.dds_delivery_tech} onChange={(e) => setFormData(f => ({ ...f, dds_delivery_tech: e.target.value }))} rows={2} placeholder="Pipe separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Feasible Delivery Technology</label>
+                    <textarea value={formData.dds_delivery_tech} onChange={(e) => setFormData(f => ({ ...f, dds_delivery_tech: e.target.value }))} rows={2} placeholder="Pipe or newline separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Recommended Dosage</label>
+                    <textarea value={formData.recommended_dosage} onChange={(e) => setFormData(f => ({ ...f, recommended_dosage: e.target.value }))} rows={2} placeholder="e.g. Adults: 1 serving daily with food..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Mechanism of Action</label>
+                    <textarea value={formData.mechanism_of_action} onChange={(e) => setFormData(f => ({ ...f, mechanism_of_action: e.target.value }))} rows={3} placeholder="How the actives work..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
                   </div>
                 </>
               )}
