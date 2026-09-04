@@ -8,6 +8,7 @@ export default function AdminProducts() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [division, setDivision] = useState('nutraceuticals');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [subcategoryFilter, setSubcategoryFilter] = useState('');
   const [page, setPage] = useState(1);
@@ -17,11 +18,12 @@ export default function AdminProducts() {
   const [formData, setFormData] = useState({
     category_id: '', subcategory_id: '', name: '', image_url: '',
     key_actives: '', primary_benefit: '', secondary_benefits: '',
-    manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft'
+    manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft',
+    description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: ''
   });
 
   useEffect(() => { fetchCategories(); }, []);
-  useEffect(() => { fetchProducts(); }, [search, categoryFilter, subcategoryFilter, page]);
+  useEffect(() => { fetchProducts(); }, [search, division, categoryFilter, subcategoryFilter, page]);
 
   async function fetchCategories() {
     try {
@@ -35,6 +37,7 @@ export default function AdminProducts() {
     setLoading(true);
     try {
       const params = new URLSearchParams({ page: page.toString(), limit: '25' });
+      if (division) params.set('division', division);
       if (categoryFilter) params.set('category', categoryFilter);
       if (subcategoryFilter) params.set('subcategory', subcategoryFilter);
       if (search) params.set('search', search);
@@ -46,8 +49,15 @@ export default function AdminProducts() {
     setLoading(false);
   }
 
+  function changeDivision(next) {
+    setDivision(next);
+    setCategoryFilter('');
+    setSubcategoryFilter('');
+    setPage(1);
+  }
+
   function resetForm() {
-    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft' });
+    setFormData({ category_id: '', subcategory_id: '', name: '', image_url: '', key_actives: '', primary_benefit: '', secondary_benefits: '', manufacturing_formats: '', dds_delivery_tech: '', status: 'Draft', description: '', skin_hair_type: '', concerns_addressed: '', suitable_for: '', what_makes_potent: '' });
     setEditingProduct(null);
     setShowForm(false);
   }
@@ -63,7 +73,12 @@ export default function AdminProducts() {
       secondary_benefits: product.secondary_benefits || '',
       manufacturing_formats: product.manufacturing_formats || '',
       dds_delivery_tech: product.dds_delivery_tech || '',
-      status: product.status || 'Draft'
+      status: product.status || 'Draft',
+      description: product.description || '',
+      skin_hair_type: product.skin_hair_type || '',
+      concerns_addressed: product.concerns_addressed || '',
+      suitable_for: product.suitable_for || '',
+      what_makes_potent: product.what_makes_potent || ''
     });
     setEditingProduct(product);
     setShowForm(true);
@@ -86,6 +101,9 @@ export default function AdminProducts() {
     fetchProducts();
   }
 
+  // Categories scoped to the active division (default fallback = nutraceuticals).
+  const divisionCategories = categories.filter(c => (c.division || 'nutraceuticals') === division);
+
   // Get subcategories for selected category in filter
   const selectedFilterCat = categories.find(c => c.slug === categoryFilter);
   const filterSubcategories = selectedFilterCat?.subcategories || [];
@@ -93,19 +111,38 @@ export default function AdminProducts() {
   // Get subcategories for form
   const formCat = categories.find(c => c.id == formData.category_id);
   const formSubcategories = formCat?.subcategories || [];
+  const isCosmeticForm = formCat?.division === 'cosmetics';
+  // Categories offered in the Add/Edit form follow the active division.
+  const formCategories = categories.filter(c => (c.division || 'nutraceuticals') === division);
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
         <div>
           <h1 className="text-2xl font-display font-bold text-neutral-900">Products</h1>
-          <p className="text-neutral-500 text-sm mt-1">{pagination.total} products total</p>
+          <p className="text-neutral-500 text-sm mt-1">{pagination.total} {division} products</p>
         </div>
-        <button onClick={() => { resetForm(); setShowForm(true); }} className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">
+        <button onClick={() => { resetForm(); setFormData(f => ({ ...f, category_id: '', subcategory_id: '' })); setShowForm(true); }} className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
           Add Product
         </button>
+      </div>
+
+      {/* Division switcher */}
+      <div className="mb-6 inline-flex rounded-lg border border-neutral-200 bg-white p-1">
+        {[
+          { key: 'nutraceuticals', label: 'Nutraceuticals' },
+          { key: 'cosmetics', label: 'Cosmetics' },
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => changeDivision(tab.key)}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${division === tab.key ? 'bg-primary-dark text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Filters */}
@@ -116,7 +153,7 @@ export default function AdminProducts() {
         </div>
         <select value={categoryFilter} onChange={(e) => { setCategoryFilter(e.target.value); setSubcategoryFilter(''); setPage(1); }} className="px-4 py-2.5 rounded-lg border border-neutral-200 text-sm bg-white">
           <option value="">All Categories</option>
-          {categories.map(cat => <option key={cat.id} value={cat.slug}>{cat.name}</option>)}
+          {divisionCategories.map(cat => <option key={cat.id} value={cat.slug}>{cat.name}</option>)}
         </select>
         {filterSubcategories.length > 0 && (
           <select value={subcategoryFilter} onChange={(e) => { setSubcategoryFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 rounded-lg border border-neutral-200 text-sm bg-white">
@@ -155,11 +192,16 @@ export default function AdminProducts() {
                       )}
                       <div className="min-w-0">
                         <div className="font-medium text-neutral-800 max-w-[180px] truncate">{p.name}</div>
-                        <div className="text-xs text-neutral-400 max-w-[180px] truncate mt-0.5">{p.primary_benefit}</div>
+                        <div className="text-xs text-neutral-400 max-w-[180px] truncate mt-0.5">{p.primary_benefit || p.concerns_addressed || p.description}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-neutral-600 text-xs">{p.category_name}</td>
+                  <td className="px-5 py-3 text-neutral-600 text-xs">
+                    <div className="flex flex-col gap-1">
+                      <span>{p.category_name}</span>
+                      <span className={`w-fit rounded-full px-2 py-0.5 text-[10px] font-medium capitalize ${p.division === 'cosmetics' ? 'bg-pink-50 text-pink-700' : 'bg-blue-50 text-blue-700'}`}>{p.division || 'nutraceuticals'}</span>
+                    </div>
+                  </td>
                   <td className="px-5 py-3 text-neutral-500 text-xs">{p.subcategory_name || '—'}</td>
                   <td className="px-5 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.status === 'Verified' ? 'bg-green-50 text-green-700' : p.status === 'Corrected' ? 'bg-amber-50 text-amber-700' : 'bg-neutral-100 text-neutral-600'}`}>{p.status}</span>
@@ -207,7 +249,7 @@ export default function AdminProducts() {
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Category *</label>
                   <select value={formData.category_id} onChange={(e) => setFormData(f => ({ ...f, category_id: e.target.value, subcategory_id: '' }))} required className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm">
                     <option value="">Select</option>
-                    {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                    {(editingProduct ? categories : formCategories).map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                   </select>
                 </div>
                 <div>
@@ -228,28 +270,65 @@ export default function AdminProducts() {
                 onChange={(url) => setFormData(f => ({ ...f, image_url: url }))}
                 help="Paste a hosted image URL or upload a file. Uploads are stored under /uploads."
               />
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Key Actives</label>
-                <textarea value={formData.key_actives} onChange={(e) => setFormData(f => ({ ...f, key_actives: e.target.value }))} rows={2} placeholder="Comma separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Primary Benefit</label>
-                  <input type="text" value={formData.primary_benefit} onChange={(e) => setFormData(f => ({ ...f, primary_benefit: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Secondary Benefits</label>
-                  <input type="text" value={formData.secondary_benefits} onChange={(e) => setFormData(f => ({ ...f, secondary_benefits: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Manufacturing Formats</label>
-                <textarea value={formData.manufacturing_formats} onChange={(e) => setFormData(f => ({ ...f, manufacturing_formats: e.target.value }))} rows={2} placeholder="Pipe separated: Tablet | Capsule..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">DDS / Delivery Technology</label>
-                <textarea value={formData.dds_delivery_tech} onChange={(e) => setFormData(f => ({ ...f, dds_delivery_tech: e.target.value }))} rows={2} placeholder="Pipe separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
-              </div>
+
+              {isCosmeticForm ? (
+                <>
+                  <div className="rounded-lg bg-pink-50/60 border border-pink-100 px-3 py-2 text-xs font-medium text-pink-700">
+                    Cosmetics product — skincare / haircare fields
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+                    <textarea value={formData.description} onChange={(e) => setFormData(f => ({ ...f, description: e.target.value }))} rows={4} placeholder="Main descriptive paragraph shown on the product page..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Skin / Hair Type</label>
+                      <input type="text" value={formData.skin_hair_type} onChange={(e) => setFormData(f => ({ ...f, skin_hair_type: e.target.value }))} placeholder="e.g. Oily, Acne-Prone" className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Suitable For</label>
+                      <input type="text" value={formData.suitable_for} onChange={(e) => setFormData(f => ({ ...f, suitable_for: e.target.value }))} placeholder="e.g. 13+ years of age" className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Concerns Addressed</label>
+                    <input type="text" value={formData.concerns_addressed} onChange={(e) => setFormData(f => ({ ...f, concerns_addressed: e.target.value }))} placeholder="Comma separated: Acne, Blemishes..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">What Makes It Potent</label>
+                    <textarea value={formData.what_makes_potent} onChange={(e) => setFormData(f => ({ ...f, what_makes_potent: e.target.value }))} rows={5} placeholder="One bullet per line, or • separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Available Sizes</label>
+                    <input type="text" value={formData.manufacturing_formats} onChange={(e) => setFormData(f => ({ ...f, manufacturing_formats: e.target.value }))} placeholder="Comma separated: 15ml, 30ml, 50ml" className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Key Actives</label>
+                    <textarea value={formData.key_actives} onChange={(e) => setFormData(f => ({ ...f, key_actives: e.target.value }))} rows={2} placeholder="Comma separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Primary Benefit</label>
+                      <input type="text" value={formData.primary_benefit} onChange={(e) => setFormData(f => ({ ...f, primary_benefit: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Secondary Benefits</label>
+                      <input type="text" value={formData.secondary_benefits} onChange={(e) => setFormData(f => ({ ...f, secondary_benefits: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Manufacturing Formats</label>
+                    <textarea value={formData.manufacturing_formats} onChange={(e) => setFormData(f => ({ ...f, manufacturing_formats: e.target.value }))} rows={2} placeholder="Pipe separated: Tablet | Capsule..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">DDS / Delivery Technology</label>
+                    <textarea value={formData.dds_delivery_tech} onChange={(e) => setFormData(f => ({ ...f, dds_delivery_tech: e.target.value }))} rows={2} placeholder="Pipe separated..." className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm resize-none" />
+                  </div>
+                </>
+              )}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">Status</label>
                 <select value={formData.status} onChange={(e) => setFormData(f => ({ ...f, status: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-neutral-200 text-sm">

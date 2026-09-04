@@ -276,7 +276,10 @@ function ProductCard({ product, category, index, basePath, labels = {} }) {
   const IconComponent = (category && Icons[category.icon]) || Icons.pill;
   const colorFrom = category?.color_from || '#15A859';
   const colorTo = category?.color_to || '#1A475C';
-  const keyActives = product.key_actives?.split(',').map((active) => active.trim()).filter(Boolean) || [];
+  // Cosmetics products surface their "concerns addressed"; nutraceuticals show key actives.
+  const chipSource = product.concerns_addressed || product.key_actives;
+  const keyActives = chipSource?.split(',').map((active) => active.trim()).filter(Boolean) || [];
+  const chipLabel = product.concerns_addressed ? 'Targets' : labels.keyActivesLabel;
   // Prefer the stored image; otherwise fall back to a name-matched bottle image.
   const resolvedImage = product.image_url || resolveBottleImage(product.name);
   const hasImage = Boolean(resolvedImage) && !imageError;
@@ -323,13 +326,13 @@ function ProductCard({ product, category, index, basePath, labels = {} }) {
         <h4 className="font-heading text-[19px] font-bold leading-[1.12] tracking-[-0.35px] text-primary-dark">
           {product.name}
         </h4>
-        {product.primary_benefit && (
-          <p className="mt-3 text-[13px] leading-relaxed text-neutral-600">{product.primary_benefit}</p>
+        {(product.primary_benefit || product.description) && (
+          <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-neutral-600">{product.primary_benefit || product.description}</p>
         )}
 
         {keyActives.length > 0 && (
           <div className="mt-5 border-t border-neutral-100 pt-4">
-            <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{labels.keyActivesLabel}</span>
+            <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{chipLabel}</span>
             <div className="flex flex-wrap gap-1.5">
               {keyActives.slice(0, 3).map((active, activeIndex) => (
                 <span key={activeIndex} className="rounded-full border border-primary-light/15 bg-primary-light/[0.06] px-2.5 py-1 text-[10px] font-medium text-primary-dark">

@@ -17,6 +17,7 @@ const EMPTY_CATEGORY_FORM = {
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [divisionFilter, setDivisionFilter] = useState('nutraceuticals');
   const [showForm, setShowForm] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [showSubForm, setShowSubForm] = useState(null);
@@ -136,18 +137,34 @@ export default function AdminCategories() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold text-neutral-900">Categories</h1>
           <p className="mt-1 text-sm text-neutral-500">Manage product categories, category imagery and subcategories</p>
         </div>
         <button
-          onClick={() => { setShowForm(!showForm); setFormError(''); }}
+          onClick={() => { setShowForm(!showForm); setFormError(''); setFormData((d) => ({ ...d, division: divisionFilter })); }}
           className="inline-flex items-center gap-2 rounded-lg bg-primary-light px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-primary-dark"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
           Add Category
         </button>
+      </div>
+
+      {/* Division switcher */}
+      <div className="mb-6 inline-flex rounded-lg border border-neutral-200 bg-white p-1">
+        {[
+          { key: 'nutraceuticals', label: 'Nutraceuticals' },
+          { key: 'cosmetics', label: 'Cosmetics' },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setDivisionFilter(tab.key)}
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${divisionFilter === tab.key ? 'bg-primary-dark text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {formError && (
@@ -218,7 +235,7 @@ export default function AdminCategories() {
       <div className="space-y-4">
         {loading ? (
           [...Array(6)].map((_, index) => <div key={index} className="h-24 animate-pulse rounded-xl border border-neutral-200/60 bg-white p-5" />)
-        ) : categories.map((cat) => (
+        ) : categories.filter((cat) => (cat.division || 'nutraceuticals') === divisionFilter).map((cat) => (
           <div key={cat.id} className="overflow-hidden rounded-xl border border-neutral-200/60 bg-white shadow-sm transition-all hover:shadow-md">
             <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${cat.color_from}, ${cat.color_to})` }} />
             <div className="p-5">
@@ -335,6 +352,11 @@ export default function AdminCategories() {
             </div>
           </div>
         ))}
+        {!loading && categories.filter((cat) => (cat.division || 'nutraceuticals') === divisionFilter).length === 0 && (
+          <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center text-sm text-neutral-400">
+            No {divisionFilter} categories yet. Use “Add Category” to create one.
+          </div>
+        )}
       </div>
     </div>
   );

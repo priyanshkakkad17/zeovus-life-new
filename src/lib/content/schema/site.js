@@ -269,7 +269,7 @@ const site = {
         },
         { id: 'siteName', label: 'Site name', type: 'text', default: 'Zeovus Life' },
         { id: 'siteUrl', label: 'Canonical site URL', type: 'url', default: 'https://zeovuslife.com' },
-        { id: 'favicon', label: 'Favicon', type: 'image', default: '/logo.png' },
+        { id: 'favicon', label: 'Favicon', type: 'image', default: '/Tab-Fevicon-clean.png' },
       ],
     },
   ],

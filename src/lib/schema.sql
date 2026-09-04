@@ -40,6 +40,12 @@ CREATE TABLE IF NOT EXISTS products (
   secondary_benefits TEXT,
   manufacturing_formats TEXT,
   dds_delivery_tech TEXT,
+  -- Cosmetics (QUES skincare) fields, nullable for nutraceutical products.
+  description TEXT,
+  skin_hair_type VARCHAR(255) DEFAULT NULL,
+  concerns_addressed VARCHAR(512) DEFAULT NULL,
+  suitable_for VARCHAR(255) DEFAULT NULL,
+  what_makes_potent TEXT,
   status ENUM('Verified', 'Corrected', 'Draft') DEFAULT 'Verified',
   is_active BOOLEAN DEFAULT TRUE,
   sort_order INT DEFAULT 0,
