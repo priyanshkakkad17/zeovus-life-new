@@ -654,7 +654,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                       times: [0, 0.55, 0.8, 1],
                       ease: [0.34, 1.56, 0.64, 1],
                     }}
-                    className="relative flex-shrink-0"
+                    className="relative z-10 flex-shrink-0 lg:-left-8"
                     style={{ transformOrigin: 'center' }}
                   >
                     {/* Ink bleed halo that appears on impact */}

@@ -106,6 +106,55 @@ function BulletList({ items, columns = false }) {
   );
 }
 
+function ProductInfoTabs({ formats, technologies, formatsLabel, deliveryLabel }) {
+  const tabs = [
+    { key: 'formats', label: formatsLabel || 'Feasible manufacturing formats', items: formats },
+    { key: 'technologies', label: deliveryLabel || 'Feasible delivery technology benefits', items: technologies },
+  ].filter((tab) => tab.items.length > 0);
+  const [activeTab, setActiveTab] = useState(tabs[0]?.key || 'formats');
+  const active = tabs.find((tab) => tab.key === activeTab) || tabs[0];
+
+  if (!active) return null;
+
+  return (
+    <div className="mt-8 overflow-hidden border border-neutral-200 bg-neutral-50/70">
+      <div className="flex border-b border-neutral-200 bg-white px-5 sm:px-6">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => setActiveTab(tab.key)}
+            className={`relative mr-6 py-4 font-heading text-[10px] font-bold uppercase tracking-[1.4px] transition-colors duration-300 sm:text-[11px] ${
+              activeTab === tab.key ? 'text-primary-dark' : 'text-neutral-400 hover:text-primary-dark'
+            }`}
+          >
+            {tab.label}
+            <span
+              className={`absolute inset-x-0 bottom-0 h-[2px] bg-primary-dark transition-transform duration-300 ${
+                activeTab === tab.key ? 'scale-x-100' : 'scale-x-0'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={active.key}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.22 }}
+          className="px-5 py-5 sm:px-6 sm:py-6"
+        >
+          <p className="text-[13px] leading-[1.75] text-neutral-600 sm:text-[14px]">
+            {active.items.join('; ')}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /**
  * Shared product detail view. `basePath` is the catalogue root (e.g. /nutraceuticals
  * or /cosmetics) used for the back-to-category link and empty-state browse link.
@@ -201,7 +250,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
     },
     keyActives.length > 0 && {
       title: labels.keyActivesLabel || 'Key actives',
-      content: <BulletList items={keyActives} />,
+      content: <p className="text-[15px] leading-relaxed text-neutral-600">{keyActives.join('; ')}</p>,
     },
     concerns.length > 0 && {
       title: labels.concernsLabel || 'Concerns addressed',
@@ -211,11 +260,11 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
       title: labels.secondaryLabel || 'Secondary benefits',
       content: <p className="text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>,
     },
-    formats.length > 0 && {
+    isCosmetic && formats.length > 0 && {
       title: formatsHeading || 'Formats',
       content: <BulletList items={formats} columns />,
     },
-    technologies.length > 0 && {
+    isCosmetic && technologies.length > 0 && {
       title: labels.deliveryLabel || 'Delivery technology',
       content: <BulletList items={technologies} columns />,
     },
@@ -287,6 +336,15 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
             </div>
           </div>
         </div>
+
+        {!isCosmetic && (formats.length > 0 || technologies.length > 0) && (
+          <ProductInfoTabs
+            formats={formats}
+            technologies={technologies}
+            formatsLabel={formatsHeading}
+            deliveryLabel={labels.deliveryLabel || 'Feasible delivery technology benefits'}
+          />
+        )}
       </div>
     </main>
   );
