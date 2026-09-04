@@ -235,12 +235,18 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
               </p>
               <Link
                 href={`${basePath}?category=${cat.slug}`}
-                className="group mt-8 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 font-heading text-[12px] font-semibold uppercase tracking-[1px] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:shadow-lg hover:shadow-white/5"
+                className="group mt-8 inline-flex w-fit items-center gap-4 font-heading text-[12px] font-semibold uppercase tracking-[2px] text-white"
               >
-                Explore More
-                <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" />
-                </svg>
+                <span className="relative pb-1">
+                  Explore More
+                  <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-100 bg-white/40 transition-transform duration-300" />
+                  <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-400 ease-out group-hover:scale-x-100" />
+                </span>
+                <span className="flex h-8 w-8 items-center justify-center border border-white/40 transition-colors duration-300 group-hover:border-white group-hover:bg-white/10">
+                  <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" />
+                  </svg>
+                </span>
               </Link>
             </div>
 
@@ -326,7 +332,7 @@ function ProductCard({ product, category, index, basePath, labels = {} }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        {product.subcategory_name && (
+        {category?.division !== 'nutraceuticals' && product.subcategory_name && (
           <p className="mb-3 font-heading text-[10px] font-bold uppercase tracking-[1.8px] text-primary-light">
             {product.subcategory_name}
           </p>
@@ -343,7 +349,7 @@ function ProductCard({ product, category, index, basePath, labels = {} }) {
             <span className="mb-2.5 block font-heading text-[10px] font-semibold uppercase tracking-[1.5px] text-neutral-400">{chipLabel}</span>
             <div className="flex flex-wrap gap-1.5">
               {keyActives.slice(0, 3).map((active, activeIndex) => (
-                <span key={activeIndex} className="rounded-full border border-primary-light/15 bg-primary-light/[0.06] px-2.5 py-1 text-[10px] font-medium text-primary-dark">
+                <span key={activeIndex} className="inline-flex items-center gap-1.5 border-l-2 border-primary-light bg-neutral-50 px-2.5 py-1 text-[10px] font-medium text-primary-dark">
                   {active}
                 </span>
               ))}
@@ -465,7 +471,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                 </div>
               </motion.div>
 
-              {selectedCat.subcategories?.length > 0 && (
+              {division !== 'nutraceuticals' && selectedCat.subcategories?.length > 0 && (
                 <div className="mb-8 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => setActiveSubcategory(null)}

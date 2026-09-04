@@ -508,7 +508,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                   className="group relative flex w-[280px] flex-shrink-0 flex-col snap-start sm:w-[320px] lg:w-[340px] 2xl:w-[400px]"
                 >
                   {/* Text content — original layout */}
-                  <div className="border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light lg:pt-7">
+                  <div className="h-[240px] overflow-hidden border-t-2 border-neutral-200 pt-6 transition-colors duration-500 group-hover:border-primary-light sm:h-[245px] lg:h-[235px] lg:pt-7 2xl:h-[250px]">
                     <span className="editorial-number font-heading text-[48px] font-bold leading-none text-neutral-300 transition-colors duration-500 group-hover:text-primary-light/40 sm:text-[60px] lg:text-[56px] 2xl:text-[68px]">
                       {String(index + 1).padStart(2, '0')}
                     </span>
@@ -520,11 +520,12 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                     </p>
                   </div>
 
-                  {/* Image — portrait on mobile, height-capped on the pinned desktop stage
-                      so the whole card (number + title + copy + image) fits the viewport. */}
-                  <div className="mt-5 lg:mt-4 lg:flex-1">
+                  {/* Consistent image frame for every process step. The fixed ratio
+                      prevents source images with different dimensions from creating
+                      uneven-looking cards. */}
+                  <div className="mt-5 lg:mt-4">
                     {item.image ? (
-                      <div className="h-full overflow-hidden aspect-[3/4] lg:aspect-auto lg:max-h-[42vh] lg:min-h-[220px]">
+                      <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-100">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -532,7 +533,7 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
                         />
                       </div>
                     ) : (
-                      <div className="aspect-[3/4] lg:aspect-auto lg:h-full lg:max-h-[42vh] lg:min-h-[220px]" />
+                      <div className="aspect-[4/3] w-full bg-neutral-100" />
                     )}
                   </div>
                 </div>

@@ -9,7 +9,7 @@ const officeContacts = [
     country: 'India',
     person: 'Kushagra Didwania',
     phone: '+91 9721062811',
-    email: 'info@zeovusfood.com',
+    email: 'info@zeovuslife.com',
     address: [
       'Unit No. 419, 4th Floor, Master Mind V',
       'Royal Palms Estate, Aarey Milk Colony',

@@ -253,12 +253,12 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
               {(product.skin_hair_type || product.suitable_for) && (
                 <div className="mt-6 flex flex-wrap gap-2.5">
                   {product.skin_hair_type && (
-                    <span className="rounded-full border border-primary-light/20 bg-primary-light/[0.06] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-primary-dark">
+                    <span className="inline-flex items-center border-l-2 border-primary-light bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-primary-dark">
                       {product.skin_hair_type}
                     </span>
                   )}
                   {product.suitable_for && (
-                    <span className="rounded-full border border-neutral-200 bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500">
+                    <span className="inline-flex items-center border-l-2 border-neutral-300 bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500">
                       {product.suitable_for}
                     </span>
                   )}
