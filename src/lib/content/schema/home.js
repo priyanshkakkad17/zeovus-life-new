@@ -81,7 +81,7 @@ const home = {
       fields: [
         { id: 'enabled', label: 'Show this section', type: 'boolean', default: true },
         { id: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'What we formulate' },
-        { id: 'heading', label: 'Heading', type: 'text', default: 'Portfolio Highlights' },
+        { id: 'heading', label: 'Heading', type: 'text', default: 'Wellness that does more' },
         {
           id: 'intro',
           label: 'Intro paragraph',
