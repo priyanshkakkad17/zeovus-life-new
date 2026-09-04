@@ -112,8 +112,14 @@ export default function CapabilitiesView({ content = {}, certifications = [] }) 
   const testingValidation = innovation.testingItems || [];
   const regulatoryScience = innovation.regulatoryItems || [];
   const manufacturingFacts = manufacturing.facts || [];
-  const nutraceuticalFormats = manufacturing.nutraFormats || [];
-  const cosmeticsFormats = manufacturing.cosmeticsFormats || [];
+  const nutraceuticalFormats = (manufacturing.nutraFormats || []).map((format, index) => ({
+    ...format,
+    image: format.image || `/images/nf${index + 1}.jpg`,
+  }));
+  const cosmeticsFormats = (manufacturing.cosmeticsFormats || []).map((format, index) => ({
+    ...format,
+    image: format.image || `/images/cf${index + 1}.jpg`,
+  }));
   const processSteps = process.steps || [];
   const qualityChecks = qualityPromise.checks || [];
   const qualityParagraphs = qualityPromise.qualityParagraphs || [];

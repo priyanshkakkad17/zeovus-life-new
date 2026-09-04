@@ -317,9 +317,6 @@ export default function ContactView({ content = {} }) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mb-12 max-w-[640px]"
           >
-            <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[2.5px] text-primary-light">
-              Get in touch
-            </p>
             <h2 className="font-heading text-[28px] font-bold uppercase leading-[1.05] tracking-[-1px] text-primary-dark sm:text-[36px] lg:text-[42px]">
               Contact Us
             </h2>
@@ -349,10 +346,7 @@ export default function ContactView({ content = {} }) {
                 <div className="relative z-10 flex h-full flex-col p-7 text-white md:p-8">
                   {/* Header */}
                   <div className="h-[132px] shrink-0">
-                    <p className="font-heading text-[11px] font-semibold uppercase tracking-[2.5px] text-secondary">
-                      Zeovus Life
-                    </p>
-                    <h3 className="mt-3 break-words font-heading text-[42px] font-bold uppercase leading-none tracking-[-1px] text-white [overflow-wrap:anywhere] md:text-[52px]">
+                    <h3 className="break-words font-heading text-[42px] font-bold uppercase leading-none tracking-[-1px] text-white [overflow-wrap:anywhere] md:text-[52px]">
                       {contact.country}
                     </h3>
                   </div>
