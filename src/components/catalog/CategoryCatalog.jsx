@@ -129,16 +129,24 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
   }, []);
 
   useEffect(() => {
+    // Track the visibility ratio of every panel and make the most-visible one
+    // active. A single 0.6 threshold could be skipped during a fast swipe,
+    // leaving a panel on screen with its (opacity-0) text never revealed.
+    const ratios = new Map();
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = cardRefs.current.indexOf(entry.target);
-            if (index !== -1) setActiveIndex(index);
-          }
+          const index = cardRefs.current.indexOf(entry.target);
+          if (index !== -1) ratios.set(index, entry.isIntersecting ? entry.intersectionRatio : 0);
         });
+        let bestIndex = 0;
+        let bestRatio = -1;
+        ratios.forEach((ratio, index) => {
+          if (ratio > bestRatio) { bestRatio = ratio; bestIndex = index; }
+        });
+        if (bestRatio > 0) setActiveIndex(bestIndex);
       },
-      { root: scrollContainerRef.current, threshold: 0.6 }
+      { root: scrollContainerRef.current, threshold: [0, 0.15, 0.35, 0.55, 0.75, 1] }
     );
     cardRefs.current.forEach((card) => { if (card) observer.observe(card); });
     return () => observer.disconnect();
@@ -214,7 +222,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
 
           <motion.div
             initial={false}
-            animate={{ opacity: activeIndex === i ? 1 : 0, y: activeIndex === i ? 0 : 44 }}
+            animate={{ opacity: 1, y: activeIndex === i ? 0 : 12 }}
             transition={{ duration: 0.62, delay: activeIndex === i ? 0.12 : 0, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12 lg:p-16 xl:p-20"
           >
@@ -239,7 +247,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
             {cat.highlights && cat.highlights.length > 0 && (
               <motion.div
                 initial={false}
-                animate={{ opacity: activeIndex === i ? 1 : 0, y: activeIndex === i ? 0 : 20 }}
+                animate={{ opacity: 1, y: activeIndex === i ? 0 : 12 }}
                 transition={{ duration: 0.5, delay: activeIndex === i ? 0.32 : 0, ease: [0.22, 1, 0.36, 1] }}
                 className="hidden border-t border-white/15 pt-7 pb-2 lg:block"
               >
