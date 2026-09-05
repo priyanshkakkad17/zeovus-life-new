@@ -22,6 +22,7 @@ export default async function CosmeticsPage() {
       hero={{
         titleLead: hero.titleLead,
         titleAccent: hero.titleAccent,
+        backgroundVideo: 'https://res.cloudinary.com/ac74hfe9/video/upload/v1788633389/cosmatics.mp4',
         stats: hero.stats || [],
         seal: hero.sealImage ? { src: hero.sealImage, label: hero.sealLabel } : null,
       }}

@@ -574,12 +574,29 @@ export default function CategoryCatalog({
   const titleLead = hero.titleLead;
   const titleAccent = hero.titleAccent;
   const heroSubtitle = hero.subtitle || '';
+  const backgroundVideo = hero.backgroundVideo || '';
 
   return (
     <div ref={pageScrollRef} className="h-screen snap-y snap-proximity overflow-y-auto scroll-smooth bg-white" style={{ scrollbarWidth: 'none' }}>
       {/* ============ HERO ============ */}
       <section className="relative overflow-hidden bg-primary-dark pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24">
-        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+        {backgroundVideo && (
+          <>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover"
+            >
+              <source src={backgroundVideo} type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-primary-dark/60" aria-hidden="true" />
+          </>
+        )}
+        <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-[0.04]" aria-hidden="true">
           <defs>
             <pattern id={`${division}-hex-grid`} x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
               <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
@@ -588,7 +605,7 @@ export default function CategoryCatalog({
           <rect width="100%" height="100%" fill={`url(#${division}-hex-grid)`} />
         </svg>
 
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        <div className="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
             <motion.div
               initial={{ opacity: 0, y: 28 }}

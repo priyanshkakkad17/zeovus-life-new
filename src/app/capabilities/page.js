@@ -10,5 +10,11 @@ export async function generateMetadata() {
 
 export default async function CapabilitiesPage() {
   const [content, site] = await Promise.all([getContentGroup('capabilities'), getContentGroup('site')]);
-  return <CapabilitiesView content={content} certifications={site.certifications?.items || []} />;
+  return (
+    <CapabilitiesView
+      content={content}
+      certifications={site.certifications?.items || []}
+      heroVideo="https://res.cloudinary.com/ac74hfe9/video/upload/v1788637642/capabilities.mp4"
+    />
+  );
 }
