@@ -227,7 +227,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
     : Boolean(product.what_makes_potent);
   // Nutraceutical formats are pipe-separated; cosmetics sizes are comma-separated.
   const formats = splitValues(product.manufacturing_formats, isCosmetic ? ',' : '|');
-  const formatsHeading = isCosmetic ? (labels.sizesLabel || 'Available sizes') : labels.formatsLabel;
+  const formatsHeading = isCosmetic ? (labels.sizesLabel || 'Standard size available') : labels.formatsLabel;
 
   // Cosmetics (QUES skincare) fields. "What makes it potent" bullets are stored
   // with leading • characters and/or newlines — split on either.
@@ -238,45 +238,80 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
         .filter(Boolean)
     : [];
   const concerns = splitValues(product.concerns_addressed, ',');
-  // The main descriptive paragraph — cosmetics use `description`, nutraceuticals
-  // fall back to `primary_benefit`.
-  const intro = product.description || product.primary_benefit;
+  const benefits = [
+    ...splitValues(product.primary_benefit, '|'),
+    ...splitValues(product.secondary_benefits, '|'),
+  ];
+  // The description is shown separately above the accordion. Benefits remain a
+  // distinct field for nutraceutical products instead of being used as a fallback.
+  const intro = product.description;
 
-  // Build the accordion sections in order, including only those with content.
-  const sections = [
-    potencyBullets.length > 0 && {
-      title: labels.potentLabel || 'What makes it potent',
-      content: <BulletList items={potencyBullets} />,
-    },
-    keyActives.length > 0 && {
-      title: labels.keyActivesLabel || 'Key actives',
-      content: <p className="text-[15px] leading-relaxed text-neutral-600">{keyActives.join('; ')}</p>,
-    },
-    concerns.length > 0 && {
-      title: labels.concernsLabel || 'Concerns addressed',
-      content: <BulletList items={concerns} columns />,
-    },
-    product.secondary_benefits && {
-      title: labels.secondaryLabel || 'Secondary benefits',
-      content: <p className="text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>,
-    },
-    isCosmetic && formats.length > 0 && {
-      title: formatsHeading || 'Formats',
-      content: <BulletList items={formats} columns />,
-    },
-    isCosmetic && technologies.length > 0 && {
-      title: labels.deliveryLabel || 'Delivery technology',
-      content: <BulletList items={technologies} columns />,
-    },
-    product.recommended_dosage && {
-      title: labels.dosageLabel || 'Recommended dosage',
-      content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.recommended_dosage}</p>,
-    },
-    product.mechanism_of_action && {
-      title: labels.mechanismLabel || 'Mechanism of action',
-      content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.mechanism_of_action}</p>,
-    },
-  ].filter(Boolean);
+  // Build the accordion sections in the requested category-specific order,
+  // including only those with content. Fields not called out in the requested
+  // order remain available afterward.
+  const sections = isCosmetic
+    ? [
+        potencyBullets.length > 0 && {
+          title: labels.potentLabel || 'What makes it potent',
+          content: <BulletList items={potencyBullets} />,
+        },
+        product.skin_hair_type && {
+          title: 'Skin / hair type',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.skin_hair_type}</p>,
+        },
+        concerns.length > 0 && {
+          title: labels.concernsLabel || 'Concerns addressed',
+          content: <BulletList items={concerns} columns />,
+        },
+        product.suitable_for && {
+          title: 'Suitable for',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.suitable_for}</p>,
+        },
+        formats.length > 0 && {
+          title: formatsHeading || 'Standard size available',
+          content: <BulletList items={formats} columns />,
+        },
+        keyActives.length > 0 && {
+          title: labels.keyActivesLabel || 'Key actives',
+          content: <p className="text-[15px] leading-relaxed text-neutral-600">{keyActives.join('; ')}</p>,
+        },
+        product.secondary_benefits && {
+          title: labels.secondaryLabel || 'Secondary benefits',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.secondary_benefits}</p>,
+        },
+        technologies.length > 0 && {
+          title: labels.deliveryLabel || 'Delivery technology',
+          content: <BulletList items={technologies} columns />,
+        },
+        product.recommended_dosage && {
+          title: labels.dosageLabel || 'Recommended dosage',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.recommended_dosage}</p>,
+        },
+        product.mechanism_of_action && {
+          title: labels.mechanismLabel || 'Mechanism of action',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.mechanism_of_action}</p>,
+        },
+      ].filter(Boolean)
+    : [
+        keyActives.length > 0 && {
+          title: labels.keyActivesLabel || 'Key actives',
+          content: <p className="text-[15px] leading-relaxed text-neutral-600">{keyActives.join('; ')}</p>,
+        },
+        benefits.length > 0 && {
+          title: labels.benefitsLabel || 'Benefits',
+          content: <BulletList items={benefits} />,
+        },
+        product.mechanism_of_action && {
+          title: labels.mechanismLabel || 'Mechanism of action',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.mechanism_of_action}</p>,
+        },
+        product.recommended_dosage && {
+          title: labels.dosageLabel || 'Recommended dosage',
+          content: <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{product.recommended_dosage}</p>,
+        },
+      ].filter(Boolean);
+
+  const filteredSections = sections.filter(Boolean);
 
   return (
     <main className="min-h-screen bg-white pb-20 pt-28 sm:pt-32">
@@ -299,20 +334,6 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
             <div className="lg:pt-6">
               <h1 className="font-heading text-[38px] font-bold leading-[1.04] tracking-[-1.2px] text-primary-dark sm:text-[46px] lg:text-[52px]">{product.name}</h1>
               {intro && <p className="mt-6 text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">{intro}</p>}
-              {(product.skin_hair_type || product.suitable_for) && (
-                <div className="mt-6 flex flex-wrap gap-2.5">
-                  {product.skin_hair_type && (
-                    <span className="inline-flex items-center border-l-2 border-primary-light bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-primary-dark">
-                      {product.skin_hair_type}
-                    </span>
-                  )}
-                  {product.suitable_for && (
-                    <span className="inline-flex items-center border-l-2 border-neutral-300 bg-neutral-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.5px] text-neutral-500">
-                      {product.suitable_for}
-                    </span>
-                  )}
-                </div>
-              )}
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href={labels.enquireHref || '/contact'} className="inline-flex items-center gap-2 rounded-[3px] bg-primary-dark px-6 py-3.5 font-heading text-[11px] font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-primary-light">
                   {labels.enquireLabel}
@@ -323,7 +344,7 @@ export default function ProductDetail({ basePath = '/nutraceuticals', labels = {
 
             {/* Collapsible detail accordion — one section open at a time */}
             <div className="mt-10">
-              {sections.map((section, index) => (
+              {filteredSections.map((section, index) => (
                 <AccordionSection
                   key={section.title}
                   title={section.title}
