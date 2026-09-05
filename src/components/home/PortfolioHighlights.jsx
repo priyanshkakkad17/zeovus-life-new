@@ -1,169 +1,205 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 export default function PortfolioHighlights({ content = {} }) {
-  const products = content.items || [];
+  const items = (content.items || []).filter((item) => item && item.image);
 
-  if (content.enabled === false || products.length === 0) return null;
+  const [active, setActive] = useState(0);
+  const total = items.length;
+
+  const go = useCallback(
+    (dir) => setActive((prev) => (prev + dir + total) % total),
+    [total]
+  );
+  const jump = useCallback((i) => setActive(i), []);
+
+  useEffect(() => {
+    if (total === 0) return;
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft') go(-1);
+      if (e.key === 'ArrowRight') go(1);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [go, total]);
+
+  if (content.enabled === false || total === 0) return null;
+
+  const offsetOf = (i) => {
+    let diff = i - active;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  };
+
+  const activeItem = items[active];
 
   return (
-    <section className="bg-white py-20 sm:py-26 lg:py-30">
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    <section className="relative overflow-hidden bg-neutral-50 py-20 sm:py-24 lg:py-28">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
 
-        {/* Header — left-aligned for editorial feel */}
-        <div className="mb-16 flex flex-col gap-6 lg:mb-20 lg:flex-row lg:items-end lg:justify-between">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-[640px]"
-          >
-            {content.eyebrow && (
-              <p className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-primary-light">
-                {content.eyebrow}
-              </p>
-            )}
-            <h2 className="font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[48px]">
+        {/* Header */}
+        <div className="mb-12 text-center lg:mb-16">
+          {content.eyebrow && (
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[3px] text-primary-light"
+            >
+              {content.eyebrow}
+            </motion.p>
+          )}
+          {content.heading && (
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="mx-auto max-w-[820px] font-heading text-[32px] font-bold uppercase leading-[1.03] tracking-[-1px] text-primary-dark sm:text-[44px] lg:text-[52px]"
+            >
               {content.heading}
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-[380px]"
-          >
-            <p className="text-[15px] leading-relaxed text-neutral-600">{content.intro}</p>
-          </motion.div>
+            </motion.h2>
+          )}
+          {content.intro && (
+            <p className="mx-auto mt-5 max-w-[560px] text-[15px] leading-relaxed text-neutral-600">{content.intro}</p>
+          )}
         </div>
 
-        {/* Editorial grid — asymmetric sizing */}
-        <div className="grid grid-cols-1 gap-px overflow-hidden bg-neutral-200 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className={`group relative bg-white transition-colors duration-500 hover:bg-[#f5f9f6] ${
-                index === 0 ? 'sm:col-span-2 lg:col-span-1 lg:row-span-2' : ''
-              }`}
-            >
-              <div className={`flex h-full flex-col justify-between p-7 sm:p-8 lg:p-10 ${
-                index === 0 ? 'lg:py-14' : ''
-              }`}>
-                {/* Top: category + index */}
-                <div className="mb-8 flex items-center justify-between">
-                  <span className="font-heading text-[10px] font-semibold uppercase tracking-[2px] text-neutral-400">
-                    {item.category}
-                  </span>
-                  <span className="font-heading text-[11px] font-medium tabular-nums text-neutral-300">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                </div>
+        {/* 3D coverflow stage */}
+        <div
+          className="relative mx-auto h-[520px] select-none sm:h-[640px] lg:h-[720px]"
+          style={{ perspective: '1800px' }}
+        >
+          {items.map((item, i) => {
+            const offset = offsetOf(i);
+            const abs = Math.abs(offset);
+            const isActive = offset === 0;
 
-                {/* Middle: product info */}
-                <div className="flex-1">
-                  {item.image && (
-                    <div className={`mb-5 overflow-hidden rounded-[4px] bg-neutral-50 ${
-                      index === 0 ? 'h-[140px] lg:h-[180px]' : 'h-[100px]'
-                    }`}>
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-full w-full object-contain p-3"
-                      />
-                    </div>
-                  )}
-                  <h3 className={`mb-3 font-heading font-semibold text-primary-dark ${
-                    index === 0
-                      ? 'text-[22px] sm:text-[24px] lg:text-[28px]'
-                      : 'text-[18px] sm:text-[20px]'
-                  }`}>
-                    {item.name}
-                  </h3>
-                  <p className={`text-neutral-600 leading-relaxed ${
-                    index === 0 ? 'text-[15px] max-w-[320px]' : 'text-[14px]'
-                  }`}>
-                    {item.benefit}
-                  </p>
-                </div>
+            if (abs > 3) return null;
 
-                {/* Bottom: CTA */}
-                {content.itemCtaLabel && (
-                  <div className="mt-8 pt-6 border-t border-neutral-100">
-                    <Link
-                      href={item.href || content.itemCtaHref || '/contact'}
-                      className="group/btn flex items-center gap-2 font-heading text-[12px] font-medium uppercase tracking-[1px] text-primary-light transition-all duration-300"
-                    >
-                      <span>{content.itemCtaLabel}</span>
-                      <svg
-                        className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="M12 5l7 7-7 7" />
-                      </svg>
-                    </Link>
+            const Wrapper = item.href ? Link : 'div';
+            const wrapperProps = item.href && isActive ? { href: item.href } : {};
+
+            return (
+              <motion.div
+                key={i}
+                className="absolute left-1/2 top-1/2"
+                initial={false}
+                animate={{
+                  x: `calc(-50% + ${offset * 52}%)`,
+                  y: '-50%',
+                  scale: isActive ? 1 : 0.76 - abs * 0.06,
+                  rotateY: isActive ? 0 : offset * -20,
+                  opacity: abs > 2 ? 0 : 1,
+                  zIndex: 20 - abs,
+                }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                onClick={() => !isActive && jump(i)}
+                style={{
+                  transformStyle: 'preserve-3d',
+                  cursor: isActive ? 'default' : 'pointer',
+                  // Keep the active (front-facing) card on its own crisp raster layer.
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  willChange: 'transform',
+                }}
+              >
+                <Wrapper
+                  {...wrapperProps}
+                  className={`group block h-[460px] w-[350px] overflow-hidden rounded-[20px] bg-white shadow-[0_20px_50px_rgba(18,45,35,0.16)] transition-shadow duration-500 sm:h-[580px] sm:w-[440px] lg:h-[660px] lg:w-[510px] ${
+                    isActive ? 'shadow-[0_34px_80px_rgba(18,45,35,0.22)] ring-1 ring-neutral-200' : ''
+                  }`}
+                >
+                  <div className="relative flex h-full w-full items-center justify-center bg-white p-3">
+                    <img
+                      src={item.image}
+                      alt={item.caption || 'Portfolio highlight'}
+                      loading={abs <= 1 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      draggable={false}
+                      className="h-full w-full rounded-[12px] object-contain"
+                      style={{ imageRendering: 'auto', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
+                    />
+                    {/* Soft veil on inactive cards for focus */}
+                    {!isActive && <div className="pointer-events-none absolute inset-0 rounded-[20px] bg-neutral-50/40" />}
                   </div>
-                )}
+                </Wrapper>
+              </motion.div>
+            );
+          })}
 
-                {/* Hover accent line — left edge */}
-                <div className="absolute left-0 top-0 h-full w-[3px] origin-top scale-y-0 bg-primary-light transition-transform duration-500 ease-out-quint group-hover:scale-y-100" />
-              </div>
-            </motion.div>
+          {/* Arrows */}
+          <button
+            onClick={() => go(-1)}
+            aria-label="Previous"
+            className="absolute left-2 top-1/2 z-40 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-primary-dark shadow-md transition-all duration-300 hover:border-primary-light hover:text-primary-light sm:left-6 lg:left-10"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button
+            onClick={() => go(1)}
+            aria-label="Next"
+            className="absolute right-2 top-1/2 z-40 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-primary-dark shadow-md transition-all duration-300 hover:border-primary-light hover:text-primary-light sm:right-6 lg:right-10"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+
+        {/* Active caption */}
+        <div className="mt-8 h-7 text-center">
+          <AnimatePresence mode="wait">
+            {activeItem?.caption && (
+              <motion.p
+                key={active}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35 }}
+                className="font-heading text-[16px] font-semibold text-primary-dark"
+              >
+                {activeItem.caption}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Progress dots */}
+        <div className="mt-6 flex items-center justify-center gap-2.5">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => jump(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2 rounded-full transition-all duration-400 ${
+                active === i ? 'w-8 bg-primary-dark' : 'w-2 bg-neutral-300 hover:bg-neutral-400'
+              }`}
+            />
           ))}
         </div>
 
-        {/* Bottom navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 flex items-center justify-between border-t border-neutral-100 pt-8"
-        >
-          <p className="font-heading text-[12px] font-medium uppercase tracking-[1.5px] text-neutral-400">
-            {(content.countLabel || '').replace('{count}', String(products.length))}
-          </p>
-          <Link
-            href={content.footerCtaHref || '/nutraceuticals'}
-            className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:text-primary-light"
-          >
-            <span className="relative">
-              {content.footerCtaLabel}
-              <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
-            </span>
-            <svg
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        {/* Footer CTA */}
+        {content.footerCtaLabel && (
+          <div className="mt-12 flex justify-center">
+            <Link
+              href={content.footerCtaHref || '/nutraceuticals'}
+              className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-dark transition-colors duration-300 hover:text-primary-light"
             >
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
-          </Link>
-        </motion.div>
-
+              <span className="relative">
+                {content.footerCtaLabel}
+                <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
+              </span>
+              <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
