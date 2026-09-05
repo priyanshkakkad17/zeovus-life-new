@@ -30,7 +30,21 @@ export default function Footer({ site, hideCta = false }) {
   const nutraceuticalCategories = footer.nutraceuticalsLinks || [];
   const cosmeticsCategories = footer.cosmeticsLinks || [];
   const groupLinks = footer.groupLinks || [];
-  const legalLinks = footer.legalLinks || [];
+  const configuredLegalLinks = footer.legalLinks || [];
+  const legalLinks = configuredLegalLinks.length > 0
+    ? configuredLegalLinks.map((link) => {
+        if (link?.name === 'Privacy Policy' && (!link.href || link.href === '#')) {
+          return { ...link, href: '/privacy-policy' };
+        }
+        if (link?.name === 'Terms' && (!link.href || link.href === '#' || link.href === '/terms')) {
+          return { ...link, name: 'Cookie Policy', href: '/cookie-policy' };
+        }
+        return link;
+      })
+    : [
+        { name: 'Privacy Policy', href: '/privacy-policy' },
+        { name: 'Cookie Policy', href: '/cookie-policy' },
+      ];
 
   return (
     <footer className="relative overflow-hidden">

@@ -172,8 +172,8 @@ const site = {
             { id: 'href', label: 'Link', type: 'url', default: '#' },
           ],
           default: [
-            { name: 'Privacy Policy', href: '#' },
-            { name: 'Terms', href: '#' },
+            { name: 'Privacy Policy', href: '/privacy-policy' },
+            { name: 'Cookie Policy', href: '/cookie-policy' },
           ],
         },
       ],
