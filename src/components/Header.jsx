@@ -4,23 +4,54 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Search } from 'lucide-react';
 
 export default function Header({ site }) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const brand = site?.brand || {};
   const navItems = (site?.nav?.items || []).filter((item) => item?.name);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    if (!isSearchOpen || searchTerm.trim().length < 2) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const response = await fetch(`/api/products?search=${encodeURIComponent(searchTerm.trim())}&limit=8`, {
+          signal: controller.signal,
+        });
+        const data = await response.json();
+        if (!controller.signal.aborted) setSearchResults(data.products || []);
+      } catch (error) {
+        if (error.name !== 'AbortError') setSearchResults([]);
+      } finally {
+        if (!controller.signal.aborted) setIsSearching(false);
+      }
+    }, 250);
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isSearchOpen, searchTerm]);
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+    setSearchTerm('');
+    setSearchResults([]);
+  };
 
   const isActive = (href) => {
     if (!href) return false;
@@ -97,17 +128,114 @@ export default function Header({ site }) {
           })}
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Desktop product search */}
         <button
           type="button"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="ml-4 flex h-11 w-11 shrink-0 items-center justify-center text-primary-dark lg:hidden"
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={isMenuOpen}
+          onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
+          className={`hidden h-10 w-10 items-center justify-center rounded-md transition-colors lg:flex ${
+            isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]/70'
+          }`}
+          aria-label="Search products"
+          aria-expanded={isSearchOpen}
         >
-          {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          <Search size={18} strokeWidth={1.8} />
         </button>
+
+        {/* Mobile controls */}
+        <div className="ml-3 flex items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={() => { setIsSearchOpen(true); setIsMenuOpen(false); }}
+            className={`flex h-11 w-11 items-center justify-center rounded-md text-primary-dark transition-colors ${
+              isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'hover:bg-[#d4ede0]'
+            }`}
+            aria-label="Search products"
+            aria-expanded={isSearchOpen}
+          >
+            <Search size={21} strokeWidth={1.8} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex h-11 w-11 shrink-0 items-center justify-center text-primary-dark"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
       </div>
+
+      {/* Global product search panel */}
+      {isSearchOpen && (
+        <div className="border-t border-primary-light/15 bg-[#e8f5ed]/95 shadow-lg backdrop-blur-lg">
+          <div className="mx-auto max-w-[1500px] px-5 py-4 sm:px-8 lg:px-12">
+            <div className="relative flex items-center">
+              <Search className="pointer-events-none absolute left-0 h-5 w-5 text-primary-light" strokeWidth={1.8} />
+              <input
+                type="search"
+                autoFocus
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search Nutraceuticals and Cosmetics products..."
+                className="w-full border-b border-primary-dark/20 bg-transparent py-3 pl-8 pr-12 font-heading text-[15px] text-primary-dark outline-none placeholder:text-primary-dark/45 focus:border-primary-light"
+                aria-label="Search Nutraceuticals and Cosmetics products"
+              />
+              <button
+                type="button"
+                onClick={closeSearch}
+                className="absolute right-0 flex h-9 w-9 items-center justify-center rounded-md text-primary-dark/60 transition-colors hover:bg-[#d4ede0] hover:text-primary-dark"
+                aria-label="Close product search"
+              >
+                <X size={19} strokeWidth={1.8} />
+              </button>
+            </div>
+
+            <div className="mt-3">
+              {searchTerm.trim().length < 2 && (
+                <p className="py-2 text-[12px] text-primary-dark/55">Type at least 2 characters to search all products.</p>
+              )}
+              {isSearching && (
+                <p className="py-2 text-[12px] text-primary-dark/55">Searching products...</p>
+              )}
+              {!isSearching && searchTerm.trim().length >= 2 && searchResults.length === 0 && (
+                <p className="py-2 text-[12px] text-primary-dark/55">No products found for “{searchTerm.trim()}”.</p>
+              )}
+              {!isSearching && searchResults.length > 0 && (
+                <div className="grid max-h-[330px] gap-2 overflow-y-auto sm:grid-cols-2 lg:grid-cols-4">
+                  {searchResults.map((product) => {
+                    const productPath = product.division === 'cosmetics' ? '/cosmetics' : '/nutraceuticals';
+                    const divisionLabel = product.division === 'cosmetics' ? 'Cosmetics' : 'Nutraceuticals';
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`${productPath}/products/${product.id}`}
+                        onClick={closeSearch}
+                        className="group rounded-md border border-primary-dark/10 bg-white/75 px-4 py-3 transition-colors hover:border-primary-light/40 hover:bg-white"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={`font-heading text-[9px] font-bold uppercase tracking-[1.2px] ${product.division === 'cosmetics' ? 'text-pink-700' : 'text-primary-light'}`}>
+                            {divisionLabel}
+                          </span>
+                          <span className="text-[10px] text-neutral-400">{product.category_name}</span>
+                        </div>
+                        <p className="mt-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-primary-dark group-hover:text-primary-light">
+                          {product.name}
+                        </p>
+                        {(product.primary_benefit || product.description || product.concerns_addressed) && (
+                          <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-neutral-500">
+                            {product.primary_benefit || product.description || product.concerns_addressed}
+                          </p>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Navigation */}
       <div
