@@ -10,5 +10,13 @@ export async function generateMetadata() {
 
 export default async function OurCompanyPage() {
   const [content, site] = await Promise.all([getContentGroup('ourCompany'), getContentGroup('site')]);
-  return <OurCompanyView content={content} certifications={site.certifications?.items || []} />;
+  const companyContent = {
+    ...content,
+    hero: {
+      ...content.hero,
+      media: 'https://res.cloudinary.com/ac74hfe9/video/upload/v1788638276/ourcompany.mp4',
+    },
+  };
+
+  return <OurCompanyView content={companyContent} certifications={site.certifications?.items || []} />;
 }
