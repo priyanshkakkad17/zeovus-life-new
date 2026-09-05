@@ -159,7 +159,7 @@ const site = {
           id: 'copyright',
           label: 'Copyright line ({year} is replaced automatically)',
           type: 'text',
-          default: '© {year} Zeovus Life Sciences Pvt. Ltd. All rights reserved.',
+          default: '© {year} Zeovus Ventures Private Limited All rights reserved.',
         },
         {
           id: 'legalLinks',
