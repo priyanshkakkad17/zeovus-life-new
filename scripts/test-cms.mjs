@@ -154,7 +154,7 @@ async function main() {
     check('GET / responds 200', home.status === 200, `got ${home.status}`);
     check(
       'home renders default hero text from the schema',
-      home.text.includes('Inside &amp; Outside.') || home.text.includes('Inside & Outside.')
+      home.text.includes('Inside &amp; Outside') || home.text.includes('Inside & Outside')
     );
     check('header tagline renders', home.text.includes('Committed to better tomorrow'));
     // Scope this to the rendered <p>. The raw "{year}" template legitimately

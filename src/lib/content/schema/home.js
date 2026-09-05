@@ -21,7 +21,7 @@ const home = {
           default: 'https://res.cloudinary.com/ac74hfe9/video/upload/v1787638726/herosection.mp4',
         },
         { id: 'titleLine1', label: 'Title — line 1', type: 'text', default: 'Wellness,' },
-        { id: 'titleLine2', label: 'Title — line 2', type: 'text', default: 'Inside & Outside.' },
+        { id: 'titleLine2', label: 'Title — line 2', type: 'text', default: 'Inside & Outside' },
         { id: 'ctaPrimaryLabel', label: 'Primary button label', type: 'text', default: 'EXPLORE NUTRACEUTICALS' },
         { id: 'ctaPrimaryHref', label: 'Primary button link', type: 'url', default: '/nutraceuticals' },
         { id: 'ctaSecondaryLabel', label: 'Secondary button label', type: 'text', default: 'EXPLORE COSMETICS' },
