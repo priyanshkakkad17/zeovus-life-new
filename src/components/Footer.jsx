@@ -145,7 +145,7 @@ export default function Footer({ site, hideCta = false }) {
 
             {/* Brand Column */}
             <div className="lg:col-span-4">
-              <Link href="/" className="inline-block mb-5 bg-white rounded-[16px] px-3 py-1.5 shadow-sm">
+              <Link href="/" className="inline-block mb-5">
                 <Image
                   src={brand.logo || '/logo.png'}
                   alt={brand.logoAlt || 'Zeovus Life'}
