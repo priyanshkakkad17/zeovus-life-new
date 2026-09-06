@@ -105,6 +105,7 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
   const process = content.process || {};
   const qualityPromise = content.qualityPromise || {};
   const certsSection = content.certifications || {};
+  const qualitySealImage = qualityPromise.sealImage || '/zqa/seal5.png';
 
   const heroStats = hero.stats || [];
   const innovationFacts = innovation.facts || [];
@@ -580,11 +581,11 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
 
           {/* LEFT PANEL — Our Promise + checklist */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden bg-[#f5f9f6] px-6 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
+            className="relative overflow-hidden bg-[#f5f9f6] px-4 py-12 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
           >
             <div className="relative mx-auto max-w-[560px]">
               {qualityPromise.promiseBadge && (
@@ -614,7 +615,7 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                 {qualityChecks.map((check, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 12 }}
+                    initial={{ opacity: 1, y: 0 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
@@ -636,21 +637,21 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
 
           {/* RIGHT PANEL — Quality & Certifications */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="relative bg-primary-dark px-6 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
+            className="relative bg-primary-dark px-4 py-12 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
           >
             <div className="relative mx-auto max-w-[600px]">
-              <div className="flex items-start justify-between gap-6">
-                <div className="flex-1">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
                   {qualityPromise.qualityEyebrow && (
                     <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[2px] text-secondary">
                       {qualityPromise.qualityEyebrow}
                     </p>
                   )}
-                  <h2 className="font-heading text-[38px] font-bold uppercase leading-[0.98] tracking-[-1.5px] text-white sm:text-[52px]">
+                  <h2 className="break-words font-heading text-[32px] font-bold uppercase leading-[0.98] tracking-[-1.2px] text-white sm:text-[52px]">
                     {qualityPromise.qualityHeadingLead}
                     {qualityPromise.qualityHeadingAccent && (
                       <>
@@ -660,9 +661,9 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                     )}
                   </h2>
                 </div>
-                {qualityPromise.sealImage && (
+                {qualitySealImage && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
+                    initial={{ opacity: 1, scale: 1, rotate: -8, filter: 'blur(0px)' }}
                     whileInView={{
                       opacity: [0, 1, 1, 1],
                       scale: [2.5, 0.8, 1.07, 1],
@@ -676,7 +677,7 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                       times: [0, 0.55, 0.8, 1],
                       ease: [0.34, 1.56, 0.64, 1],
                     }}
-                    className="relative z-10 flex-shrink-0 lg:-left-8"
+                    className="relative z-10 flex-shrink-0 self-end sm:self-start"
                     style={{ transformOrigin: 'center' }}
                   >
                     {/* Ink bleed halo that appears on impact */}
@@ -690,10 +691,10 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                       style={{ background: 'radial-gradient(circle, rgba(127,175,127,0.35) 0%, transparent 70%)' }}
                     />
                     <img
-                      src={qualityPromise.sealImage}
+                      src={qualitySealImage}
                       alt={qualityPromise.sealAlt || ''}
                       draggable={false}
-                      className="relative h-[110px] w-[110px] select-none object-contain sm:h-[140px] sm:w-[140px]"
+                      className="relative h-24 w-24 select-none object-contain sm:h-[140px] sm:w-[140px]"
                     />
                   </motion.div>
                 )}
@@ -711,10 +712,8 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                   {qualityStats.map((stat, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, y: 14 }}
+                      initial={{ opacity: 1, y: 0 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                       className="rounded-xl border border-white/10 bg-white/[0.05] px-3 py-4 sm:px-4 sm:py-5"
                     >
                       <span className="editorial-number block font-heading text-[26px] font-bold leading-none text-secondary sm:text-[38px] lg:text-[44px]">

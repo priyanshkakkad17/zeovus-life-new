@@ -17,6 +17,21 @@ const SOCIAL_PATHS = {
     'M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.121 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.376-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
 };
 
+const GROUP_LOGOS = {
+  'Zeovus Group': {
+    src: '/images/zeovus_logo.png',
+    width: 2171,
+    height: 724,
+    className: 'h-8',
+  },
+  'Zeovus Food': {
+    src: '/images/zeovus_food_logo.png',
+    width: 1536,
+    height: 1024,
+    className: 'h-16',
+  },
+};
+
 export default function Footer({ site, hideCta = false }) {
   const currentYear = new Date().getFullYear();
 
@@ -263,21 +278,37 @@ export default function Footer({ site, hideCta = false }) {
                 {footer.groupHeading}
               </p>
               <ul className="space-y-3">
-                {groupLinks.map((link, i) => (
-                  <li key={`${link.name}-${i}`}>
-                    {link.href ? (
-                      <a
-                        href={link.href}
-                        {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                        className="text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
-                      >
-                        {link.name}
-                      </a>
-                    ) : (
-                      <span className="text-neutral-400 text-[14px] whitespace-nowrap">{link.name}</span>
-                    )}
-                  </li>
-                ))}
+                {groupLinks.map((link, i) => {
+                  const logo = GROUP_LOGOS[link.name];
+                  const content = logo ? (
+                    <Image
+                      src={logo.src}
+                      alt={link.name}
+                      width={logo.width}
+                      height={logo.height}
+                      className={`${logo.className} w-auto max-w-[140px] object-contain`}
+                    />
+                  ) : link.name;
+
+                  return (
+                    <li key={`${link.name}-${i}`}>
+                      {link.href ? (
+                        <a
+                          href={link.href}
+                          {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          aria-label={link.name}
+                          className="inline-flex items-center text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
+                        >
+                          {content}
+                        </a>
+                      ) : (
+                        <span className="inline-flex items-center text-neutral-400 text-[14px] whitespace-nowrap" aria-label={logo ? link.name : undefined}>
+                          {content}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
