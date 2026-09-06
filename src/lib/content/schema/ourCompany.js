@@ -298,10 +298,10 @@ const ourCompany = {
         { id: 'enabled', label: 'Show this section', type: 'boolean', default: true },
         { id: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'SUSTAINABILITY' },
         {
-          id: 'heading',
-          label: 'Heading',
-          type: 'textarea',
-          default: 'Committed to the preservation and protection of the global environment.',
+          id: 'image',
+          label: 'Sustainability image',
+          type: 'image',
+          default: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1788717983/WhatsApp_Image_2026-09-06_at_23.34.38.jpg',
         },
         {
           id: 'paragraphs',

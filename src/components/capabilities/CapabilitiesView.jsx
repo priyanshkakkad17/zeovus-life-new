@@ -310,6 +310,24 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                   )}
                 </motion.div>
 
+                {/* Innovation feature image */}
+                <motion.figure
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative mt-10 aspect-[16/8] overflow-hidden rounded-[24px] border border-primary-dark/[0.06] bg-[#f5f9f6] shadow-[0_16px_45px_rgba(18,45,35,0.08)] sm:aspect-[16/7]"
+                >
+                  <img
+                    src="https://res.cloudinary.com/ac74hfe9/image/upload/v1788717754/WhatsApp_Image_2026-09-06_at_23.24.54.jpg"
+                    alt="Zeovus Life formulation science and product innovation"
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary-dark/20 via-transparent to-transparent" aria-hidden="true" />
+                </motion.figure>
+
                 {/* Three supporting points — vertical editorial blocks */}
                 {/* Technical content — two lightweight panels over a subtle science backdrop */}
                 <div className="relative mt-14">

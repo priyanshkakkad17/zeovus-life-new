@@ -15,6 +15,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
   const certsSection = content.certifications || {};
   const sustainability = content.sustainability || {};
   const socialImpact = content.socialImpact || {};
+  const sustainabilityImage = sustainability.image || 'https://res.cloudinary.com/ac74hfe9/image/upload/v1788717983/WhatsApp_Image_2026-09-06_at_23.34.38.jpg';
 
   const heroVideo = hero.media || '';
   const heroTitle = hero.title || '';
@@ -669,26 +670,43 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
       {sustainability.enabled !== false && (
       <section className="section-py bg-primary-dark text-white">
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <p className="text-primary-light font-medium mb-4">{sustainability.eyebrow}</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">{sustainability.heading}</h2>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="max-w-3xl mx-auto space-y-4 text-neutral-300 mt-6"
-          >
-            {(sustainability.paragraphs || []).map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </motion.div>
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:gap-16">
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="max-w-3xl text-left"
+              >
+                <p className="mb-4 font-medium text-primary-light">{sustainability.eyebrow}</p>
+                <h2 className="mb-6 font-display text-3xl font-bold md:text-4xl">{sustainability.heading}</h2>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="mt-6 max-w-3xl space-y-4 text-left text-neutral-300"
+              >
+                {(sustainability.paragraphs || []).map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </motion.div>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl"
+            >
+              <img
+                src={sustainabilityImage}
+                alt="Sustainability at Zeovus Life"
+                className="aspect-[4/3] h-full w-full object-cover"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
       )}
