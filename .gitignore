@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 Zeovus_Life_14_Category_Revised_Catalogue.xlsx
 QUES_Product_Catalog_Descriptions.xlsx
+
+# Local database backups (contain sensitive data)
+backups/

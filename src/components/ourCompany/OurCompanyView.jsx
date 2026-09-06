@@ -39,16 +39,6 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/80 via-primary/70 to-primary-light/60"></div>
         
-        {/* Hex grid overlay similar to capabilities page */}
-        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
-          <defs>
-            <pattern id="company-hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-              <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#company-hex-grid)" />
-        </svg>
-
         <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12 pt-32 pb-16 sm:pt-36 lg:pt-40 lg:pb-24">
           <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
             <motion.div

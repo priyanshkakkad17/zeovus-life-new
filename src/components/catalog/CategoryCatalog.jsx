@@ -596,15 +596,6 @@ export default function CategoryCatalog({
             <div className="absolute inset-0 bg-primary-dark/60" aria-hidden="true" />
           </>
         )}
-        <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-[0.04]" aria-hidden="true">
-          <defs>
-            <pattern id={`${division}-hex-grid`} x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-              <polygon points="30,2 56,16 56,36 30,50 4,36 4,16" fill="none" stroke="#ffffff" strokeWidth="0.8" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill={`url(#${division}-hex-grid)`} />
-        </svg>
-
         <div className="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
             <motion.div
