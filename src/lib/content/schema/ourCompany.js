@@ -323,11 +323,8 @@ const ourCompany = {
       fields: [
         { id: 'enabled', label: 'Show this section', type: 'boolean', default: true },
         { id: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'SOCIAL IMPACT' },
-        { id: 'heading', label: 'Heading', type: 'text', default: 'Beyond Manufacturing' },
-        {
-          id: 'intro',
-          label: 'Intro paragraph',
-          type: 'textarea',
+        { id: 'image', label: 'Social Impact image', type: 'image', default: 'https://res.cloudinary.com/ac74hfe9/image/upload/v1788718859/IMG_9082.png' },
+        { id: 'intro', label: 'Intro paragraph', type: 'textarea',
           default:
             'We commit 1% of our profits to programs supporting child nutrition, education, and stronger communities because the places we source from and the world we manufacture for have always been the same world.',
         },

@@ -16,6 +16,7 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
   const sustainability = content.sustainability || {};
   const socialImpact = content.socialImpact || {};
   const sustainabilityImage = sustainability.image || 'https://res.cloudinary.com/ac74hfe9/image/upload/v1788717983/WhatsApp_Image_2026-09-06_at_23.34.38.jpg';
+  const socialImpactImage = socialImpact.image || 'https://res.cloudinary.com/ac74hfe9/image/upload/v1788718859/IMG_9082.png';
 
   const heroVideo = hero.media || '';
   const heroTitle = hero.title || '';
@@ -715,37 +716,55 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
       {socialImpact.enabled !== false && (
       <section className="section-py bg-[#f5f9f6]">
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <p className="text-primary-light font-medium mb-4">{socialImpact.eyebrow}</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-primary-dark">
-              {socialImpact.heading}
-            </h2>
-            <p className="text-neutral-600 mb-10">{socialImpact.intro}</p>
-          </motion.div>
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:gap-16">
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="max-w-3xl text-left"
+              >
+                <p className="mb-4 font-medium text-primary-light">{socialImpact.eyebrow}</p>
+                <h2 className="mb-6 font-display text-3xl font-bold text-primary-dark md:text-4xl">
+                  {socialImpact.heading}
+                </h2>
+                <p className="mb-10 text-neutral-600">{socialImpact.intro}</p>
+              </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="max-w-2xl mx-auto"
-          >
-            <div className="grid grid-cols-3 gap-3 sm:gap-6">
-              {(socialImpact.pillars || []).map((pillar, index) => (
-                <div key={index} className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/15 sm:h-14 sm:w-14">
-                    <ContentIcon name={pillar.icon} className="h-5 w-5 text-secondary sm:h-6 sm:w-6" />
-                  </div>
-                  <p className="text-[12px] font-medium text-primary-dark sm:text-sm">{pillar.label}</p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 }}
+                className="max-w-2xl"
+              >
+                <div className="grid grid-cols-3 gap-3 sm:gap-6">
+                  {(socialImpact.pillars || []).map((pillar, index) => (
+                    <div key={index} className="text-center">
+                      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/15 sm:h-14 sm:w-14">
+                        <ContentIcon name={pillar.icon} className="h-5 w-5 text-secondary sm:h-6 sm:w-6" />
+                      </div>
+                      <p className="text-[12px] font-medium text-primary-dark sm:text-sm">{pillar.label}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </motion.div>
             </div>
-          </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative overflow-hidden rounded-3xl border border-primary-dark/10 bg-white shadow-xl"
+            >
+              <img
+                src={socialImpactImage}
+                alt="Social impact at Zeovus Life"
+                className="aspect-[4/3] h-full w-full object-cover"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
       )}
