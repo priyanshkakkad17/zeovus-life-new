@@ -107,8 +107,8 @@ export const cosmetics = catalogSchema({
     titleLead: 'Formulated',
     titleAccent: 'to transform.',
     stats: [{ value: '4', label: 'Categories' }],
-    sealImage: '/zqa/seal5.png',
-    sealLabel: 'Quality Standard',
+    sealImage: '',
+    sealLabel: '',
   },
   labels: {
     searchPlaceholder: 'Search products, actives or benefits…',
