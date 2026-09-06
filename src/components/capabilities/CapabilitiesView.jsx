@@ -643,20 +643,25 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
             transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="relative bg-primary-dark px-4 py-12 sm:px-10 sm:py-20 lg:px-14 lg:py-24"
           >
-            <div className="relative mx-auto max-w-[600px]">
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 flex-1">
+            <div className="relative mx-auto max-w-[680px]">
+              <div className="flex flex-col gap-6 lg:block">
+                <div className="min-w-0">
                   {qualityPromise.qualityEyebrow && (
                     <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[2px] text-secondary">
                       {qualityPromise.qualityEyebrow}
                     </p>
                   )}
-                  <h2 className="break-words font-heading text-[32px] font-bold uppercase leading-[0.98] tracking-[-1.2px] text-white sm:text-[52px]">
+                  <h2 className="font-heading text-[28px] font-bold uppercase leading-[0.98] tracking-[-1.2px] text-white sm:text-[44px] lg:text-[42px]">
                     {qualityPromise.qualityHeadingLead}
                     {qualityPromise.qualityHeadingAccent && (
                       <>
                         <br />
-                        <span className="text-secondary">{qualityPromise.qualityHeadingAccent}</span>
+                        <span
+                          className="inline-block w-max whitespace-nowrap text-secondary"
+                          style={{ display: 'inline-block', width: 'max-content', maxWidth: 'none', whiteSpace: 'nowrap', wordBreak: 'keep-all', overflowWrap: 'normal' }}
+                        >
+                          {qualityPromise.qualityHeadingAccent}
+                        </span>
                       </>
                     )}
                   </h2>
@@ -677,7 +682,7 @@ export default function CapabilitiesView({ content = {}, certifications = [], he
                       times: [0, 0.55, 0.8, 1],
                       ease: [0.34, 1.56, 0.64, 1],
                     }}
-                    className="relative z-10 flex-shrink-0 self-end sm:self-start"
+                    className="relative z-10 flex-shrink-0 self-end lg:absolute lg:right-0 lg:top-0"
                     style={{ transformOrigin: 'center' }}
                   >
                     {/* Ink bleed halo that appears on impact */}
