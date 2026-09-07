@@ -118,10 +118,8 @@ function DotNav({ categories, activeIndex, onDotClick }) {
 function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {} }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const cardRefs = useRef([]);
   const sectionRef = useRef(null);
-  const previousActiveIndex = useRef(0);
 
   const scrollToCard = useCallback((index) => {
     const card = cardRefs.current[index];
@@ -153,13 +151,6 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
   }, [categories.length]);
 
   useEffect(() => {
-    if (previousActiveIndex.current !== activeIndex) {
-      setIsTransitioning(true);
-      previousActiveIndex.current = activeIndex;
-    }
-  }, [activeIndex]);
-
-  useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
     const observer = new IntersectionObserver(
@@ -173,52 +164,31 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
   return (
     <section ref={sectionRef} className="relative">
       {isVisible && <DotNav categories={categories} activeIndex={activeIndex} onDotClick={scrollToCard} />}
-      <AnimatePresence>
-        {isVisible && isTransitioning && (
-          <motion.div
-            key={activeIndex}
-            initial={{ x: '-115%', opacity: 0 }}
-            animate={{ x: '125%', opacity: [0, 1, 0] }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
-            onAnimationComplete={() => setIsTransitioning(false)}
-            className="pointer-events-none fixed inset-y-0 left-0 z-[80] w-[65vw]"
-            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(156, 205, 98, 0.26) 36%, rgba(255, 255, 255, 0.18) 52%, rgba(21, 168, 89, 0.16) 68%, transparent 100%)' }}
-          />
-        )}
-      </AnimatePresence>
       {categories.map((cat, i) => (
-        <motion.div
+        <div
           key={cat.slug || i}
           ref={(el) => { cardRefs.current[i] = el; }}
-          initial={false}
-          animate={{ opacity: activeIndex === i ? 1 : 0.82 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="relative h-screen w-full snap-start snap-always overflow-hidden"
         >
           {cat.image ? (
             <motion.img
               src={cat.image}
               alt={cat.name}
-              initial={{ scale: 1.14, opacity: 0.72 }}
-              animate={{ scale: activeIndex === i ? 1.05 : 1.14, opacity: activeIndex === i ? 1 : 0.72 }}
+              initial={false}
+              animate={{ scale: activeIndex === i ? 1.05 : 1.1 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 h-full w-full object-cover"
               loading={i < 2 ? 'eager' : 'lazy'}
             />
           ) : (
-            <motion.div
-              initial={{ opacity: 0.72 }}
-              animate={{ opacity: activeIndex === i ? 1 : 0.72 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
+            <div
               className="absolute inset-0"
               style={{ background: `linear-gradient(160deg, ${cat.color_from}, ${cat.color_to})` }}
             />
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
 
           <motion.div
             initial={false}
@@ -278,7 +248,7 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
               </svg>
             </div>
           )}
-        </motion.div>
+        </div>
       ))}
     </section>
   );
