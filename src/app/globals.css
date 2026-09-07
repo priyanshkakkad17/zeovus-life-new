@@ -308,3 +308,67 @@ html {
 .link-reveal:hover::after {
   width: 100%;
 }
+
+/* ------------------------------------------------------------------ */
+/* Google Translate widget — hide the default UI. We drive translation */
+/* through our own LanguageSwitcher via the `googtrans` cookie.        */
+/* ------------------------------------------------------------------ */
+
+/* Hide the injected widget container itself. */
+#google_translate_element {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  white-space: nowrap !important;
+}
+
+/* Hide the top banner Google adds and keep the page flush to the top. */
+.goog-te-banner-frame,
+.skiptranslate iframe.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-OiiCO {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+/* The <html>/<body> get pushed down by the banner via an inline `top` style;
+   force it back to the top and neutralise the added margin. */
+html,
+body {
+  top: 0 !important;
+  position: static !important;
+  margin-top: 0 !important;
+}
+
+/* NOTE: do not hide `.skiptranslate` wholesale — Google uses that class on the
+   machinery that performs the translation. We only hide the banner frame. */
+
+/* Hide the balloon/tooltip Google shows on hover over translated text. */
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Suppress the floating gadget UI text/icon. Note: we do NOT use display:none
+   on `.goog-te-combo` because Google needs that <select> present and operable
+   to actually apply the translation — the whole widget is hidden off-screen
+   via the #google_translate_element rule above instead. */
+.goog-te-gadget {
+  font-size: 0 !important;
+}
+.goog-te-gadget-icon {
+  display: none !important;
+}
+.goog-logo-link,
+.goog-te-gadget span {
+  display: none !important;
+}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown, Search } from 'lucide-react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Header({ site }) {
   const pathname = usePathname();
@@ -14,9 +15,25 @@ export default function Header({ site }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [isEnglish, setIsEnglish] = useState(true);
 
   const brand = site?.brand || {};
   const navItems = (site?.nav?.items || []).filter((item) => item?.name);
+
+  // The tagline only fits beside the English nav. Translated languages produce
+  // longer nav labels, so we hide the tagline whenever the page isn't English.
+  useEffect(() => {
+    const readLang = () => {
+      const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
+      if (!match) return setIsEnglish(true);
+      const parts = decodeURIComponent(match[1]).split('/');
+      const target = parts[parts.length - 1];
+      return setIsEnglish(!target || target === 'en');
+    };
+    readLang();
+    const interval = setInterval(readLang, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!isSearchOpen || searchTerm.trim().length < 2) {
@@ -90,13 +107,17 @@ export default function Header({ site }) {
 
           {brand.showTagline !== false && brand.tagline && (
             <>
-              {/* Divider — shown from tablet up. Hidden only in the lg range (1024–1279px)
-                  where the nav is tightest; back at xl (1280px, the target laptop). */}
-              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden xl:block xl:ml-4 xl:h-9 2xl:ml-5" />
+              {/* Divider — pairs with the tagline: visible on tablet, hidden through
+                  the lg–xl desktop range, and back at 2xl alongside the tagline. */}
+              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
 
-              {/* Tagline — compact and width-capped at xl (wraps to 2 lines so it never
-                  pushes into the nav), full single-line size only at 2xl. */}
-              <p className="ml-4 hidden max-w-[180px] font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden xl:ml-4 xl:block xl:max-w-[150px] xl:text-[11px] 2xl:ml-5 2xl:max-w-none 2xl:whitespace-nowrap 2xl:text-[15px]">
+              {/* Tagline shows on tablet (sm–md), hides through the tighter desktop
+                  range (lg–xl), and returns as a single non-wrapping line only at
+                  2xl (1536px+) where there's room for it beside the nav. */}
+              <p
+                translate="no"
+                className="notranslate ml-4 hidden max-w-[180px] truncate whitespace-nowrap font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px]"
+              >
                 {brand.tagline}
               </p>
             </>
@@ -105,7 +126,11 @@ export default function Header({ site }) {
 
         {/* Desktop Navigation — compact through the lg/xl range (1024–1535px, includes the
             1280px target laptop), roomier only at 2xl (1536px+). */}
-        <nav className="hidden items-center gap-1 lg:flex xl:gap-1.5 2xl:gap-2">
+        <nav
+          className={`hidden shrink-0 items-center lg:flex ${
+            isEnglish ? 'gap-1 xl:gap-1.5 2xl:gap-2' : 'gap-0.5 2xl:gap-1'
+          }`}
+        >
           {navItems.map((item) => {
             const active = isActive(item.href);
 
@@ -113,7 +138,11 @@ export default function Header({ site }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`whitespace-nowrap rounded-md px-3 py-2.5 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-all duration-300 2xl:px-5 2xl:py-3 2xl:text-[13px] 2xl:tracking-[1px] ${
+                className={`whitespace-nowrap rounded-md font-heading font-semibold uppercase transition-all duration-300 ${
+                  isEnglish
+                    ? 'px-3 py-2.5 text-[12px] tracking-[0.5px] 2xl:px-5 2xl:py-3 2xl:text-[13px] 2xl:tracking-[1px]'
+                    : 'px-2 py-2 text-[10.5px] tracking-[0.2px] 2xl:px-3 2xl:text-[11.5px]'
+                } ${
                   active
                     ? 'bg-primary-dark text-[#e8f5ed]'
                     : 'text-primary-dark hover:bg-[#d4ede0]/70'
@@ -128,18 +157,21 @@ export default function Header({ site }) {
           })}
         </nav>
 
-        {/* Desktop product search */}
-        <button
-          type="button"
-          onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
-          className={`hidden h-10 w-10 items-center justify-center rounded-md transition-colors lg:flex ${
-            isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]/70'
-          }`}
-          aria-label="Search products"
-          aria-expanded={isSearchOpen}
-        >
-          <Search size={18} strokeWidth={1.8} />
-        </button>
+        {/* Desktop product search + language switcher */}
+        <div className="hidden items-center gap-1.5 lg:flex">
+          <button
+            type="button"
+            onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
+            className={`flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
+              isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]/70'
+            }`}
+            aria-label="Search products"
+            aria-expanded={isSearchOpen}
+          >
+            <Search size={18} strokeWidth={1.8} />
+          </button>
+          <LanguageSwitcher variant="desktop" />
+        </div>
 
         {/* Mobile controls */}
         <div className="ml-3 flex items-center gap-1 lg:hidden">
@@ -262,6 +294,7 @@ export default function Header({ site }) {
               </Link>
             );
           })}
+          <LanguageSwitcher variant="mobile" />
         </div>
       </div>
     </header>

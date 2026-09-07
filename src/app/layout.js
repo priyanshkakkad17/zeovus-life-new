@@ -1,5 +1,6 @@
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import GoogleTranslate from '@/components/GoogleTranslate';
 import { getContentGroup } from '@/lib/content/store';
 
 // Content is read from the database on every request so admin edits appear
@@ -38,6 +39,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className="font-sans text-neutral-900 bg-white">
         <LayoutWrapper site={site}>{children}</LayoutWrapper>
+        <GoogleTranslate />
       </body>
     </html>
   );
