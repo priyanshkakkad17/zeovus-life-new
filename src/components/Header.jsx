@@ -79,7 +79,7 @@ export default function Header({ site }) {
             className="flex shrink-0 items-center"
           >
             <Image
-              src={brand.logo || '/logo.png'}
+              src="/navbar_logo.png"
               alt={brand.logoAlt || 'Zeovus Life'}
               width={160}
               height={60}
