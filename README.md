@@ -9,7 +9,7 @@ Based on `Zeovus-life-Website/design.md`:
 - **Primary Dark**: `#1F4015` (Deep Green) 
 - **Primary**: `#1A475C` (Teal) 
 - **Primary Light**: `#15A859` (Bright Green)
-- **Secondary**: `#9CCD62` (Lime)
+- **Secondary**: `#9CCD62` (Lime) 
 - **Secondary Dark**: `#B4BD62` 
 - **Accent**: `#FFD374` (Gold)
 - **Accent Light**: `#FFEF98`
