@@ -145,21 +145,21 @@ export default function AdminProducts() {
 
     if (division === 'cosmetics') {
       headers = [
-        'Product Name', 'Category', 'Description', 'Skin / Hair Type',
+        'Product Name', 'Category', 'Subcategory', 'Description', 'Skin / Hair Type',
         'Suitable For', 'Concerns Addressed', 'What Makes It Potent', 'Available Sizes', 'Status'
       ];
       example = [
-        'Example Serum', sampleCat, 'A short description', 'Oily, Acne-Prone',
+        'Example Serum', sampleCat, '', 'A short description', 'Oily, Acne-Prone',
         '13+ years of age', 'Acne, Blemishes', 'Bullet 1\nBullet 2', '15ml, 30ml', 'Draft'
       ];
     } else {
       headers = [
-        'Product Name', 'Category', 'Description', 'Key Actives',
+        'Product Name', 'Category', 'Subcategory', 'Description', 'Key Actives',
         'Primary Benefit', 'Secondary Benefits', 'Manufacturing Formats', 'Feasible Delivery Technology',
         'Recommended Dosage', 'Mechanism of Action', 'Status'
       ];
       example = [
-        'Example Product', sampleCat, 'A short description', 'Vitamin C, Zinc',
+        'Example Product', sampleCat, '', 'A short description', 'Vitamin C, Zinc',
         'Immune support', 'Antioxidant', 'Tablet | Capsule', '',
         'Adults: 1 daily with food', '', 'Draft'
       ];
@@ -457,6 +457,7 @@ export default function AdminProducts() {
               <div className="rounded-lg bg-blue-50/60 border border-blue-100 px-3 py-2.5 text-xs text-blue-700 space-y-1">
                 <p>Upload an <strong>Excel (.xlsx)</strong> or <strong>CSV</strong> file. The first row must be column headers.</p>
                 <p>Products are matched to categories by <strong>name</strong>. Only new products are added — existing ones (same name in the same category) are skipped automatically.</p>
+                <p>If a <strong>Subcategory</strong> name doesn&apos;t exist under its category, it will be created automatically.</p>
               </div>
 
               <button type="button" onClick={downloadTemplate} className="inline-flex items-center gap-2 text-sm text-primary-light hover:text-primary-dark font-medium">
@@ -489,6 +490,12 @@ export default function AdminProducts() {
                     <span className="text-green-700">Imported (new)</span>
                     <span className="font-semibold text-green-700">{importResult.imported}</span>
                   </div>
+                  {importResult.subcategoriesCreated > 0 && (
+                    <div className="flex items-center justify-between px-3 py-2 bg-indigo-50/50">
+                      <span className="text-indigo-700">New subcategories created</span>
+                      <span className="font-semibold text-indigo-700">{importResult.subcategoriesCreated}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between px-3 py-2 bg-amber-50/50">
                     <span className="text-amber-700">Skipped (duplicates)</span>
                     <span className="font-semibold text-amber-700">{importResult.skipped}</span>

@@ -157,6 +157,7 @@ export async function POST(request) {
 
     const connection = await pool.getConnection();
     let imported = 0;
+    let subcategoriesCreated = 0;
     const skipped = []; // duplicates
     const errors = [];
     const seenInFile = new Set();
@@ -183,13 +184,32 @@ export async function POST(request) {
             continue;
           }
 
-          // Resolve subcategory (optional).
+          // Resolve subcategory (optional). If a name is given that doesn't
+          // exist under this category, create it on the fly (same logic as the
+          // "Add Subcategory" admin action).
           let subcategoryId = null;
           if (product.subcategory_id && subById.has(Number(product.subcategory_id))) {
             subcategoryId = subById.get(Number(product.subcategory_id)).id;
           } else if (product.subcategory) {
-            const sub = subByKey.get(`${category.id}::${String(product.subcategory).trim().toLowerCase()}`);
-            if (sub) subcategoryId = sub.id;
+            const subName = String(product.subcategory).trim();
+            const lookupKey = `${category.id}::${subName.toLowerCase()}`;
+            const existingSub = subByKey.get(lookupKey);
+            if (existingSub) {
+              subcategoryId = existingSub.id;
+            } else {
+              const subSlug = slugify(subName);
+              const [subResult] = await connection.query(
+                'INSERT INTO subcategories (category_id, name, slug) VALUES (?, ?, ?)',
+                [category.id, subName, subSlug]
+              );
+              subcategoryId = subResult.insertId;
+              subcategoriesCreated++;
+              // Cache so repeat references in the same file reuse it.
+              const created = { id: subcategoryId, category_id: category.id, name: subName, slug: subSlug };
+              subByKey.set(lookupKey, created);
+              subByKey.set(`${category.id}::${subSlug.toLowerCase()}`, created);
+              subById.set(Number(subcategoryId), created);
+            }
           }
 
           const slug = slugify(product.name);
@@ -245,6 +265,7 @@ export async function POST(request) {
       success: true,
       total: products.length,
       imported,
+      subcategoriesCreated,
       skipped: skipped.length,
       skippedRows: skipped,
       errors: errors.length > 0 ? errors : undefined,
