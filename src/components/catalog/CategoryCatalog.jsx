@@ -86,45 +86,10 @@ function StampSeal({ src, label }) {
   );
 }
 
-// ─── Side dot navigation ─────────────────────────────────────────────────────
-function DotNav({ categories, activeIndex, onDotClick }) {
-  return (
-    <div className="fixed right-5 top-1/2 z-[90] -translate-y-1/2 flex flex-col gap-2.5 sm:right-7">
-      {categories.map((cat, i) => (
-        <button
-          key={cat.slug || i}
-          onClick={() => onDotClick(i)}
-          aria-label={cat.name}
-          title={cat.name}
-          className="group relative flex items-center justify-end"
-        >
-          <span className="pointer-events-none absolute right-7 whitespace-nowrap rounded bg-black/80 px-3 py-1.5 font-heading text-[10px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 backdrop-blur-sm">
-            {cat.name}
-          </span>
-          <span
-            className={`block rounded-full transition-all duration-400 ${
-              activeIndex === i
-                ? 'h-3 w-3 bg-white shadow-lg shadow-white/30'
-                : 'h-2 w-2 bg-white/30 group-hover:bg-white/60'
-            }`}
-          />
-        </button>
-      ))}
-    </div>
-  );
-}
-
 // ─── Editorial scroll — snap cards in page-level scroll container ─────────────
 function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {} }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const cardRefs = useRef([]);
-  const sectionRef = useRef(null);
-
-  const scrollToCard = useCallback((index) => {
-    const card = cardRefs.current[index];
-    if (card) card.scrollIntoView({ behavior: 'smooth' });
-  }, []);
 
   useEffect(() => {
     // Track the visibility ratio of every panel and make the most-visible one
@@ -150,20 +115,8 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
     return () => observer.disconnect();
   }, [categories.length]);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { root: scrollContainerRef.current, threshold: 0.15 }
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative">
-      {isVisible && <DotNav categories={categories} activeIndex={activeIndex} onDotClick={scrollToCard} />}
+    <section className="relative">
       {categories.map((cat, i) => (
         <div
           key={cat.slug || i}
@@ -189,6 +142,14 @@ function EditorialScroll({ categories, scrollContainerRef, basePath, labels = {}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
+
+          {/* Soft light veil on the non-active panel */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: activeIndex === i ? 0 : 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute inset-0 bg-white/20"
+          />
 
           <motion.div
             initial={false}
