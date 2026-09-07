@@ -402,7 +402,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                 </div>
               </motion.div>
 
-              {division !== 'nutraceuticals' && selectedCat.subcategories?.length > 0 && (
+              {division !== 'nutraceuticals' && selectedCat.subcategories?.some((sub) => sub.product_count > 0) && (
                 <div className="mb-8 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => setActiveSubcategory(null)}
@@ -412,7 +412,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                   >
                     All <span className="ml-1 opacity-70">({selectedCat.product_count})</span>
                   </button>
-                  {selectedCat.subcategories.map((sub) => (
+                  {selectedCat.subcategories.filter((sub) => sub.product_count > 0).map((sub) => (
                     <button
                       key={sub.id}
                       onClick={() => setActiveSubcategory(sub.id.toString())}
