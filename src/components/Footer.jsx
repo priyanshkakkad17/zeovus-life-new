@@ -286,7 +286,7 @@ export default function Footer({ site, hideCta = false }) {
                       alt={link.name}
                       width={logo.width}
                       height={logo.height}
-                      className={`${logo.className} w-auto max-w-[140px] object-contain brightness-0 invert`}
+                      className={`${logo.className} w-auto max-w-[140px] object-contain`}
                     />
                   ) : link.name;
 
