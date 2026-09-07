@@ -15,6 +15,11 @@ export default function AdminProducts() {
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [showImport, setShowImport] = useState(false);
+  const [importFile, setImportFile] = useState(null);
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState(null);
+  const [importError, setImportError] = useState('');
   const [formData, setFormData] = useState({
     category_id: '', subcategory_id: '', name: '', image_url: '',
     key_actives: '', primary_benefit: '', secondary_benefits: '',
@@ -104,6 +109,75 @@ export default function AdminProducts() {
     fetchProducts();
   }
 
+  function openImport() {
+    setImportFile(null);
+    setImportResult(null);
+    setImportError('');
+    setShowImport(true);
+  }
+
+  async function handleImport(e) {
+    e.preventDefault();
+    if (!importFile) { setImportError('Please choose a file first.'); return; }
+    setImporting(true);
+    setImportError('');
+    setImportResult(null);
+    try {
+      const fd = new FormData();
+      fd.append('file', importFile);
+      const res = await fetch('/api/products/bulk', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setImportError(data.error || 'Import failed.');
+      } else {
+        setImportResult(data);
+        fetchProducts();
+      }
+    } catch (err) {
+      setImportError(err.message || 'Import failed.');
+    }
+    setImporting(false);
+  }
+
+  function downloadTemplate() {
+    const sampleCat = divisionCategories[0]?.name || 'Category Name';
+    let headers, example;
+
+    if (division === 'cosmetics') {
+      headers = [
+        'Product Name', 'Category', 'Description', 'Skin / Hair Type',
+        'Suitable For', 'Concerns Addressed', 'What Makes It Potent', 'Available Sizes', 'Status'
+      ];
+      example = [
+        'Example Serum', sampleCat, 'A short description', 'Oily, Acne-Prone',
+        '13+ years of age', 'Acne, Blemishes', 'Bullet 1\nBullet 2', '15ml, 30ml', 'Draft'
+      ];
+    } else {
+      headers = [
+        'Product Name', 'Category', 'Description', 'Key Actives',
+        'Primary Benefit', 'Secondary Benefits', 'Manufacturing Formats', 'Feasible Delivery Technology',
+        'Recommended Dosage', 'Mechanism of Action', 'Status'
+      ];
+      example = [
+        'Example Product', sampleCat, 'A short description', 'Vitamin C, Zinc',
+        'Immune support', 'Antioxidant', 'Tablet | Capsule', '',
+        'Adults: 1 daily with food', '', 'Draft'
+      ];
+    }
+    const escape = (v) => {
+      const s = String(v ?? '');
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const csv = [headers.join(','), example.map(escape).join(',')].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${division}-products-import-template.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   // Categories scoped to the active division (default fallback = nutraceuticals).
   const divisionCategories = categories.filter(c => (c.division || 'nutraceuticals') === division);
 
@@ -126,10 +200,16 @@ export default function AdminProducts() {
           <h1 className="text-2xl font-display font-bold text-neutral-900">Products</h1>
           <p className="text-neutral-500 text-sm mt-1">{pagination.total} {division} products</p>
         </div>
-        <button onClick={() => { resetForm(); setFormData(f => ({ ...f, category_id: '', subcategory_id: '' })); setShowForm(true); }} className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-          Add Product
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={openImport} className="inline-flex items-center gap-2 px-4 py-2.5 border border-neutral-200 bg-white text-neutral-700 rounded-lg font-medium text-sm hover:bg-neutral-50 transition-all">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Bulk Import
+          </button>
+          <button onClick={() => { resetForm(); setFormData(f => ({ ...f, category_id: '', subcategory_id: '' })); setShowForm(true); }} className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            Add Product
+          </button>
+        </div>
       </div>
 
       {/* Division switcher */}
@@ -358,6 +438,87 @@ export default function AdminProducts() {
               <div className="flex gap-3 pt-2">
                 <button type="submit" className="px-6 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">{editingProduct ? 'Update' : 'Create'}</button>
                 <button type="button" onClick={resetForm} className="px-6 py-2.5 border border-neutral-200 text-neutral-600 rounded-lg text-sm hover:bg-neutral-50">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Import Modal */}
+      {showImport && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50" onClick={() => !importing && setShowImport(false)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-neutral-100 px-6 py-4 rounded-t-2xl flex items-center justify-between z-10">
+              <h2 className="font-display font-semibold text-lg">Bulk Import Products</h2>
+              <button onClick={() => !importing && setShowImport(false)} className="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-400"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+            </div>
+            <form onSubmit={handleImport} className="p-6 space-y-4">
+              <div className="rounded-lg bg-blue-50/60 border border-blue-100 px-3 py-2.5 text-xs text-blue-700 space-y-1">
+                <p>Upload an <strong>Excel (.xlsx)</strong> or <strong>CSV</strong> file. The first row must be column headers.</p>
+                <p>Products are matched to categories by <strong>name</strong>. Only new products are added — existing ones (same name in the same category) are skipped automatically.</p>
+              </div>
+
+              <button type="button" onClick={downloadTemplate} className="inline-flex items-center gap-2 text-sm text-primary-light hover:text-primary-dark font-medium">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Download CSV template
+              </button>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Select file</label>
+                <input
+                  type="file"
+                  accept=".xlsx,.xls,.csv"
+                  onChange={(e) => { setImportFile(e.target.files?.[0] || null); setImportResult(null); setImportError(''); }}
+                  className="w-full text-sm text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-light/10 file:text-primary-dark hover:file:bg-primary-light/20"
+                />
+                {importFile && <p className="text-xs text-neutral-500 mt-1">{importFile.name}</p>}
+              </div>
+
+              {importError && (
+                <div className="rounded-lg bg-red-50 border border-red-100 px-3 py-2.5 text-sm text-red-700">{importError}</div>
+              )}
+
+              {importResult && (
+                <div className="rounded-lg border border-neutral-200 divide-y divide-neutral-100 text-sm overflow-hidden">
+                  <div className="flex items-center justify-between px-3 py-2">
+                    <span className="text-neutral-600">Rows in file</span>
+                    <span className="font-medium">{importResult.total}</span>
+                  </div>
+                  <div className="flex items-center justify-between px-3 py-2 bg-green-50/50">
+                    <span className="text-green-700">Imported (new)</span>
+                    <span className="font-semibold text-green-700">{importResult.imported}</span>
+                  </div>
+                  <div className="flex items-center justify-between px-3 py-2 bg-amber-50/50">
+                    <span className="text-amber-700">Skipped (duplicates)</span>
+                    <span className="font-semibold text-amber-700">{importResult.skipped}</span>
+                  </div>
+                  {importResult.errors && (
+                    <div className="px-3 py-2 bg-red-50/50">
+                      <p className="text-red-700 font-medium mb-1">{importResult.errors.length} error(s)</p>
+                      <ul className="text-xs text-red-600 space-y-0.5 max-h-32 overflow-y-auto">
+                        {importResult.errors.map((er, i) => (
+                          <li key={i}>Row {er.row}: {er.name} — {er.error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-1">
+                {!importResult ? (
+                  <button type="submit" disabled={importing || !importFile} className="px-6 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all disabled:opacity-50">
+                    {importing ? 'Importing…' : 'Import'}
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => { setImportResult(null); setImportFile(null); }} className="px-6 py-2.5 bg-primary-light text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-all">
+                    Import another
+                  </button>
+                )}
+                <button type="button" onClick={() => setShowImport(false)} disabled={importing} className="px-6 py-2.5 border border-neutral-200 text-neutral-600 rounded-lg text-sm hover:bg-neutral-50 disabled:opacity-50">
+                  {importResult ? 'Done' : 'Cancel'}
+                </button>
               </div>
             </form>
           </div>
