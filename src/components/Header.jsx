@@ -128,7 +128,7 @@ export default function Header({ site }) {
             1280px target laptop), roomier only at 2xl (1536px+). */}
         <nav
           className={`hidden shrink-0 items-center lg:flex ${
-            isEnglish ? 'gap-1 xl:gap-1.5 2xl:gap-2' : 'gap-0.5 2xl:gap-1'
+            isEnglish ? 'gap-0.5 xl:gap-1 2xl:gap-1.5' : 'gap-0.5 2xl:gap-1'
           }`}
         >
           {navItems.map((item) => {
@@ -140,7 +140,7 @@ export default function Header({ site }) {
                 href={item.href}
                 className={`whitespace-nowrap rounded-md font-heading font-semibold uppercase transition-all duration-300 ${
                   isEnglish
-                    ? 'px-3 py-2.5 text-[12px] tracking-[0.5px] 2xl:px-5 2xl:py-3 2xl:text-[13px] 2xl:tracking-[1px]'
+                    ? 'px-2.5 py-2 text-[11px] tracking-[0.3px] 2xl:px-3.5 2xl:text-[12px] 2xl:tracking-[0.6px]'
                     : 'px-2 py-2 text-[10.5px] tracking-[0.2px] 2xl:px-3 2xl:text-[11.5px]'
                 } ${
                   active
