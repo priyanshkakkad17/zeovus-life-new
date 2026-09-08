@@ -74,8 +74,7 @@ const site = {
           id: 'brandBlurb',
           label: 'Brand blurb',
           type: 'textarea',
-          default:
-            'Science-backed formulations and world-class manufacturing for brands that demand excellence.',
+          default: '',
         },
         { id: 'companyHeading', label: '"Company" column heading', type: 'text', default: 'Company' },
         {

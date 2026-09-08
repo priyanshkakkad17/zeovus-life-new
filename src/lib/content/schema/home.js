@@ -80,7 +80,7 @@ const home = {
       label: 'Portfolio Highlights',
       fields: [
         { id: 'enabled', label: 'Show this section', type: 'boolean', default: true },
-        { id: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'What we formulate' },
+        { id: 'eyebrow', label: 'Eyebrow', type: 'text', default: '' },
         { id: 'heading', label: 'Heading', type: 'text', default: 'Wellness that does more' },
         {
           id: 'intro',

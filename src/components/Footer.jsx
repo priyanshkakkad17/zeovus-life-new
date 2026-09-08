@@ -19,16 +19,16 @@ const SOCIAL_PATHS = {
 
 const GROUP_LOGOS = {
   'Zeovus Group': {
-    src: '/images/zeovus_logo.png',
-    width: 2171,
+    src: '/Zeovus_new_logo-removebg-preview.png',
+    width: 2172,
     height: 724,
-    className: 'h-8',
+    className: 'h-8 brightness-0 invert',
   },
   'Zeovus Food': {
-    src: '/images/zeovus_food_logo.png',
+    src: '/footer_food_logo.webp',
     width: 1536,
     height: 1024,
-    className: 'h-16',
+    className: 'h-16 brightness-0 invert',
   },
 };
 
@@ -40,6 +40,20 @@ export default function Footer({ site, hideCta = false }) {
   const brand = site?.brand || {};
   const contact = site?.contactInfo || {};
   const socials = (site?.social?.items || []).filter((item) => item?.href && item.href !== '#');
+
+  // Address block (reference-style): countries line + company + address + phone + email.
+  // Uses real site data with sensible fallbacks from the company profile.
+  const officeCountries = footer.officeCountries || ['India', 'USA', 'Qatar'];
+  const companyName = footer.companyName || brand.legalName || 'Zeovus Ventures Private Limited';
+  const addressLines = (contact.address
+    ? contact.address.split('\n')
+    : [
+        'Unit No. 419, 4th Floor, Master Mind V',
+        'Royal Palms Estate, Aarey Milk Colony',
+        'Goregaon (East), Mumbai - 400065',
+        'India',
+      ]
+  ).map((line) => line.trim()).filter(Boolean);
 
   const quickLinks = footer.companyLinks || [];
   const nutraceuticalCategories = footer.nutraceuticalsLinks || [];
@@ -68,8 +82,8 @@ export default function Footer({ site, hideCta = false }) {
       {cta.enabled !== false && !hideCta && (
       <div className="relative bg-[#f5f9f6]">
         {/* Wave separator at bottom */}
-        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V100H0V40Z" fill="#162E10"/>
+        <svg className="absolute -bottom-px left-0 w-full" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V101H0V40Z" fill="#162E10"/>
         </svg>
 
         <div className="max-w-[1100px] mx-auto px-6 md:px-10 pt-20 pb-32 md:pt-28 md:pb-36">
@@ -162,16 +176,63 @@ export default function Footer({ site, hideCta = false }) {
             <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-5">
                 <Image
-                  src={brand.logo || '/logo.png'}
+                  src="/navbar_logo.png"
                   alt={brand.logoAlt || 'Zeovus Life'}
                   width={160}
                   height={60}
-                  className="h-auto w-[100px] object-contain"
+                  className="h-auto w-[140px] object-contain brightness-0 invert"
                 />
               </Link>
-              <p className="text-neutral-400 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
-                {footer.brandBlurb}
-              </p>
+              {footer.brandBlurb && (
+                <p className="text-neutral-400 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
+                  {footer.brandBlurb}
+                </p>
+              )}
+
+              {/* ── Address block (India | USA | Qatar) ── */}
+              <div className="mb-7 max-w-[280px]">
+                {officeCountries.length > 0 && (
+                  <p className="mb-4 flex flex-wrap items-center gap-x-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-primary-light/80">
+                    {officeCountries.map((country, i) => (
+                      <span key={`${country}-${i}`} className="flex items-center gap-2">
+                        {i > 0 && <span className="text-white/25">|</span>}
+                        {country}
+                      </span>
+                    ))}
+                  </p>
+                )}
+
+                <p className="mb-2 text-[15px] font-semibold text-white">{companyName}</p>
+
+                {addressLines.length > 0 && (
+                  <address className="not-italic text-[14px] leading-[1.9] text-neutral-400">
+                    {addressLines.map((line, i) => (
+                      <span key={`addr-${i}`} className="block">{line}</span>
+                    ))}
+                  </address>
+                )}
+
+                {(contact.phone || contact.email) && (
+                  <div className="mt-4 space-y-1.5">
+                    {contact.phone && (
+                      <a
+                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                        className="block text-[14px] font-semibold text-primary-light transition-colors hover:text-white"
+                      >
+                        {contact.phone}
+                      </a>
+                    )}
+                    {contact.email && (
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="block text-[14px] font-semibold text-primary-light transition-colors hover:text-white"
+                      >
+                        {contact.email}
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
 
               {/* Social Icons - pill shape */}
               {socials.length > 0 && (
@@ -246,30 +307,6 @@ export default function Footer({ site, hideCta = false }) {
                   </li>
                 ))}
               </ul>
-
-              {/* Contact */}
-              {(contact.email || contact.phone || contact.address) && (
-                <div className="mt-8 pt-6 border-t border-white/[0.06]">
-                  <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-4">
-                    {footer.contactHeading}
-                  </p>
-                  <div className="space-y-2">
-                    {contact.email && (
-                      <a href={`mailto:${contact.email}`} className="block text-neutral-400 text-[14px] hover:text-white transition-colors">
-                        {contact.email}
-                      </a>
-                    )}
-                    {contact.phone && (
-                      <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="block text-neutral-400 text-[14px] hover:text-white transition-colors">
-                        {contact.phone}
-                      </a>
-                    )}
-                    {contact.address && (
-                      <p className="whitespace-pre-line text-neutral-400 text-[14px] leading-[1.7]">{contact.address}</p>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Group */}
@@ -319,7 +356,6 @@ export default function Footer({ site, hideCta = false }) {
           {/* Wave top */}
           <svg className="w-full h-6" viewBox="0 0 1440 24" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 24H1440V0C1440 0 1320 12 1080 12C840 12 720 0 480 0C240 0 0 12 0 12V24Z" fill="#0A1A06"/>
-            <path d="M0 24V12C0 12 240 0 480 0C720 0 840 12 1080 12C1320 12 1440 0 1440 0" stroke="white" strokeWidth="0.3" opacity="0.1" fill="none"/>
           </svg>
           
           <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-5">

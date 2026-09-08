@@ -113,8 +113,8 @@ export default function CapabilitiesSection({ content = {} }) {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="w-full lg:w-[60%]"
           >
-            {/* Video container with refined frame */}
-            <div className="group relative overflow-hidden rounded-[18px] ring-1 ring-white/[0.06]" style={{ aspectRatio: '4/3' }}>
+            {/* Video container with refined frame — hugs the video's natural ratio (no letterbox) */}
+            <div className="group relative overflow-hidden rounded-[18px] bg-[#0A260E] ring-1 ring-white/[0.06]">
               {/* Video or image */}
               {isVideo ? (
                 <video
@@ -124,13 +124,13 @@ export default function CapabilitiesSection({ content = {} }) {
                   loop
                   muted
                   playsInline
-                  className="h-full w-full object-cover transition-[transform] duration-[800ms] ease-out-quint group-hover:scale-[1.02]"
+                  className="block h-auto w-full object-contain transition-[transform] duration-[800ms] ease-out-quint group-hover:scale-[1.02]"
                 />
               ) : media ? (
                 <img
                   src={media}
                   alt=""
-                  className="h-full w-full object-cover transition-[transform] duration-[800ms] ease-out-quint group-hover:scale-[1.02]"
+                  className="block h-auto w-full object-contain transition-[transform] duration-[800ms] ease-out-quint group-hover:scale-[1.02]"
                 />
               ) : null}
 

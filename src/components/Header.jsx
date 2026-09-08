@@ -88,7 +88,7 @@ export default function Header({ site }) {
       {/* Main Navbar */}
       <div className="mx-auto flex h-[72px] max-w-[1500px] items-center justify-between px-5 sm:px-8 sm:h-[80px] lg:h-[90px] lg:px-12">
         {/* Left: Logo + Tagline */}
-        <div className="flex min-w-0 items-center">
+        <div className="flex min-w-0 flex-1 items-center lg:flex-none">
           {/* Logo */}
           <Link
             href="/"
@@ -98,25 +98,25 @@ export default function Header({ site }) {
             <Image
               src="/navbar_logo.png"
               alt={brand.logoAlt || 'Zeovus Life'}
-              width={160}
-              height={60}
+              width={220}
+              height={90}
               priority
-              className="h-[46px] w-auto max-w-[120px] object-contain sm:h-[56px] sm:max-w-[140px] lg:h-[65px] lg:max-w-[160px]"
+              className="h-[54px] w-auto max-w-[150px] object-contain sm:h-[68px] sm:max-w-[180px] lg:h-[80px] lg:max-w-[210px]"
             />
           </Link>
 
           {brand.showTagline !== false && brand.tagline && (
             <>
-              {/* Divider — pairs with the tagline: visible on tablet, hidden through
-                  the lg–xl desktop range, and back at 2xl alongside the tagline. */}
-              <div className="ml-4 hidden h-8 w-px shrink-0 bg-primary-dark/25 sm:block lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
+              {/* Divider — pairs with the tagline. Visible on all phones, hidden
+                  through the lg–xl desktop range, and back at 2xl alongside the tagline. */}
+              <div className="ml-2.5 block h-7 w-px shrink-0 bg-primary-dark/25 sm:ml-4 sm:h-8 lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
 
-              {/* Tagline shows on tablet (sm–md), hides through the tighter desktop
-                  range (lg–xl), and returns as a single non-wrapping line only at
-                  2xl (1536px+) where there's room for it beside the nav. */}
+              {/* Tagline: visible on all phones. Wraps to two lines on mobile so it
+                  never overflows, single line on tablet, hidden through lg–xl, and
+                  returns beside the nav at 2xl. */}
               <p
                 translate="no"
-                className="notranslate ml-4 hidden max-w-[180px] truncate whitespace-nowrap font-heading text-[11px] font-bold leading-[1.25] tracking-[0.04em] text-primary-dark/75 sm:block md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px]"
+                className="notranslate ml-2.5 block min-w-0 flex-1 font-heading text-[10px] font-bold leading-[1.2] tracking-[0.04em] text-primary-dark/75 sm:ml-4 sm:max-w-[180px] sm:flex-none sm:truncate sm:whitespace-nowrap sm:text-[11px] md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px]"
               >
                 {brand.tagline}
               </p>
@@ -174,7 +174,7 @@ export default function Header({ site }) {
         </div>
 
         {/* Mobile controls */}
-        <div className="ml-3 flex items-center gap-1 lg:hidden">
+        <div className="ml-3 flex shrink-0 items-center gap-1 lg:hidden">
           <button
             type="button"
             onClick={() => { setIsSearchOpen(true); setIsMenuOpen(false); }}
