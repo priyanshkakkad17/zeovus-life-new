@@ -376,7 +376,7 @@ const capabilities = {
           label: 'Meta description',
           type: 'textarea',
           default:
-            'Formulation R&D, delivery science and certified manufacturing across every major nutraceutical and cosmetic format.',
+            'Formulation R&D, ingredient selection, certified manufacturing and delivery support for nutraceutical and cosmetic products. Start your Zeovus Life brief today.',
         },
       ],
     },

@@ -160,6 +160,8 @@ const ourCompany = {
           default: 'A NOTE FROM THE PEOPLE BEHIND ZEOVUS LIFE',
         },
         { id: 'heading', label: 'Heading', type: 'text', default: 'Built to do it right.' },
+        { id: 'attributionName', label: 'Quote attribution name', type: 'text', default: 'Zeovus Life Founding Team' },
+        { id: 'attributionTitle', label: 'Quote attribution title', type: 'text', default: 'Founders & formulation leadership' },
         {
           id: 'openingParagraph',
           label: 'Opening paragraph',
@@ -366,7 +368,7 @@ const ourCompany = {
           label: 'Meta description',
           type: 'textarea',
           default:
-            'Decades of formulation and manufacturing expertise, one quality standard. Meet the company behind Zeovus Life.',
+            'Meet Zeovus Life, a trusted nutraceutical and cosmetic manufacturing partner with formulation judgment, global quality systems and long-term experience. Learn more today.',
         },
       ],
     },

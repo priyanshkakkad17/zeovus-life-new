@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ContentIcon } from '@/lib/content/icons';
+import CaseStudies from '@/components/ourCompany/CaseStudies';
 
 export default function OurCompanyView({ content = {}, certifications = [] }) {
   const hero = content.hero || {};
@@ -415,6 +416,12 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                       </span>
                     </p>
                   )}
+                  {(founders.attributionName || founders.attributionTitle) && (
+                    <footer className="mt-8 border-t border-neutral-200 pt-5">
+                      <p className="font-heading text-[15px] font-bold text-primary-dark">{founders.attributionName}</p>
+                      <p className="mt-1 text-[13px] uppercase tracking-[1.5px] text-neutral-500">{founders.attributionTitle}</p>
+                    </footer>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -422,6 +429,8 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
         </div>
       </section>
       )}
+
+      <CaseStudies />
 
       {/* Who We Build With - Horizontal Row Style */}
       {audience.enabled !== false && (

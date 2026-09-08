@@ -78,7 +78,10 @@ export default function Footer({ site, hideCta = false }) {
       ]
   ).map((line) => line.trim()).filter(Boolean);
 
-  const quickLinks = footer.companyLinks || [];
+  const configuredQuickLinks = footer.companyLinks || [];
+  const quickLinks = configuredQuickLinks.some((link) => link.href === '/faq')
+    ? configuredQuickLinks
+    : [...configuredQuickLinks, { name: 'FAQ', href: '/faq' }];
   const nutraceuticalCategories = footer.nutraceuticalsLinks || [];
   const cosmeticsCategories = footer.cosmeticsLinks || [];
   const groupLinks = footer.groupLinks || [];

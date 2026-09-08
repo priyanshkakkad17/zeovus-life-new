@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { buildPageMetadata } from '@/lib/seoMetadata';
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: 'Cookie Policy | Zeovus Life',
-  description: 'Learn how Zeovus Life uses cookies and similar technologies and how to manage your preferences.',
-};
+  description: 'Learn how Zeovus Life uses cookies and similar technologies on our manufacturing website, plus how to manage preferences and consent choices.',
+  path: '/cookie-policy',
+});
 
 const sections = [
   {

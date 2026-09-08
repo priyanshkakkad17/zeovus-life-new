@@ -70,7 +70,7 @@ function catalogSchema({ id, label, preview, hero, labels }) {
         id: 'seo',
         label: 'SEO',
         fields: [
-          { id: 'title', label: 'Page title', type: 'text', default: `${label} — Zeovus Life` },
+          { id: 'title', label: 'Page title', type: 'text', default: `${label.replace(/ Page$/, '')} | Zeovus Life` },
           { id: 'description', label: 'Meta description', type: 'textarea', default: labels.seoDescription },
         ],
       },
@@ -95,7 +95,7 @@ export const nutraceuticals = catalogSchema({
   labels: {
     searchPlaceholder: 'Search formulations, actives or benefits…',
     seoDescription:
-      'Explore the Zeovus Life nutraceutical portfolio across healthy ageing, immunity, gut health and more.',
+      'Explore Zeovus Life nutraceutical manufacturing across healthy ageing, multivitamins, gut health and more. Request a tailored product catalog today.',
   },
 });
 
@@ -112,6 +112,6 @@ export const cosmetics = catalogSchema({
   },
   labels: {
     searchPlaceholder: 'Search products, actives or benefits…',
-    seoDescription: 'Explore the Zeovus Life cosmetics portfolio across skincare, haircare, sun care and body care.',
+    seoDescription: 'Explore Zeovus Life cosmetic manufacturing across skincare, haircare, sun care and body care. Request a tailored product catalog today.',
   },
 });
