@@ -208,9 +208,8 @@ const site = {
             { id: 'href', label: 'Profile URL', type: 'url', default: '#' },
           ],
           default: [
-            { platform: 'twitter', href: '#' },
-            { platform: 'instagram', href: '#' },
-            { platform: 'linkedin', href: '#' },
+            { platform: 'instagram', href: 'https://www.instagram.com/zeovusworld?igsh=MWs2ZWszemxmOTV3aw==' },
+            { platform: 'linkedin', href: 'https://www.linkedin.com/company/zeovus-ventures-pvt-ltd/' },
           ],
         },
       ],
