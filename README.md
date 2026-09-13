@@ -5,7 +5,7 @@ A modern, responsive website for Zeovus Life - a B2B nutraceutical and cosmetic 
 ## 🎨 Design System
  
 ### Colors
-Based on `Zeovus-life-Website/design.md`:
+Based on `Zeovus-life-Website/design.md`: 
 - **Primary Dark**: `#1F4015` (Deep Green) 
 - **Primary**: `#1A475C` (Teal) 
 - **Primary Light**: `#15A859` (Bright Green)
