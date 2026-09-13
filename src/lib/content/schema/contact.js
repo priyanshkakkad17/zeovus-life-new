@@ -150,7 +150,7 @@ const contact = {
           id: 'description',
           label: 'Meta description',
           type: 'textarea',
-          default: 'Start an enquiry with Zeovus Life. Co-development, private label, bulk supply and distribution.',
+          default: 'Start a product brief with Zeovus Life for private-label supplements, cosmetics, co-development, bulk supply and export manufacturing support. Contact us today.',
         },
       ],
     },

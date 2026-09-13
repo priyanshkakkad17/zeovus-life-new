@@ -17,6 +17,25 @@ const SOCIAL_PATHS = {
     'M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.121 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.376-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
 };
 
+const FALLBACK_SOCIALS = [
+  {
+    platform: 'instagram',
+    href: 'https://www.instagram.com/zeovusworld?igsh=MWs2ZWszemxmOTV3aw==',
+  },
+  {
+    platform: 'linkedin',
+    href: 'https://www.linkedin.com/company/zeovus-ventures-pvt-ltd/',
+  },
+];
+
+const SOCIAL_LABELS = {
+  twitter: 'Twitter',
+  instagram: 'Instagram',
+  linkedin: 'LinkedIn',
+  facebook: 'Facebook',
+  youtube: 'YouTube',
+};
+
 const GROUP_LOGOS = {
   'Zeovus Group': {
     src: '/Zeovus_new_logo-removebg-preview.png',
@@ -39,7 +58,11 @@ export default function Footer({ site, hideCta = false }) {
   const footer = site?.footer || {};
   const brand = site?.brand || {};
   const contact = site?.contactInfo || {};
-  const socials = (site?.social?.items || []).filter((item) => item?.href && item.href !== '#');
+  const configuredSocials = site?.social?.items || [];
+  const hasConfiguredSocials = configuredSocials.some((item) => item?.href && item.href !== '#');
+  const socials = (hasConfiguredSocials ? configuredSocials : FALLBACK_SOCIALS).filter(
+    (item) => item?.href && item.href !== '#'
+  );
 
   // Address block (reference-style): countries line + company + address + phone + email.
   // Uses real site data with sensible fallbacks from the company profile.
@@ -55,7 +78,10 @@ export default function Footer({ site, hideCta = false }) {
       ]
   ).map((line) => line.trim()).filter(Boolean);
 
-  const quickLinks = footer.companyLinks || [];
+  const configuredQuickLinks = footer.companyLinks || [];
+  const quickLinks = configuredQuickLinks.some((link) => link.href === '/faq')
+    ? configuredQuickLinks
+    : [...configuredQuickLinks, { name: 'FAQ', href: '/faq' }];
   const nutraceuticalCategories = footer.nutraceuticalsLinks || [];
   const cosmeticsCategories = footer.cosmeticsLinks || [];
   const groupLinks = footer.groupLinks || [];
@@ -244,7 +270,7 @@ export default function Footer({ site, hideCta = false }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300"
-                      aria-label={item.platform}
+                      aria-label={SOCIAL_LABELS[item.platform] || item.platform}
                     >
                       <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
                         <path d={SOCIAL_PATHS[item.platform] || SOCIAL_PATHS.linkedin} />

@@ -1,11 +1,17 @@
 import OurCompanyView from '@/components/ourCompany/OurCompanyView';
 import { getContentGroup } from '@/lib/content/store';
+import { buildPageMetadata } from '@/lib/seoMetadata';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
-  const content = await getContentGroup('ourCompany');
-  return { title: content.seo?.title, description: content.seo?.description };
+  const [content, site] = await Promise.all([getContentGroup('ourCompany'), getContentGroup('site')]);
+  return buildPageMetadata({
+    title: content.seo?.title || 'Our Company | Zeovus Life',
+    description: content.seo?.description || 'Meet Zeovus Life, a global nutraceutical and cosmetic manufacturing partner built on formulation judgment, quality and long-term trust. Learn more today.',
+    path: '/our-company',
+    siteUrl: site.seo?.siteUrl,
+  });
 }
 
 export default async function OurCompanyPage() {

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ContentIcon } from '@/lib/content/icons';
+import CaseStudies from '@/components/ourCompany/CaseStudies';
 
 export default function OurCompanyView({ content = {}, certifications = [] }) {
   const hero = content.hero || {};
@@ -26,20 +27,20 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+      <section className="relative flex min-h-screen items-end overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-20">
         {/* Video Background */}
         {heroVideo && (/\.(mp4|webm|mov)(\?|$)/i.test(heroVideo) ? (
-          <video key={heroVideo} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
+          <video key={heroVideo} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover object-bottom">
             <source src={heroVideo} type="video/mp4" />
           </video>
         ) : (
-          <img src={heroVideo} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <img src={heroVideo} alt="" className="absolute inset-0 h-full w-full object-cover object-bottom" />
         ))}
         
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/80 via-primary/70 to-primary-light/60"></div>
         
-        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12 pt-32 pb-16 sm:pt-36 lg:pt-40 lg:pb-24">
+        <div className="relative mx-auto w-full max-w-[1800px]">
           <div className="grid gap-14 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-20">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -415,6 +416,12 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
                       </span>
                     </p>
                   )}
+                  {(founders.attributionName || founders.attributionTitle) && (
+                    <footer className="mt-8 border-t border-neutral-200 pt-5">
+                      <p className="font-heading text-[15px] font-bold text-primary-dark">{founders.attributionName}</p>
+                      <p className="mt-1 text-[13px] uppercase tracking-[1.5px] text-neutral-500">{founders.attributionTitle}</p>
+                    </footer>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -422,6 +429,8 @@ export default function OurCompanyView({ content = {}, certifications = [] }) {
         </div>
       </section>
       )}
+
+      <CaseStudies />
 
       {/* Who We Build With - Horizontal Row Style */}
       {audience.enabled !== false && (

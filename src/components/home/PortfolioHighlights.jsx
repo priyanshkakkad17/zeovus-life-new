@@ -118,7 +118,7 @@ export default function PortfolioHighlights({ content = {} }) {
                   <div className="relative flex h-full w-full items-center justify-center bg-white p-3">
                     <img
                       src={item.image}
-                      alt={item.caption || 'Portfolio highlight'}
+                      alt={item.alt || item.caption || 'Zeovus Life product portfolio'}
                       loading={abs <= 1 ? 'eager' : 'lazy'}
                       decoding="async"
                       draggable={false}

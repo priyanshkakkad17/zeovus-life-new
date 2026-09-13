@@ -9,15 +9,27 @@ export default function LayoutWrapper({ children, site }) {
   const isAdmin = pathname.startsWith('/admin');
   const hideFooterCta = pathname === '/contact';
 
+  const publicSite = isAdmin
+    ? site
+    : {
+        ...site,
+        nav: {
+          ...(site?.nav || {}),
+          items: (site?.nav?.items || []).some((item) => item?.href === '/faq')
+            ? site.nav.items
+            : [...(site?.nav?.items || []), { name: 'FAQ', href: '/faq', hasDropdown: false }],
+        },
+      };
+
   if (isAdmin) {
     return <>{children}</>;
   }
 
   return (
     <>
-      <Header site={site} />
+      <Header site={publicSite} />
       <main>{children}</main>
-      <Footer site={site} hideCta={hideFooterCta} />
+      <Footer site={publicSite} hideCta={hideFooterCta} />
     </>
   );
 }
