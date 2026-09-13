@@ -324,13 +324,18 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
   }, [division]);
 
   useEffect(() => {
-    if (selectedCategory) {
-      setLoading(true);
+    if (!selectedCategory) return;
+    setLoading(true);
+    const timer = setTimeout(() => {
       const params = new URLSearchParams({ category: selectedCategory, limit: '200' });
       if (activeSubcategory) params.set('subcategory', activeSubcategory);
       if (searchTerm) params.set('search', searchTerm);
-      fetch(`/api/products?${params}`).then((r) => r.json()).then((data) => { setProducts(data.products || []); setLoading(false); }).catch(() => setLoading(false));
-    }
+      fetch(`/api/products?${params}`)
+        .then((r) => r.json())
+        .then((data) => { setProducts(data.products || []); setLoading(false); })
+        .catch(() => setLoading(false));
+    }, searchTerm ? 300 : 0);
+    return () => clearTimeout(timer);
   }, [selectedCategory, activeSubcategory, searchTerm]);
 
   const selectedCat = categories.find((c) => c.slug === selectedCategory);
@@ -434,7 +439,7 @@ function CatalogContent({ scrollContainerRef, division, basePath, staticCategori
                   type="text"
                   placeholder={labels.searchPlaceholder}
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => { setSearchTerm(e.target.value); if (activeSubcategory) setActiveSubcategory(null); }}
                   className="w-full border-b border-neutral-200 bg-transparent py-2.5 pl-7 text-[14px] text-primary-dark placeholder:text-neutral-400 focus:border-primary-light focus:outline-none"
                 />
               </div>

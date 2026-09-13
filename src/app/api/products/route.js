@@ -43,7 +43,15 @@ export async function GET(request) {
       params.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
     }
 
-    sql += ' ORDER BY p.sort_order ASC, p.name ASC LIMIT ? OFFSET ?';
+    // When searching, sort name matches first, then other field matches
+    if (search) {
+      const nameTerm = `%${search}%`;
+      sql += ' ORDER BY (p.name LIKE ?) DESC, p.name ASC';
+      params.push(nameTerm);
+    } else {
+      sql += ' ORDER BY p.sort_order ASC, p.name ASC';
+    }
+    sql += ' LIMIT ? OFFSET ?';
     params.push(limit, offset);
 
     const products = await query(sql, params);
