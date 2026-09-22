@@ -1,200 +1,213 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { motion, useInView, animate } from 'framer-motion';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
-export default function CertificationsSection({ content = {}, certifications = [] }) {
+const CERT_LOGOS = [
+  { src: "/logo/gmp.png", alt: "GMP certification" },
+  { src: "/logo/ISO-Logo.png", alt: "ISO certification" },
+  { src: "/logo/haccp.png", alt: "HACCP certification" },
+  { src: "/logo/iso22000.png", alt: "FSSC 22000 certification" },
+  { src: "/logo/brcgs.png", alt: "BRCGS certification" },
+  { src: "/logo/ifs-logo.png", alt: "IFS certification" },
+  { src: "/logo/usfda.png", alt: "US FDA certification" },
+  { src: "/logo/iso 22716-2007.png", alt: "ISO 22716 certification" },
+  { src: "/logo/cosmos-standard.png", alt: "COSMOS standard" },
+  { src: "/logo/halal.png", alt: "Halal certification" },
+  { src: "/logo/kosher.png", alt: "Kosher certification" },
+  { src: "/logo/organic.png", alt: "Organic certification" },
+  { src: "/logo/non gmo project copy.jpg", alt: "Non-GMO Project" },
+  { src: "/logo/reach-compliant copy.png", alt: "REACH compliant" },
+  { src: "/logo/nsf.png", alt: "NSF certification" },
+  { src: "/logo/leaping_bunny.png", alt: "Leaping Bunny cruelty-free" },
+  { src: "/logo/vegan.webp", alt: "Vegan certification" },
+  { src: "/logo/fssai.png", alt: "FSSAI certification" },
+];
+
+function useCountUp(target) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (inView) {
+      const controls = animate(0, target, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate(value) {
+          setCount(Math.round(value));
+        }
+      });
+      return () => controls.stop();
+    }
+  }, [inView, target]);
+
+  return [count, ref];
+}
+
+function Stat({ value, suffix, label }) {
+  const [count, ref] = useCountUp(value);
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-primary-dark font-bold text-5xl md:text-6xl leading-none tracking-tight">
+        {count}
+        <span className="text-primary-light">{suffix}</span>
+      </div>
+      <div className="mt-3 text-[13px] font-medium tracking-[0.12em] uppercase text-primary-dark/60">{label}</div>
+    </div>
+  );
+}
+
+export default function CertificationsSection({ content = {} }) {
   const metrics = content.metrics || [];
-  const showCerts = content.showCertifications !== false && certifications.length > 0;
+  const logos = [...CERT_LOGOS, ...CERT_LOGOS];
 
   if (content.enabled === false) return null;
 
   return (
-    <section className="relative overflow-hidden bg-[#f5f9f6] py-20 sm:py-26 lg:py-30">
-
-      {/* Molecular grid background */}
-      <svg
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.03]"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <defs>
-          <pattern id="hex-grid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-            <polygon
-              points="30,2 56,16 56,36 30,50 4,36 4,16"
-              fill="none"
-              stroke="#1F4015"
-              strokeWidth="0.8"
-            />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hex-grid)" />
-      </svg>
-
-      <div className="relative mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
-
-        {/* Eyebrow + Headline — tightened hierarchy */}
+    <section id="quality" className="bg-[#F8F8F8] py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10 text-center"
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl"
         >
           {content.eyebrow && (
-            <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[3px] text-primary-light">
+            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-primary-light mb-4">
               {content.eyebrow}
             </p>
           )}
-          <h2 className="mb-5 font-heading text-[36px] font-bold uppercase leading-[1.02] tracking-[-1.5px] text-primary-dark sm:text-[48px] md:text-[56px]">
+          <h2 className="text-primary-dark font-bold text-3xl sm:text-4xl md:text-5xl leading-[1.08] text-balance">
             {content.headingLead}
+            <br />
             {content.headingAccent && (
-              <>
-                <br />
-                <span className="text-primary-light">{content.headingAccent}</span>
-              </>
+              <span className="text-primary-light">{content.headingAccent}</span>
             )}
           </h2>
-          <p className="mx-auto max-w-[680px] text-[16px] leading-relaxed text-neutral-600 sm:text-[18px]">
-            {content.intro}
-          </p>
+          {content.intro && (
+            <p className="mt-6 text-primary-dark/70 text-base leading-relaxed">
+              {content.intro}
+            </p>
+          )}
         </motion.div>
 
-        {/* ZQA seal — overlaps the metrics card */}
-        {content.sealImage && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 mb-[-80px] flex justify-center"
-        >
-          <motion.div
-            whileHover={{ scale: 1.04, rotate: 1 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-primary-light/25 bg-white shadow-[0_8px_48px_rgba(31,64,21,0.14)] sm:h-[180px] sm:w-[180px]"
-          >
-            <img
-              src={content.sealImage}
-              alt={content.sealAlt || ''}
-              className="h-[132px] w-[132px] object-contain sm:h-[152px] sm:w-[152px]"
-            />
-          </motion.div>
-        </motion.div>
-        )}
-
-        {/* Metrics card — refined with editorial number styling */}
-        {metrics.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mb-14"
-        >
-          <div className={`overflow-hidden rounded-[20px] bg-white shadow-[0_2px_40px_rgba(31,64,21,0.07)] ring-1 ring-primary-dark/[0.04] ${content.sealImage ? 'pt-[96px]' : 'pt-2'}`}>
-            <div className="grid divide-y divide-neutral-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-              {metrics.map((m, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.25 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col items-center px-6 py-8 text-center sm:px-8"
-                >
-                  <span className="editorial-number font-heading text-[52px] font-bold leading-none text-primary-light sm:text-[56px] lg:text-[64px]">
-                    {m.value}
-                    {m.suffix && (
-                      <span className="text-[32px] text-primary-light/60 lg:text-[36px]">{m.suffix}</span>
-                    )}
-                  </span>
-                  <span className="mt-3 font-heading text-[11px] font-semibold uppercase tracking-[2px] text-neutral-500">
-                    {m.label}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-            {content.metricsFootnote && (
-              <div className="border-t border-neutral-100 px-8 py-4">
-                <p className="text-center text-[13px] text-neutral-500">{content.metricsFootnote}</p>
-              </div>
-            )}
-          </div>
-        </motion.div>
-        )}
-
-        {/* Certification carousel — refined cards */}
-        {showCerts && (
-        <div className="relative overflow-hidden">
-          {/* Fade edges */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-[#f5f9f6] to-transparent sm:w-28" />
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-[#f5f9f6] to-transparent sm:w-28" />
-
-          <div className="flex w-max animate-cert-scroll items-center gap-4 py-3">
-            {[...certifications, ...certifications].map((cert, i) => (
-              <div
-                key={i}
-                className="inline-flex flex-shrink-0 flex-col items-center justify-center gap-2.5 rounded-xl border border-primary-dark/[0.06] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/30 hover:shadow-[0_4px_16px_rgba(21,168,89,0.08)]"
-                style={{ minWidth: '105px', minHeight: '84px' }}
-              >
-                {cert.logo ? (
-                  <img
-                    src={cert.logo}
-                    alt={cert.label}
-                    className="h-9 w-auto max-w-[72px] object-contain"
-                  />
-                ) : (
-                  <span className="flex h-9 items-center font-heading text-[14px] font-bold tracking-[-0.3px] text-primary-dark">
-                    {cert.label}
-                  </span>
-                )}
-                <span className="font-heading text-[9px] font-semibold uppercase tracking-[1.2px] text-neutral-400">
-                  {cert.label}
-                </span>
-              </div>
+        {/* Stats + seal */}
+        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
+          <div className="md:col-span-8 grid grid-cols-3 gap-4 md:gap-8">
+            {metrics.map((s, i) => (
+              <Stat key={i} value={Number(s.value) || 0} suffix={s.suffix} label={s.label} />
             ))}
           </div>
+          <div className="md:col-span-4 flex justify-center md:justify-end">
+            <motion.div
+              initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
+              whileInView={{
+                opacity: [0, 1, 1, 1],
+                scale: [2.5, 0.8, 1.07, 1],
+                rotate: [-24, -13, -9, -8],
+                filter: ['blur(4px)', 'blur(0.4px)', 'blur(0px)', 'blur(0px)'],
+              }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.3,
+                duration: 0.52,
+                times: [0, 0.55, 0.8, 1],
+                ease: [0.34, 1.56, 0.64, 1],
+              }}
+              className="relative shrink-0"
+              style={{ transformOrigin: 'center' }}
+            >
+              {/* Ink bleed halo that appears on impact */}
+              <motion.span
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 0.7 }}
+                whileInView={{ opacity: [0, 0.4, 0], scale: [0.7, 1.15, 1.35] }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+                className="absolute inset-0 rounded-full"
+                style={{ background: 'radial-gradient(circle, rgba(127,175,127,0.35) 0%, transparent 70%)' }}
+              />
+              <img
+                src={content.sealImage || "/zqa/seal5.png"}
+                alt={content.sealAlt || "Zeovus Quality Assurance Seal"}
+                loading="lazy"
+                draggable={false}
+                className="relative h-40 w-40 md:h-48 md:w-48 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)] select-none"
+              />
+            </motion.div>
+          </div>
         </div>
-        )}
 
-        {/* Standards footer CTA — refined */}
+        {content.metricsFootnote && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <p className="mt-8 text-[13px] text-primary-dark/55 italic border-l-2 border-primary-light/40 pl-4 max-w-2xl">
+              {content.metricsFootnote}
+            </p>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Certification logo carousel */}
+      {content.showCertifications !== false && (
+        <div className="mt-16 md:mt-20">
+          <div className="group relative overflow-hidden">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#F8F8F8] to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#F8F8F8] to-transparent z-10" />
+            <div className="flex w-max animate-cert-scroll group-hover:[animation-play-state:paused]">
+              {logos.map((logo, i) => (
+                <div
+                  key={i}
+                  className="shrink-0 mx-3 sm:mx-5 flex items-center justify-center h-24 w-28 sm:h-28 sm:w-36"
+                  tabIndex={0}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    loading="lazy"
+                    className="max-h-full max-w-full object-contain opacity-80 hover:opacity-100 transition-opacity"
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer strip */}
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 mt-14 md:mt-20">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-16 border-t border-primary-dark/[0.06] pt-10 text-center"
+          transition={{ duration: 0.6 }}
         >
-          <p className="mb-2 font-heading text-[12px] font-semibold uppercase tracking-[2px] text-neutral-500">
-            {content.footerHeading}
-          </p>
-          <p className="mx-auto mb-6 max-w-[500px] text-[14px] leading-relaxed text-neutral-500">
-            {content.footerBody}
-          </p>
-          <Link
-            href={content.footerCtaHref || '/capabilities'}
-            className="group inline-flex items-center gap-2 font-heading text-[13px] font-semibold uppercase tracking-[1.5px] text-primary-light"
-          >
-            <span className="relative">
-              {content.footerCtaLabel}
-              <span className="absolute -bottom-px left-0 h-px w-0 bg-primary-light transition-all duration-400 group-hover:w-full" />
-            </span>
-            <svg
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-t border-primary-dark/10 pt-10">
+            <div className="max-w-xl">
+              <h3 className="text-primary-dark font-bold text-2xl md:text-3xl text-balance mb-3">
+                {content.footerHeading || 'Held to standards you can verify.'}
+              </h3>
+              <p className="text-primary-dark/70 text-base leading-relaxed">
+                {content.footerBody || 'Explore every certification, audit protocol, and compliance framework behind Zeovus manufacturing.'}
+              </p>
+            </div>
+            <Link
+              href={content.footerCtaHref || '/capabilities'}
+              className="shrink-0 inline-flex items-center gap-2 h-12 px-7 rounded-full border-2 border-primary-dark text-primary-dark font-semibold text-sm hover:bg-primary-dark hover:text-white transition-colors"
             >
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
-          </Link>
+              {content.footerCtaLabel || 'View Manufacturing Standards'} <ArrowRight size={16} />
+            </Link>
+          </div>
         </motion.div>
-
       </div>
     </section>
   );

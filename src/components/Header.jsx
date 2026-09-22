@@ -20,6 +20,13 @@ export default function Header({ site }) {
   const brand = site?.brand || {};
   const navItems = (site?.nav?.items || []).filter((item) => item?.name);
 
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // The tagline only fits beside the English nav. Translated languages produce
   // longer nav labels, so we hide the tagline whenever the page isn't English.
   useEffect(() => {
@@ -77,12 +84,14 @@ export default function Header({ site }) {
     return pathname.startsWith(path);
   };
 
+  const solid = isScrolled || isMenuOpen || isSearchOpen;
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'border-b border-primary-light/10 bg-[#e8f5ed]/90 backdrop-blur-lg'
-          : 'bg-[#e8f5ed]/75 backdrop-blur-md'
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
+        solid
+          ? 'bg-[#F8F8F8]/95 backdrop-blur-md shadow-[0_1px_0_rgba(31,64,21,0.08)]'
+          : 'bg-transparent'
       }`}
     >
       {/* Main Navbar */}
@@ -101,7 +110,7 @@ export default function Header({ site }) {
               width={220}
               height={90}
               priority
-              className="h-[54px] w-auto max-w-[150px] object-contain sm:h-[68px] sm:max-w-[180px] lg:h-[80px] lg:max-w-[210px]"
+              className={`h-[54px] w-auto max-w-[150px] object-contain sm:h-[68px] sm:max-w-[180px] lg:h-[80px] lg:max-w-[210px] transition-[filter] duration-500 ${solid ? '' : 'brightness-0 invert'}`}
             />
           </Link>
 
@@ -109,14 +118,14 @@ export default function Header({ site }) {
             <>
               {/* Divider — pairs with the tagline. Visible on all phones, hidden
                   through the lg–xl desktop range, and back at 2xl alongside the tagline. */}
-              <div className="ml-2.5 block h-7 w-px shrink-0 bg-primary-dark/25 sm:ml-4 sm:h-8 lg:hidden 2xl:ml-5 2xl:block 2xl:h-9" />
+              <div className={`ml-2.5 block h-7 w-px shrink-0 transition-colors duration-500 sm:ml-4 sm:h-8 lg:hidden 2xl:ml-5 2xl:block 2xl:h-9 ${solid ? 'bg-primary-dark/25' : 'bg-white/25'}`} />
 
               {/* Tagline: visible on all phones. Wraps to two lines on mobile so it
                   never overflows, single line on tablet, hidden through lg–xl, and
                   returns beside the nav at 2xl. */}
               <p
                 translate="no"
-                className="notranslate ml-2.5 block min-w-0 flex-1 font-heading text-[10px] font-bold leading-[1.2] tracking-[0.04em] text-primary-dark/75 sm:ml-4 sm:max-w-[180px] sm:flex-none sm:truncate sm:whitespace-nowrap sm:text-[11px] md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px]"
+                className={`notranslate ml-2.5 block min-w-0 flex-1 font-heading text-[10px] font-bold leading-[1.2] tracking-[0.04em] transition-colors duration-500 sm:ml-4 sm:max-w-[180px] sm:flex-none sm:truncate sm:whitespace-nowrap sm:text-[11px] md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px] ${solid ? 'text-primary-dark/75' : 'text-white/80'}`}
               >
                 {brand.tagline}
               </p>
@@ -128,7 +137,7 @@ export default function Header({ site }) {
             1280px target laptop), roomier only at 2xl (1536px+). */}
         <nav
           className={`hidden shrink-0 items-center lg:flex ${
-            isEnglish ? 'gap-0.5 xl:gap-1 2xl:gap-1.5' : 'gap-0.5 2xl:gap-1'
+            isEnglish ? 'gap-2 xl:gap-4 2xl:gap-5' : 'gap-2 2xl:gap-3'
           }`}
         >
           {navItems.map((item) => {
@@ -138,14 +147,14 @@ export default function Header({ site }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`whitespace-nowrap rounded-md font-heading font-semibold uppercase transition-all duration-300 ${
+                className={`whitespace-nowrap font-heading uppercase transition-colors duration-200 ${
                   isEnglish
-                    ? 'px-2.5 py-2 text-[11px] tracking-[0.3px] 2xl:px-3.5 2xl:text-[12px] 2xl:tracking-[0.6px]'
-                    : 'px-2 py-2 text-[10.5px] tracking-[0.2px] 2xl:px-3 2xl:text-[11.5px]'
+                    ? 'text-[12px] font-bold tracking-[1px] 2xl:text-[13px] 2xl:tracking-[1.5px]'
+                    : 'text-[11px] font-bold tracking-[0.5px] 2xl:text-[12px]'
                 } ${
-                  active
-                    ? 'bg-primary-dark text-[#e8f5ed]'
-                    : 'text-primary-dark hover:bg-[#d4ede0]/70'
+                  solid
+                    ? active ? 'text-primary-light' : 'text-primary-dark hover:text-primary-light'
+                    : active ? 'text-accent' : 'text-white/90 hover:text-accent'
                 }`}
               >
                 {item.name}
@@ -157,20 +166,33 @@ export default function Header({ site }) {
           })}
         </nav>
 
-        {/* Desktop product search + language switcher */}
-        <div className="hidden items-center gap-1.5 lg:flex">
-          <button
-            type="button"
-            onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
-            className={`flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
-              isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]/70'
-            }`}
-            aria-label="Search products"
-            aria-expanded={isSearchOpen}
+        {/* Desktop controls (Search, Language, CTA) */}
+        <div className="hidden items-center gap-3 lg:flex">
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
+              className={`flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
+                solid
+                  ? isSearchOpen ? 'text-primary-light' : 'text-primary-dark hover:text-primary-light'
+                  : isSearchOpen ? 'text-accent' : 'text-white/90 hover:text-accent'
+              }`}
+              aria-label="Search products"
+              aria-expanded={isSearchOpen}
+            >
+              <Search size={18} strokeWidth={2} />
+            </button>
+            <div className={`transition-opacity duration-500 ${solid ? 'opacity-100' : 'opacity-80'}`}>
+               <LanguageSwitcher variant="desktop" />
+            </div>
+          </div>
+          
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center h-[42px] px-6 rounded-full bg-accent text-primary-dark font-heading text-[12px] font-bold uppercase tracking-[1px] hover:bg-[#ffdf97] transition-colors duration-200"
           >
-            <Search size={18} strokeWidth={1.8} />
-          </button>
-          <LanguageSwitcher variant="desktop" />
+            Enquire Now
+          </Link>
         </div>
 
         {/* Mobile controls */}
@@ -178,8 +200,10 @@ export default function Header({ site }) {
           <button
             type="button"
             onClick={() => { setIsSearchOpen(true); setIsMenuOpen(false); }}
-            className={`flex h-11 w-11 items-center justify-center rounded-md text-primary-dark transition-colors ${
-              isSearchOpen ? 'bg-primary-dark text-[#e8f5ed]' : 'hover:bg-[#d4ede0]'
+            className={`flex h-11 w-11 items-center justify-center rounded-md transition-colors ${
+              solid
+                ? isSearchOpen ? 'text-primary-light' : 'text-primary-dark hover:bg-primary-dark/5'
+                : 'text-white hover:bg-white/10'
             }`}
             aria-label="Search products"
             aria-expanded={isSearchOpen}
@@ -189,7 +213,9 @@ export default function Header({ site }) {
           <button
             type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center text-primary-dark"
+            className={`flex h-11 w-11 shrink-0 items-center justify-center transition-colors ${
+              solid ? 'text-primary-dark' : 'text-white'
+            }`}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
           >
@@ -200,7 +226,7 @@ export default function Header({ site }) {
 
       {/* Global product search panel */}
       {isSearchOpen && (
-        <div className="border-t border-primary-light/15 bg-[#e8f5ed]/95 shadow-lg backdrop-blur-lg">
+        <div className="border-t border-primary-light/15 bg-[#F8F8F8]/95 shadow-lg backdrop-blur-lg">
           <div className="mx-auto max-w-[1500px] px-5 py-4 sm:px-8 lg:px-12">
             <div className="relative flex items-center">
               <Search className="pointer-events-none absolute left-0 h-5 w-5 text-primary-light" strokeWidth={1.8} />
@@ -216,7 +242,7 @@ export default function Header({ site }) {
               <button
                 type="button"
                 onClick={closeSearch}
-                className="absolute right-0 flex h-9 w-9 items-center justify-center rounded-md text-primary-dark/60 transition-colors hover:bg-[#d4ede0] hover:text-primary-dark"
+                className="absolute right-0 flex h-9 w-9 items-center justify-center rounded-md text-primary-dark/60 transition-colors hover:bg-primary-dark/5 hover:text-primary-dark"
                 aria-label="Close product search"
               >
                 <X size={19} strokeWidth={1.8} />
@@ -271,8 +297,8 @@ export default function Header({ site }) {
 
       {/* Mobile Navigation */}
       <div
-        className={`overflow-hidden bg-[#e8f5ed]/95 backdrop-blur-md transition-all duration-300 lg:hidden ${
-          isMenuOpen ? 'max-h-[600px]' : 'max-h-0'
+        className={`bg-[#F8F8F8]/95 backdrop-blur-md transition-all duration-300 lg:hidden ${
+          isMenuOpen ? 'max-h-[85vh] overflow-y-auto' : 'max-h-0 overflow-hidden'
         }`}
       >
         <div className="flex flex-col border-t border-primary-light/20 py-4">
@@ -284,16 +310,27 @@ export default function Header({ site }) {
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className={`mx-4 my-1 rounded-md px-5 py-4 font-heading text-[13px] font-medium uppercase tracking-[1px] transition-all duration-300 ${
+                className={`mx-4 my-1 rounded-md px-5 py-4 font-heading text-[13px] font-bold uppercase tracking-[1px] transition-colors duration-300 ${
                   active
-                    ? 'bg-primary-dark text-[#e8f5ed]'
-                    : 'text-primary-dark hover:bg-[#d4ede0]'
+                    ? 'bg-primary-dark text-[#F8F8F8]'
+                    : 'text-primary-dark hover:bg-primary-dark/5'
                 }`}
               >
                 {item.name}
               </Link>
             );
           })}
+          
+          <div className="mx-4 mt-2 mb-4">
+             <Link
+                href="/contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-center h-12 w-full rounded-full bg-accent text-primary-dark font-heading text-[13px] font-bold uppercase tracking-[1px] hover:bg-[#ffdf97]"
+              >
+                Enquire Now
+              </Link>
+          </div>
+          
           <LanguageSwitcher variant="mobile" />
         </div>
       </div>

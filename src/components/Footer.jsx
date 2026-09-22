@@ -64,8 +64,6 @@ export default function Footer({ site, hideCta = false }) {
     (item) => item?.href && item.href !== '#'
   );
 
-  // Address block (reference-style): countries line + company + address + phone + email.
-  // Uses real site data with sensible fallbacks from the company profile.
   const officeCountries = footer.officeCountries || ['India', 'USA', 'Qatar'];
   const companyName = footer.companyName || brand.legalName || 'Zeovus Ventures Private Limited';
   const addressLines = (contact.address
@@ -106,10 +104,10 @@ export default function Footer({ site, hideCta = false }) {
 
       {/* ═══════════════════ CURVED TOP CTA SECTION ═══════════════════ */}
       {cta.enabled !== false && !hideCta && (
-      <div className="relative bg-[#f5f9f6]">
-        {/* Wave separator at bottom */}
+      <div className="relative bg-[#FFF5D1]">
+        {/* Wave separator at bottom matching footer primary dark */}
         <svg className="absolute -bottom-px left-0 w-full" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V101H0V40Z" fill="#162E10"/>
+          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V101H0V40Z" fill="#1F4015"/>
         </svg>
 
         <div className="max-w-[1100px] mx-auto px-6 md:px-10 pt-20 pb-32 md:pt-28 md:pb-36">
@@ -120,54 +118,40 @@ export default function Footer({ site, hideCta = false }) {
             transition={{ duration: 0.7 }}
             className="relative"
           >
-            {/* CTA Card with curved design */}
-            <div className="relative bg-gradient-to-br from-primary-dark via-[#1a3812] to-[#0D1F09] rounded-[40px] p-10 md:p-16 overflow-hidden">
+            {/* CTA Card */}
+            <div className="relative bg-gradient-to-br from-[#1F4015] to-[#1A475C] rounded-[40px] p-10 md:p-16 overflow-hidden">
               
               {/* Decorative curves inside card */}
-              <svg className="absolute top-0 right-0 w-[400px] h-[400px] opacity-10 pointer-events-none" viewBox="0 0 400 400" fill="none">
-                <circle cx="350" cy="50" r="150" stroke="white" strokeWidth="1"/>
-                <circle cx="350" cy="50" r="100" stroke="white" strokeWidth="0.8"/>
-                <circle cx="350" cy="50" r="50" stroke="white" strokeWidth="0.6"/>
-                <path d="M200 0 Q350 100 300 250" stroke="white" strokeWidth="0.8" fill="none"/>
-                <path d="M250 0 Q400 80 380 200" stroke="white" strokeWidth="0.6" fill="none"/>
+              <svg className="absolute top-0 right-0 w-[400px] h-[400px] opacity-[0.08] pointer-events-none" viewBox="0 0 400 400" fill="none">
+                <circle cx="350" cy="50" r="150" stroke="#FAD563" strokeWidth="1"/>
+                <circle cx="350" cy="50" r="100" stroke="#FAD563" strokeWidth="0.8"/>
+                <circle cx="350" cy="50" r="50" stroke="#FAD563" strokeWidth="0.6"/>
+                <path d="M200 0 Q350 100 300 250" stroke="#FAD563" strokeWidth="0.8" fill="none"/>
+                <path d="M250 0 Q400 80 380 200" stroke="#FAD563" strokeWidth="0.6" fill="none"/>
               </svg>
 
-              {/* Flowing organic shape */}
-              <svg className="absolute bottom-0 left-0 w-[350px] h-[250px] opacity-[0.07] pointer-events-none" viewBox="0 0 350 250" fill="none">
-                <path d="M0 250 Q80 180 150 200 T300 150 T350 50" stroke="white" strokeWidth="2" fill="none"/>
-                <path d="M0 200 Q100 150 180 170 T320 100" stroke="white" strokeWidth="1.5" fill="none"/>
-                <circle cx="150" cy="200" r="6" fill="white" opacity="0.6"/>
-                <circle cx="300" cy="150" r="4" fill="white" opacity="0.6"/>
-                <circle cx="180" cy="170" r="4" fill="white" opacity="0.5"/>
-              </svg>
-
-              {/* Green glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-primary-light/[0.06] blur-[80px] pointer-events-none"></div>
-
-              <div className="relative z-10 text-center max-w-xl mx-auto">
+              <div className="relative z-10 text-center max-w-2xl mx-auto">
                 {cta.eyebrow && (
-                  <p className="text-primary-light text-[11px] font-semibold tracking-[0.35em] uppercase mb-4">
+                  <p className="text-[#9CCD62] text-[12px] font-semibold tracking-[0.35em] uppercase mb-4">
                     {cta.eyebrow}
                   </p>
                 )}
-                <h3 className="font-display text-[28px] md:text-[38px] font-bold text-white leading-[1.15] tracking-tight mb-5">
-                  {cta.heading}
+                <h3 className="font-display text-[32px] md:text-[44px] font-bold text-[#FFF5D1] leading-[1.15] tracking-tight mb-6">
+                  {cta.heading || 'Your next breakthrough product starts here.'}
                 </h3>
-                <p className="text-white/60 text-[15px] md:text-[16px] leading-[1.7] mb-9">
-                  {cta.body}
+                <p className="text-white/80 text-[16px] md:text-[18px] leading-[1.7] mb-10">
+                  {cta.body || 'From formulation to final product — partner with a manufacturer that delivers science, quality, and scale.'}
                 </p>
-                {cta.buttonLabel && (
-                  <Link
-                    href={cta.buttonHref || '/contact'}
-                    className="group inline-flex items-center gap-3 px-9 py-4 bg-primary-light text-white text-[13px] font-semibold uppercase tracking-[0.15em] rounded-full hover:bg-[#12964E] transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_40px_rgba(21,168,89,0.3)]"
-                  >
-                    {cta.buttonLabel}
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14" />
-                      <path d="M12 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                )}
+                <Link
+                  href={cta.buttonHref || '/contact'}
+                  className="group inline-flex items-center gap-3 px-9 py-4 bg-[#FAD563] text-[#1F4015] text-[13px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-[#FFD374] hover:shadow-[0_8px_40px_rgba(250,213,99,0.35)] transition-all duration-300 hover:-translate-y-1"
+                >
+                  {cta.buttonLabel || 'Enquire Now'}
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -176,26 +160,8 @@ export default function Footer({ site, hideCta = false }) {
       )}
 
       {/* ═══════════════════ MAIN FOOTER ═══════════════════ */}
-      <div className="relative bg-[#162E10]">
-
-        {/* Organic decorative blobs */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none opacity-[0.04]">
-          <svg viewBox="0 0 500 500" fill="none" className="w-full h-full">
-            <path d="M250 50 C350 50 450 150 450 250 C450 350 350 450 250 450 C150 450 50 350 50 250 C50 150 150 50 250 50Z" stroke="white" strokeWidth="1"/>
-            <path d="M250 100 C320 100 400 180 400 250 C400 320 320 400 250 400 C180 400 100 320 100 250 C100 180 180 100 250 100Z" stroke="white" strokeWidth="0.8"/>
-            <path d="M180 120 Q250 80 320 150 T350 300 Q300 400 200 380 T100 250 Q120 150 180 120Z" stroke="white" strokeWidth="0.6" fill="none"/>
-          </svg>
-        </div>
-
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] pointer-events-none opacity-[0.03]">
-          <svg viewBox="0 0 400 400" fill="none" className="w-full h-full">
-            <ellipse cx="100" cy="300" rx="200" ry="150" stroke="white" strokeWidth="1" fill="none"/>
-            <ellipse cx="120" cy="280" rx="150" ry="100" stroke="white" strokeWidth="0.8" fill="none"/>
-          </svg>
-        </div>
-
-        {/* Main content */}
-        <div className="relative max-w-[1100px] mx-auto px-6 md:px-10 pt-6 pb-16 md:pb-20">
+      <div className="relative bg-[#1F4015]">
+        <div className="relative max-w-[1100px] mx-auto px-6 md:px-10 pt-10 pb-16 md:pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-6">
 
             {/* Brand Column */}
@@ -210,7 +176,7 @@ export default function Footer({ site, hideCta = false }) {
                 />
               </Link>
               {footer.brandBlurb && (
-                <p className="text-neutral-400 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
+                <p className="text-[#FFF5D1]/60 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
                   {footer.brandBlurb}
                 </p>
               )}
@@ -218,20 +184,20 @@ export default function Footer({ site, hideCta = false }) {
               {/* ── Address block (India | USA | Qatar) ── */}
               <div className="mb-7 max-w-[280px]">
                 {officeCountries.length > 0 && (
-                  <p className="mb-4 flex flex-wrap items-center gap-x-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-primary-light/80">
+                  <p className="mb-4 flex flex-wrap items-center gap-x-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#9CCD62]">
                     {officeCountries.map((country, i) => (
                       <span key={`${country}-${i}`} className="flex items-center gap-2">
-                        {i > 0 && <span className="text-white/25">|</span>}
+                        {i > 0 && <span className="text-white/20">|</span>}
                         {country}
                       </span>
                     ))}
                   </p>
                 )}
 
-                <p className="mb-2 text-[15px] font-semibold text-white">{companyName}</p>
+                <p className="mb-2 text-[15px] font-semibold text-[#FFF5D1]">{companyName}</p>
 
                 {addressLines.length > 0 && (
-                  <address className="not-italic text-[14px] leading-[1.9] text-neutral-400">
+                  <address className="not-italic text-[14px] leading-[1.9] text-[#FFF5D1]/60">
                     {addressLines.map((line, i) => (
                       <span key={`addr-${i}`} className="block">{line}</span>
                     ))}
@@ -243,7 +209,7 @@ export default function Footer({ site, hideCta = false }) {
                     {contact.phone && (
                       <a
                         href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                        className="block text-[14px] font-semibold text-primary-light transition-colors hover:text-white"
+                        className="block text-[14px] font-semibold text-[#FAD563] transition-colors hover:text-[#FFF5D1]"
                       >
                         {contact.phone}
                       </a>
@@ -251,7 +217,7 @@ export default function Footer({ site, hideCta = false }) {
                     {contact.email && (
                       <a
                         href={`mailto:${contact.email}`}
-                        className="block text-[14px] font-semibold text-primary-light transition-colors hover:text-white"
+                        className="block text-[14px] font-semibold text-[#FAD563] transition-colors hover:text-[#FFF5D1]"
                       >
                         {contact.email}
                       </a>
@@ -262,17 +228,17 @@ export default function Footer({ site, hideCta = false }) {
 
               {/* Social Icons - pill shape */}
               {socials.length > 0 && (
-                <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-white/[0.04] border border-white/10">
+                <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-black/10 border border-[#FFF5D1]/10">
                   {socials.map((item, i) => (
                     <a
                       key={`${item.platform}-${i}`}
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-primary-light/20 transition-all duration-300"
+                      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#FAD563]/20 transition-all duration-300"
                       aria-label={SOCIAL_LABELS[item.platform] || item.platform}
                     >
-                      <svg className="w-4 h-4 text-neutral-400 hover:text-primary-light transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-[#FFF5D1]/60 hover:text-[#FAD563] transition-colors" fill="currentColor" viewBox="0 0 24 24">
                         <path d={SOCIAL_PATHS[item.platform] || SOCIAL_PATHS.linkedin} />
                       </svg>
                     </a>
@@ -283,13 +249,13 @@ export default function Footer({ site, hideCta = false }) {
 
             {/* Navigation */}
             <div className="lg:col-span-2">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
+              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
                 {footer.companyHeading}
               </p>
               <ul className="space-y-3">
                 {quickLinks.map((link, i) => (
                   <li key={`${link.name}-${i}`}>
-                    <Link href={link.href || '/'} className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200">
+                    <Link href={link.href || '/'} className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200">
                       {link.name}
                     </Link>
                   </li>
@@ -299,7 +265,7 @@ export default function Footer({ site, hideCta = false }) {
 
             {/* Nutraceuticals */}
             <div className="lg:col-span-3">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
+              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
                 {footer.nutraceuticalsHeading}
               </p>
               <ul className="space-y-3">
@@ -307,7 +273,7 @@ export default function Footer({ site, hideCta = false }) {
                   <li key={`${cat.name}-${i}`}>
                     <Link
                       href={cat.href || '/nutraceuticals'}
-                      className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200"
+                      className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200"
                     >
                       {cat.name}
                     </Link>
@@ -318,7 +284,7 @@ export default function Footer({ site, hideCta = false }) {
 
             {/* Cosmetics */}
             <div className="lg:col-span-2">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
+              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
                 {footer.cosmeticsHeading}
               </p>
               <ul className="space-y-3">
@@ -326,7 +292,7 @@ export default function Footer({ site, hideCta = false }) {
                   <li key={`${cat.name}-${i}`}>
                     <Link
                       href={cat.href || '/cosmetics'}
-                      className="text-neutral-400 text-[14px] hover:text-white transition-colors duration-200"
+                      className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200"
                     >
                       {cat.name}
                     </Link>
@@ -337,7 +303,7 @@ export default function Footer({ site, hideCta = false }) {
 
             {/* Group */}
             <div className="lg:col-span-1">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-primary-light/60 mb-5">
+              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
                 {footer.groupHeading}
               </p>
               <ul className="space-y-3">
@@ -360,12 +326,12 @@ export default function Footer({ site, hideCta = false }) {
                           href={link.href}
                           {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           aria-label={link.name}
-                          className="inline-flex items-center text-neutral-400 text-[14px] whitespace-nowrap hover:text-white transition-colors"
+                          className="inline-flex items-center text-[#FFF5D1]/70 text-[14px] whitespace-nowrap hover:text-[#FAD563] transition-colors"
                         >
                           {content}
                         </a>
                       ) : (
-                        <span className="inline-flex items-center text-neutral-400 text-[14px] whitespace-nowrap" aria-label={logo ? link.name : undefined}>
+                        <span className="inline-flex items-center text-[#FFF5D1]/70 text-[14px] whitespace-nowrap" aria-label={logo ? link.name : undefined}>
                           {content}
                         </span>
                       )}
@@ -378,22 +344,22 @@ export default function Footer({ site, hideCta = false }) {
         </div>
 
         {/* ═══════════════════ BOTTOM BAR ═══════════════════ */}
-        <div className="bg-[#0A1A06]">
+        <div className="bg-[#122B0B]">
           {/* Wave top */}
           <svg className="w-full h-6" viewBox="0 0 1440 24" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 24H1440V0C1440 0 1320 12 1080 12C840 12 720 0 480 0C240 0 0 12 0 12V24Z" fill="#0A1A06"/>
+            <path d="M0 24H1440V0C1440 0 1320 12 1080 12C840 12 720 0 480 0C240 0 0 12 0 12V24Z" fill="#122B0B"/>
           </svg>
           
           <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-5">
             <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-              <p className="text-neutral-600 text-[12px]">
+              <p className="text-[#FFF5D1]/50 text-[12px]">
                 {(footer.copyright || '').replace('{year}', String(currentYear))}
               </p>
               <div className="flex items-center gap-5 text-[12px]">
                 {legalLinks.map((link, i) => (
                   <span key={`${link.name}-${i}`} className="flex items-center gap-5">
-                    {i > 0 && <span className="w-1 h-1 rounded-full bg-neutral-700" />}
-                    <Link href={link.href || '#'} className="text-neutral-600 hover:text-neutral-400 transition-colors">
+                    {i > 0 && <span className="w-1 h-1 rounded-full bg-[#FFF5D1]/30" />}
+                    <Link href={link.href || '#'} className="text-[#FFF5D1]/50 hover:text-[#FAD563] transition-colors">
                       {link.name}
                     </Link>
                   </span>

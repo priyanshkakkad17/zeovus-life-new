@@ -2,106 +2,73 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+
 export default function WorkingTogether({ content = {} }) {
   const options = content.items || [];
 
   if (content.enabled === false || options.length === 0) return null;
 
   return (
-    <section className="bg-white py-20 sm:py-26 lg:py-30">
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-
-        {/* Two-column header with asymmetric weight */}
-        <div className="mb-16 lg:mb-22">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-primary-light">
+    <section id="partnerships" className="bg-white py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mb-12 md:mb-16"
+        >
+          {content.eyebrow && (
+            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-primary-light mb-4">
               {content.eyebrow}
             </p>
-          </motion.div>
+          )}
+          <h2 className="text-primary-dark font-bold text-3xl sm:text-4xl md:text-5xl leading-[1.08] text-balance">
+            {content.headingLead}
+            <br />
+            {content.headingAccent && (
+              <span className="text-primary-light">{content.headingAccent}</span>
+            )}
+          </h2>
+          <p className="mt-5 text-primary-dark/60 text-sm italic">
+            {content.intro || 'All partnership models include dedicated account management and quality assurance.'}
+          </p>
+        </motion.div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-[720px] font-heading text-[32px] font-bold uppercase leading-[1.02] tracking-[-1px] text-primary-dark sm:text-[42px] lg:text-[48px]"
-          >
-            {content.headingLead}{' '}
-            <span className="text-primary-light">{content.headingAccent}</span>
-          </motion.h2>
-        </div>
-
-        {/* Staggered list layout — numbered, with progressive reveal */}
-        <div className="grid gap-0">
-          {options.map((item, index) => {
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="group relative border-b border-neutral-100 py-8 first:border-t lg:py-10"
-              >
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8 lg:gap-12">
-                  {/* Number block */}
-                  <div className="flex items-center sm:w-[110px] sm:flex-shrink-0 lg:w-[140px]">
-                    <span className="font-heading text-[72px] font-bold leading-none tracking-[-4px] text-neutral-200 transition-colors duration-500 group-hover:text-primary-light/30 lg:text-[96px]">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1">
-                    <h3 className="mb-2 font-heading text-[18px] font-semibold text-primary-dark transition-colors duration-300 sm:text-[20px] lg:text-[22px]">
-                      {item.title}
-                    </h3>
-                    <p className="max-w-[520px] text-[14px] leading-relaxed text-neutral-600 sm:text-[15px]">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* CTA — right-aligned on desktop */}
-                  {content.itemCtaLabel && (
-                  <div className="mt-4 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
-                    <Link
-                      href={content.itemCtaHref || '/contact'}
-                      className="group/link inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-heading text-[11px] font-medium uppercase tracking-[1px] text-neutral-500 transition-all duration-300 hover:border-primary-light/40 hover:text-primary-light"
-                    >
-                      {content.itemCtaLabel}
-                      <svg
-                        className="h-3 w-3 transition-transform duration-300 group-hover/link:translate-x-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="M12 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </div>
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-primary-dark/10 border border-primary-dark/10 rounded-2xl overflow-hidden">
+          {options.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.05 * i }}
+              className="h-full"
+            >
+              <article className="group h-full bg-white p-8 md:p-10 flex flex-col">
+                <div className="flex items-baseline gap-4 mb-5">
+                  <span className="text-accent font-bold text-2xl tabular-nums">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="h-px flex-1 bg-primary-dark/10" />
                 </div>
-
-                {/* Hover accent — left vertical bar */}
-                <div className="absolute left-0 top-0 h-full w-[3px] origin-top scale-y-0 bg-primary-light transition-transform duration-600 ease-out-quint group-hover:scale-y-100" />
-              </motion.div>
-            );
-          })}
+                <h3 className="text-primary-dark font-semibold text-xl md:text-2xl leading-snug mb-4 text-balance">
+                  {m.title}
+                </h3>
+                <p className="text-primary-dark/65 text-[15px] leading-relaxed mb-7 flex-1">
+                  {m.description}
+                </p>
+                <Link
+                  href={content.itemCtaHref || '/contact'}
+                  className="inline-flex items-center gap-2 self-start text-primary-dark font-semibold text-sm border-b-2 border-accent pb-1 hover:gap-3 transition-all"
+                >
+                  {content.itemCtaLabel || 'Enquire'} <ArrowRight size={15} />
+                </Link>
+              </article>
+            </motion.div>
+          ))}
         </div>
-
       </div>
     </section>
   );
