@@ -41,13 +41,13 @@ const GROUP_LOGOS = {
     src: '/Zeovus_new_logo-removebg-preview.png',
     width: 2172,
     height: 724,
-    className: 'h-8 brightness-0 invert',
+    className: 'h-6 sm:h-7 w-auto object-contain object-left mix-blend-multiply origin-left scale-110',
   },
   'Zeovus Food': {
     src: '/footer_food_logo.webp',
     width: 1536,
     height: 1024,
-    className: 'h-16 brightness-0 invert',
+    className: 'h-10 sm:h-12 w-auto object-contain object-left mix-blend-multiply origin-left scale-110',
   },
 };
 
@@ -104,10 +104,10 @@ export default function Footer({ site, hideCta = false }) {
 
       {/* ═══════════════════ CURVED TOP CTA SECTION ═══════════════════ */}
       {cta.enabled !== false && !hideCta && (
-      <div className="relative bg-[#FFF5D1]">
+      <div className="relative bg-[#FBF9F1]">
         {/* Wave separator at bottom matching footer primary dark */}
         <svg className="absolute -bottom-px left-0 w-full" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V101H0V40Z" fill="#1F4015"/>
+          <path d="M0 40C240 80 480 100 720 80C960 60 1200 20 1440 40V101H0V40Z" fill="#FBF9F1"/>
         </svg>
 
         <div className="max-w-[1100px] mx-auto px-6 md:px-10 pt-20 pb-32 md:pt-28 md:pb-36">
@@ -119,24 +119,31 @@ export default function Footer({ site, hideCta = false }) {
             className="relative"
           >
             {/* CTA Card */}
-            <div className="relative bg-gradient-to-br from-[#1F4015] to-[#1A475C] rounded-[40px] p-10 md:p-16 overflow-hidden">
+            <div className="relative bg-gradient-to-br from-[#1B3E25] to-[#1A475C] rounded-[40px] p-10 md:p-16 overflow-hidden">
               
               {/* Decorative curves inside card */}
               <svg className="absolute top-0 right-0 w-[400px] h-[400px] opacity-[0.08] pointer-events-none" viewBox="0 0 400 400" fill="none">
-                <circle cx="350" cy="50" r="150" stroke="#FAD563" strokeWidth="1"/>
-                <circle cx="350" cy="50" r="100" stroke="#FAD563" strokeWidth="0.8"/>
-                <circle cx="350" cy="50" r="50" stroke="#FAD563" strokeWidth="0.6"/>
-                <path d="M200 0 Q350 100 300 250" stroke="#FAD563" strokeWidth="0.8" fill="none"/>
-                <path d="M250 0 Q400 80 380 200" stroke="#FAD563" strokeWidth="0.6" fill="none"/>
+                <circle cx="350" cy="50" r="150" stroke="#FCE590" strokeWidth="1"/>
+                <circle cx="350" cy="50" r="100" stroke="#FCE590" strokeWidth="0.8"/>
+                <circle cx="350" cy="50" r="50" stroke="#FCE590" strokeWidth="0.6"/>
+                <path d="M200 0 Q350 100 300 250" stroke="#FCE590" strokeWidth="0.8" fill="none"/>
+                <path d="M250 0 Q400 80 380 200" stroke="#FCE590" strokeWidth="0.6" fill="none"/>
               </svg>
+
+              {/* Decorative Sprouts Illustration */}
+              <img 
+                src="https://res.cloudinary.com/ac74hfe9/image/upload/v1789399874/Gemini_Generated_Image_hfve8ghfve8ghfve-removebg-preview.png"
+                alt="Decorative sprouts"
+                className="absolute bottom-0 right-4 md:right-16 lg:right-24 h-[120px] md:h-[200px] w-auto object-contain object-bottom pointer-events-none opacity-90 hidden sm:block"
+              />
 
               <div className="relative z-10 text-center max-w-2xl mx-auto">
                 {cta.eyebrow && (
-                  <p className="text-[#9CCD62] text-[12px] font-semibold tracking-[0.35em] uppercase mb-4">
+                  <p className="text-[#A3C695] text-[12px] font-semibold tracking-[0.35em] uppercase mb-4">
                     {cta.eyebrow}
                   </p>
                 )}
-                <h3 className="font-display text-[32px] md:text-[44px] font-bold text-[#FFF5D1] leading-[1.15] tracking-tight mb-6">
+                <h3 className="font-display text-[32px] md:text-[44px] font-bold text-[#FBF9F1] leading-[1.15] tracking-tight mb-6">
                   {cta.heading || 'Your next breakthrough product starts here.'}
                 </h3>
                 <p className="text-white/80 text-[16px] md:text-[18px] leading-[1.7] mb-10">
@@ -144,7 +151,7 @@ export default function Footer({ site, hideCta = false }) {
                 </p>
                 <Link
                   href={cta.buttonHref || '/contact'}
-                  className="group inline-flex items-center gap-3 px-9 py-4 bg-[#FAD563] text-[#1F4015] text-[13px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-[#FFD374] hover:shadow-[0_8px_40px_rgba(250,213,99,0.35)] transition-all duration-300 hover:-translate-y-1"
+                  className="group inline-flex items-center gap-3 px-9 py-4 bg-[#FCE590] text-[#1B3E25] text-[13px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-[#FFD374] hover:shadow-[0_8px_40px_rgba(252,229,144,0.35)] transition-all duration-300 hover:-translate-y-1"
                 >
                   {cta.buttonLabel || 'Enquire Now'}
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -160,85 +167,43 @@ export default function Footer({ site, hideCta = false }) {
       )}
 
       {/* ═══════════════════ MAIN FOOTER ═══════════════════ */}
-      <div className="relative bg-[#1F4015]">
-        <div className="relative max-w-[1100px] mx-auto px-6 md:px-10 pt-10 pb-16 md:pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-6">
-
-            {/* Brand Column */}
-            <div className="lg:col-span-4">
-              <Link href="/" className="inline-block mb-5">
+      <div className="relative bg-[#FBF9F1] pt-16 md:pt-24 min-h-[600px] flex flex-col justify-between">
+        
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10 w-full mb-12">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-0 justify-between items-start">
+            
+            {/* Left Section (Brand Text) */}
+            <div className="lg:w-[35%] xl:w-[32%] lg:pr-10 shrink-0">
+              <Link href="/" className="block mb-10 hover:opacity-80 transition-opacity -ml-1">
                 <Image
                   src="/navbar_logo.png"
                   alt={brand.logoAlt || 'Zeovus Life'}
                   width={160}
                   height={60}
-                  className="h-auto w-[140px] object-contain brightness-0 invert"
+                  className="h-auto w-[150px] object-contain object-left mix-blend-multiply"
                 />
               </Link>
-              {footer.brandBlurb && (
-                <p className="text-[#FFF5D1]/60 text-[14px] leading-[1.8] mb-7 max-w-[270px]">
-                  {footer.brandBlurb}
-                </p>
-              )}
-
-              {/* ── Address block (India | USA | Qatar) ── */}
-              <div className="mb-7 max-w-[280px]">
-                {officeCountries.length > 0 && (
-                  <p className="mb-4 flex flex-wrap items-center gap-x-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#9CCD62]">
-                    {officeCountries.map((country, i) => (
-                      <span key={`${country}-${i}`} className="flex items-center gap-2">
-                        {i > 0 && <span className="text-white/20">|</span>}
-                        {country}
-                      </span>
-                    ))}
-                  </p>
-                )}
-
-                <p className="mb-2 text-[15px] font-semibold text-[#FFF5D1]">{companyName}</p>
-
-                {addressLines.length > 0 && (
-                  <address className="not-italic text-[14px] leading-[1.9] text-[#FFF5D1]/60">
-                    {addressLines.map((line, i) => (
-                      <span key={`addr-${i}`} className="block">{line}</span>
-                    ))}
-                  </address>
-                )}
-
-                {(contact.phone || contact.email) && (
-                  <div className="mt-4 space-y-1.5">
-                    {contact.phone && (
-                      <a
-                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                        className="block text-[14px] font-semibold text-[#FAD563] transition-colors hover:text-[#FFF5D1]"
-                      >
-                        {contact.phone}
-                      </a>
-                    )}
-                    {contact.email && (
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="block text-[14px] font-semibold text-[#FAD563] transition-colors hover:text-[#FFF5D1]"
-                      >
-                        {contact.email}
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Social Icons - pill shape */}
+              <h2 className="text-[#1B3E25] font-display text-3xl md:text-4xl lg:text-[2.65rem] leading-[1.1] font-medium tracking-tight mb-6">
+                Better Nutrition<br className="hidden lg:block"/> for a Healthier<br className="hidden lg:block"/> Tomorrow
+              </h2>
+              <div className="w-16 h-[1px] bg-[#1B3E25]/60 mb-6"></div>
+              <p className="text-[#4A4A4A] text-[15px] font-medium max-w-sm mb-10 leading-relaxed">
+                Partnering through science,<br/> nature and innovation.
+              </p>
+              
+              {/* Social Icons */}
               {socials.length > 0 && (
-                <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-black/10 border border-[#FFF5D1]/10">
+                <div className="flex items-center gap-3">
                   {socials.map((item, i) => (
                     <a
                       key={`${item.platform}-${i}`}
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#FAD563]/20 transition-all duration-300"
+                      className="w-10 h-10 rounded-full border border-[#1B3E25] flex items-center justify-center hover:bg-[#1B3E25] hover:text-[#FBF9F1] transition-all duration-300 text-[#1B3E25]"
                       aria-label={SOCIAL_LABELS[item.platform] || item.platform}
                     >
-                      <svg className="w-4 h-4 text-[#FFF5D1]/60 hover:text-[#FAD563] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d={SOCIAL_PATHS[item.platform] || SOCIAL_PATHS.linkedin} />
                       </svg>
                     </a>
@@ -247,124 +212,115 @@ export default function Footer({ site, hideCta = false }) {
               )}
             </div>
 
-            {/* Navigation */}
-            <div className="lg:col-span-2">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
-                {footer.companyHeading}
-              </p>
-              <ul className="space-y-3">
-                {quickLinks.map((link, i) => (
-                  <li key={`${link.name}-${i}`}>
-                    <Link href={link.href || '/'} className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200">
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Nutraceuticals */}
-            <div className="lg:col-span-3">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
-                {footer.nutraceuticalsHeading}
-              </p>
-              <ul className="space-y-3">
-                {nutraceuticalCategories.map((cat, i) => (
-                  <li key={`${cat.name}-${i}`}>
-                    <Link
-                      href={cat.href || '/nutraceuticals'}
-                      className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200"
-                    >
-                      {cat.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Cosmetics */}
-            <div className="lg:col-span-2">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
-                {footer.cosmeticsHeading}
-              </p>
-              <ul className="space-y-3">
-                {cosmeticsCategories.map((cat, i) => (
-                  <li key={`${cat.name}-${i}`}>
-                    <Link
-                      href={cat.href || '/cosmetics'}
-                      className="text-[#FFF5D1]/70 text-[14px] hover:text-[#FAD563] transition-colors duration-200"
-                    >
-                      {cat.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Group */}
-            <div className="lg:col-span-1">
-              <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#9CCD62] mb-5">
-                {footer.groupHeading}
-              </p>
-              <ul className="space-y-3">
-                {groupLinks.map((link, i) => {
-                  const logo = GROUP_LOGOS[link.name];
-                  const content = logo ? (
-                    <Image
-                      src={logo.src}
-                      alt={link.name}
-                      width={logo.width}
-                      height={logo.height}
-                      className={`${logo.className} w-auto max-w-[140px] object-contain`}
-                    />
-                  ) : link.name;
-
-                  return (
+            {/* Links Columns (with vertical dividers) */}
+            <div className="lg:flex-1 flex flex-wrap md:flex-nowrap justify-between gap-y-10 lg:border-l lg:border-[#1B3E25]/15 lg:pl-10">
+              
+              {/* COMPANY */}
+              <div className="w-1/2 md:w-1/4 md:border-r border-[#1B3E25]/15 pr-4 lg:pr-8">
+                <h4 className="text-[#457348] font-bold text-[11px] tracking-[0.15em] mb-5">COMPANY</h4>
+                <ul className="space-y-3">
+                  {quickLinks.map((link, i) => (
                     <li key={`${link.name}-${i}`}>
-                      {link.href ? (
-                        <a
-                          href={link.href}
-                          {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                          aria-label={link.name}
-                          className="inline-flex items-center text-[#FFF5D1]/70 text-[14px] whitespace-nowrap hover:text-[#FAD563] transition-colors"
-                        >
+                      <Link href={link.href || '/'} className="text-[#4A4A4A] text-[14px] font-medium hover:text-[#457348] transition-colors duration-200">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* NUTRACEUTICALS */}
+              <div className="w-1/2 md:w-[35%] md:border-r border-[#1B3E25]/15 px-4 lg:px-8">
+                <h4 className="text-[#457348] font-bold text-[11px] tracking-[0.15em] mb-5">NUTRACEUTICALS</h4>
+                <ul className="space-y-3">
+                  {nutraceuticalCategories.map((cat, i) => (
+                    <li key={`${cat.name}-${i}`}>
+                      <Link href={cat.href || '/nutraceuticals'} className="text-[#4A4A4A] text-[14px] font-medium hover:text-[#457348] transition-colors duration-200">
+                        {cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* COSMETICS */}
+              <div className="w-1/2 md:w-[25%] md:border-r border-[#1B3E25]/15 px-4 lg:px-8">
+                <h4 className="text-[#457348] font-bold text-[11px] tracking-[0.15em] mb-5">COSMETICS</h4>
+                <ul className="space-y-3">
+                  {cosmeticsCategories.map((cat, i) => (
+                    <li key={`${cat.name}-${i}`}>
+                      <Link href={cat.href || '/cosmetics'} className="text-[#4A4A4A] text-[14px] font-medium hover:text-[#457348] transition-colors duration-200">
+                        {cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* GROUP */}
+              <div className="w-1/2 md:w-auto md:pl-4 lg:pl-8">
+                <h4 className="text-[#457348] font-bold text-[11px] tracking-[0.15em] mb-5">GROUP</h4>
+                <ul className="space-y-3">
+                  {groupLinks.map((link, i) => {
+                    const logo = GROUP_LOGOS[link.name];
+                    const content = logo ? (
+                      <Image src={logo.src} alt={link.name} width={logo.width} height={logo.height} className={logo.className} />
+                    ) : link.name;
+                    return (
+                      <li key={`${link.name}-${i}`}>
+                        <a href={link.href || '#'} className="block hover:opacity-75 transition-opacity">
                           {content}
                         </a>
-                      ) : (
-                        <span className="inline-flex items-center text-[#FFF5D1]/70 text-[14px] whitespace-nowrap" aria-label={logo ? link.name : undefined}>
-                          {content}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
+
+
           </div>
         </div>
 
-        {/* ═══════════════════ BOTTOM BAR ═══════════════════ */}
-        <div className="bg-[#122B0B]">
-          {/* Wave top */}
-          <svg className="w-full h-6" viewBox="0 0 1440 24" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 24H1440V0C1440 0 1320 12 1080 12C840 12 720 0 480 0C240 0 0 12 0 12V24Z" fill="#122B0B"/>
+        {/* Wave Background Graphic */}
+        <div className="absolute bottom-0 left-0 w-full h-[50vh] min-h-[300px] max-h-[600px] z-0 overflow-hidden pointer-events-none">
+          <svg className="absolute bottom-0 w-[150%] md:w-full h-full object-cover md:object-fill origin-bottom-left" viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 250 C 300 250 400 350 700 350 C 1000 350 1200 200 1440 100 L 1440 400 L 0 400 Z" fill="#FCE590" opacity="0.7" />
+            <path d="M0 350 C 400 350 500 250 800 250 C 1100 250 1200 150 1440 50 L 1440 400 L 0 400 Z" fill="#A3C695" opacity="0.8" />
+            <path d="M400 400 C 600 350 700 200 1000 200 C 1200 200 1300 100 1440 0 L 1440 400 Z" fill="#355C33" opacity="0.9" />
+            <path d="M700 400 C 900 350 1000 150 1250 150 C 1350 150 1400 50 1440 0 L 1440 400 Z" fill="#1B3E25" opacity="1" />
           </svg>
-          
-          <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-5">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-              <p className="text-[#FFF5D1]/50 text-[12px]">
-                {(footer.copyright || '').replace('{year}', String(currentYear))}
-              </p>
-              <div className="flex items-center gap-5 text-[12px]">
-                {legalLinks.map((link, i) => (
-                  <span key={`${link.name}-${i}`} className="flex items-center gap-5">
-                    {i > 0 && <span className="w-1 h-1 rounded-full bg-[#FFF5D1]/30" />}
-                    <Link href={link.href || '#'} className="text-[#FFF5D1]/50 hover:text-[#FAD563] transition-colors">
-                      {link.name}
-                    </Link>
-                  </span>
-                ))}
-              </div>
+        </div>
+
+        {/* Sprouts in Bottom Right Corner */}
+        <div className="absolute bottom-0 right-4 md:right-12 xl:right-24 z-20 flex items-end gap-1 md:gap-3 pointer-events-none">
+          <img 
+            src="https://res.cloudinary.com/ac74hfe9/image/upload/v1789399874/Gemini_Generated_Image_hfve8ghfve8ghfve-removebg-preview.png"
+            alt="Sprout small"
+            className="h-28 md:h-44 w-auto object-contain object-bottom -scale-x-100 opacity-95"
+          />
+          <img 
+            src="https://res.cloudinary.com/ac74hfe9/image/upload/v1789399874/Gemini_Generated_Image_hfve8ghfve8ghfve-removebg-preview.png"
+            alt="Sprout large"
+            className="h-36 md:h-56 w-auto object-contain object-bottom opacity-100"
+          />
+        </div>
+
+        {/* Legal & Copyright */}
+        <div className="relative z-10 w-full mt-auto px-6 md:px-10 pb-6 md:pb-8 pt-20">
+          <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[#1B3E25] text-[13px] font-medium">
+            <p className="opacity-90 drop-shadow-sm">
+              {(footer.copyright || '© {year} Zeovus Ventures Private Limited. All rights reserved.').replace('{year}', String(currentYear))}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 drop-shadow-sm">
+              {legalLinks.map((link, i) => (
+                <span key={`${link.name}-${i}`} className="flex items-center gap-4">
+                  {i > 0 && <span className="text-[#1B3E25]/30">|</span>}
+                  <Link href={link.href || '#'} className="hover:opacity-70 transition-opacity">
+                    {link.name}
+                  </Link>
+                </span>
+              ))}
             </div>
           </div>
         </div>
