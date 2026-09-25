@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ArrowRight,
@@ -99,8 +100,6 @@ export default function HeroSection({ content = {} }) {
 
       {/* 
         REFINED READABILITY OVERLAY:
-        - Reduced white milky hue: dialed down to 78% on left and 8% on right
-        - Allows the video's rich colors, depth, and motion to show through with much stronger opacity
       */}
       <div
         className="absolute inset-0 z-[1] pointer-events-none"
@@ -115,17 +114,17 @@ export default function HeroSection({ content = {} }) {
 
       {/* 
         TOP-RIGHT FLOATING EDITORIAL CALLOUT:
-        "From nature's potential to products that make a difference"
+        Palette: Warm sunny yellow #FFD374 from official brand palette
       */}
       <div className="hidden lg:block absolute top-[135px] right-12 xl:right-24 z-10 pointer-events-none max-w-[240px] text-right">
-        <p className="font-serif italic text-neutral-800 text-base xl:text-lg leading-snug drop-shadow-sm">
+        <p className="font-serif italic text-[#FFD374] text-base xl:text-lg leading-snug drop-shadow-[0_2px_10px_rgba(15,30,20,0.6)]">
           &ldquo;From nature&apos;s potential to products that make a difference&rdquo;
         </p>
-        <div className="w-16 h-[1.5px] bg-[#15A859] ml-auto mt-2 rounded-full shadow-sm" />
+        <div className="w-16 h-[2px] bg-[#FFD374] ml-auto mt-2 rounded-full shadow-sm" />
       </div>
 
       {/* 
-        MAIN HERO CONTENT (POSITIONED MUCH LOWER):
+        MAIN HERO CONTENT:
       */}
       <div className="relative z-10 mx-auto w-full max-w-[1500px] px-6 sm:px-10 lg:px-12 pt-16 sm:pt-24 lg:pt-36 pb-6 sm:pb-8">
         <div className="max-w-3xl">
@@ -238,7 +237,7 @@ export default function HeroSection({ content = {} }) {
             transition={{ duration: 0.8, delay: 0.45 }}
             className="hidden md:flex items-center gap-3 pl-4"
           >
-            <div className="relative flex items-center justify-center w-20 h-20">
+            <div className="relative flex items-center justify-center w-28 h-28">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
@@ -247,18 +246,25 @@ export default function HeroSection({ content = {} }) {
                 <svg viewBox="0 0 100 100" className="w-full h-full">
                   <path
                     id="circlePath"
-                    d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
+                    d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
                     fill="transparent"
                   />
-                  <text className="text-[9.5px] font-heading font-bold uppercase tracking-[0.18em] fill-[#1F4015]">
+                  <text className="text-[10px] font-heading font-extrabold uppercase tracking-[0.16em] fill-[#1F4015]">
                     <textPath href="#circlePath" startOffset="0%">
                       • ZEOVUS QUALITY ASSURED •
                     </textPath>
                   </text>
                 </svg>
               </motion.div>
-              <div className="w-9 h-9 rounded-full bg-white/95 border border-neutral-200 flex items-center justify-center text-[#15A859] shadow-sm">
-                <ShieldCheck size={20} strokeWidth={2.2} />
+              {/* Extra Large Inner Circle & Logo */}
+              <div className="w-16 h-16 rounded-full bg-white border border-neutral-200/90 flex items-center justify-center p-2 shadow-md overflow-hidden">
+                <Image
+                  src="/images/Logo.png"
+                  alt="Zeovus Quality Assured Logo"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
           </motion.div>

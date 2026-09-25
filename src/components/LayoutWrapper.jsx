@@ -15,9 +15,9 @@ export default function LayoutWrapper({ children, site }) {
         ...site,
         nav: {
           ...(site?.nav || {}),
-          items: (site?.nav?.items || []).some((item) => item?.href === '/faq')
-            ? site.nav.items
-            : [...(site?.nav?.items || []), { name: 'FAQ', href: '/faq', hasDropdown: false }],
+          items: (site?.nav?.items || []).filter(
+            (item) => item?.href !== '/faq' && item?.name?.toLowerCase() !== 'faq'
+          ),
         },
       };
 

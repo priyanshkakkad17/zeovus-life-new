@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Leaf, ShieldCheck, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const SOCIAL_PATHS = {
   instagram:
@@ -78,29 +78,11 @@ export default function Footer({ site, hideCta = false }) {
       {!hideCta && (
         <div>
           {/* Top gap above CTA banner: Matches the section above (#F4F6F0) */}
-          <div className="w-full bg-[#F4F6F0] pt-12 sm:pt-16 lg:pt-20">
+          <div className="w-full bg-[#EBF0E8] pt-12 sm:pt-16 lg:pt-20">
             <section className="relative w-full bg-[#0B2A1F] text-white py-16 sm:py-20 lg:py-24 px-6 sm:px-12 lg:px-20 overflow-hidden shadow-2xl">
               
               {/* Subtle Ambient Glow */}
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#15A859]/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Botanical Sprout - Left Edge */}
-              <div className="absolute left-6 sm:left-12 bottom-6 sm:bottom-8 pointer-events-none opacity-85">
-                <svg width="40" height="70" viewBox="0 0 40 70" fill="none" className="w-8 sm:w-10 h-auto text-[#E5B54F]">
-                  <path d="M20 70 V22" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                  <path d="M20 22 C10 22 2 12 2 2 C12 2 20 12 20 22 Z" fill="currentColor" />
-                  <path d="M20 18 C30 18 38 8 38 0 C28 0 20 8 20 18 Z" fill="currentColor" />
-                </svg>
-              </div>
-
-              {/* Botanical Sprout - Right Edge */}
-              <div className="absolute right-6 sm:right-12 bottom-6 sm:bottom-8 pointer-events-none opacity-85">
-                <svg width="40" height="70" viewBox="0 0 40 70" fill="none" className="w-8 sm:w-10 h-auto text-[#E5B54F]">
-                  <path d="M20 70 V22" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                  <path d="M20 22 C10 22 2 12 2 2 C12 2 20 12 20 22 Z" fill="currentColor" />
-                  <path d="M20 18 C30 18 38 8 38 0 C28 0 20 8 20 18 Z" fill="currentColor" />
-                </svg>
-              </div>
 
               <div className="relative z-10 max-w-[1360px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-10">
                 
@@ -152,6 +134,18 @@ export default function Footer({ site, hideCta = false }) {
           />
         </div>
 
+        {/* Botanical Leaf Stick - Right Bottom Corner */}
+        <div className="pointer-events-none absolute right-2 bottom-8 z-20 block sm:right-3 sm:bottom-10 md:right-4 md:bottom-12 lg:right-6 xl:right-8">
+          <div className="relative w-[36px] h-[72px] sm:w-[48px] sm:h-[96px] md:w-[60px] md:h-[120px] lg:w-[72px] lg:h-[144px] xl:w-[84px] xl:h-[168px] opacity-95 brightness-110">
+            <Image
+              src="/images/stick with flowe.png"
+              alt="Botanical twig accent"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
+
         <div className="relative z-10 w-full">
           
           {/* TOP MISTY SKY HEADER ROW */}
@@ -176,14 +170,6 @@ export default function Footer({ site, hideCta = false }) {
                 </p>
               </div>
 
-              {/* Floating Sprout Icon in Sky */}
-              <div className="hidden md:block pointer-events-none pr-4 lg:pr-8">
-                <svg width="40" height="46" viewBox="0 0 40 46" fill="none" className="w-9 h-auto text-[#7CA862]">
-                  <path d="M20 46 V15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                  <path d="M20 15 C8 15 2 6 2 2 C12 2 20 8 20 15 Z" fill="currentColor" />
-                  <path d="M20 12 C32 12 38 4 38 0 C28 0 20 5 20 12 Z" fill="currentColor" />
-                </svg>
-              </div>
 
             </div>
           </div>
@@ -192,7 +178,7 @@ export default function Footer({ site, hideCta = false }) {
           <div className="pt-2 sm:pt-4 pb-12 px-6 sm:px-10 lg:px-16">
             <div className="max-w-[1440px] mx-auto">
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-white/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-10 lg:gap-8 pb-10">
                 
                 {/* Column 1: Brand Info & Address (Col Span 3) */}
                 <div className="lg:col-span-3 flex flex-col items-start">
@@ -330,7 +316,7 @@ export default function Footer({ site, hideCta = false }) {
                   </div>
                 </div>
 
-                {/* Column 5: STAY CONNECTED & TRUST BADGES (Col Span 3) */}
+                {/* Column 5: STAY CONNECTED (Col Span 3) */}
                 <div className="lg:col-span-3 flex flex-col">
                   <h4 className="font-heading font-bold text-xs text-[#9CCD62] uppercase tracking-wider mb-2">
                     STAY CONNECTED
@@ -345,7 +331,7 @@ export default function Footer({ site, hideCta = false }) {
                   </p>
 
                   {/* Newsletter Form */}
-                  <form onSubmit={(e) => e.preventDefault()} className="relative flex items-center mb-7 max-w-xs w-full">
+                  <form onSubmit={(e) => e.preventDefault()} className="relative flex items-center mb-4 max-w-xs w-full">
                     <input
                       type="email"
                       placeholder="Your email address"
@@ -360,47 +346,24 @@ export default function Footer({ site, hideCta = false }) {
                     </button>
                   </form>
 
-                  {/* 3 Trust Badges Row */}
-                  <div className="flex items-center justify-between max-w-xs w-full pt-1">
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <Leaf size={18} className="text-[#9CCD62]" strokeWidth={1.8} />
-                      <span className="text-[11px] text-white/80 font-medium leading-tight">
-                        Science<br />Backed
+                  {/* Legal Links under Email Input */}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/70 pt-1">
+                    {legalLinks.map((link, i) => (
+                      <span key={`${link.name}-${i}`} className="inline-flex items-center gap-3">
+                        {i > 0 && <span className="text-white/20">|</span>}
+                        <Link href={link.href} className="hover:text-[#9CCD62] transition-colors">
+                          {link.name}
+                        </Link>
                       </span>
-                    </div>
-                    
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <ShieldCheck size={18} className="text-[#9CCD62]" strokeWidth={1.8} />
-                      <span className="text-[11px] text-white/80 font-medium leading-tight">
-                        Quality<br />Assured
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <Globe size={18} className="text-[#9CCD62]" strokeWidth={1.8} />
-                      <span className="text-[11px] text-white/80 font-medium leading-tight">
-                        A Healthier<br />Tomorrow
-                      </span>
-                    </div>
+                    ))}
                   </div>
-
                 </div>
 
               </div>
 
-              {/* ═══════════════════ BOTTOM COPYRIGHT & LEGAL BAR ═══════════════════ */}
+              {/* ═══════════════════ BOTTOM COPYRIGHT BAR ═══════════════════ */}
               <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/60">
                 <p>© {currentYear} Zeovus Ventures Private Limited. All rights reserved.</p>
-                <div className="flex items-center gap-4">
-                  {legalLinks.map((link, i) => (
-                    <span key={`${link.name}-${i}`} className="flex items-center gap-4">
-                      {i > 0 && <span className="text-white/20">|</span>}
-                      <Link href={link.href} className="hover:text-white transition-colors">
-                        {link.name}
-                      </Link>
-                    </span>
-                  ))}
-                </div>
               </div>
 
             </div>

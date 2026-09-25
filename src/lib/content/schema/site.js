@@ -43,7 +43,6 @@ const site = {
             { name: 'Capabilities', href: '/capabilities', hasDropdown: false },
             { name: 'Nutraceuticals', href: '/nutraceuticals', hasDropdown: true },
             { name: 'Cosmetics', href: '/cosmetics', hasDropdown: true },
-            { name: 'FAQ', href: '/faq', hasDropdown: false },
             { name: 'Working Together', href: '/contact', hasDropdown: false },
           ],
         },

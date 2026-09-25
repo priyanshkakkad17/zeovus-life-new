@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const LABS = [
@@ -44,28 +43,28 @@ export default function PortfolioHighlights({ content = {} }) {
 
   const N = baseItems.length;
 
-  const REPEAT_COUNT = 8;
+  const REPEAT_COUNT = 12;
   const loopedItems = Array.from({ length: REPEAT_COUNT }, () => baseItems).flat();
 
   const startIndex = Math.floor(REPEAT_COUNT / 2) * N;
   const [index, setIndex] = useState(startIndex);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const nextCard = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIndex((prev) => prev + 1);
-  };
+  // Auto-slide every 3.5 seconds
+  useEffect(() => {
+    if (isPaused) return undefined;
 
-  const prevCard = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIndex((prev) => prev - 1);
-  };
+    const interval = setInterval(() => {
+      setIndex((prev) => {
+        if (prev >= loopedItems.length - 2) {
+          return startIndex;
+        }
+        return prev + 1;
+      });
+    }, 3500);
 
-  const handleAnimationComplete = () => {
-    setIsAnimating(false);
-  };
+    return () => clearInterval(interval);
+  }, [isPaused, loopedItems.length, startIndex]);
 
   if (content.enabled === false || baseItems.length === 0) return null;
 
@@ -104,41 +103,22 @@ export default function PortfolioHighlights({ content = {} }) {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Sharp Container with Dark & Creative Arrow Controls */}
-          <div className="xl:col-span-8 relative flex items-center justify-center w-full">
-            
-            {/* 
-              CREATIVE DARK LEFT ARROW BUTTON:
-              - High contrast deep charcoal background (#1F4015 / #111827)
-              - Magnetic hover shift with glowing ring
-              - Clean linear icon with hover arrow kick
-            */}
-            <button
-              onClick={prevCard}
-              disabled={isAnimating}
-              aria-label="Previous lab"
-              className="group absolute -left-5 sm:-left-8 xl:-left-12 z-20 flex items-center justify-center h-14 w-14 bg-[#111827] text-white shadow-xl hover:bg-[#1F4015] hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-40"
-            >
-              <ArrowLeft
-                size={22}
-                strokeWidth={2.4}
-                className="transition-transform duration-300 group-hover:-translate-x-1"
-              />
-              {/* Creative border accent */}
-              <span className="absolute inset-0 border border-white/20 pointer-events-none group-hover:border-[#9CCD62]/60 transition-colors" />
-            </button>
-
+          {/* RIGHT COLUMN: Auto-sliding Card Track without buttons (pauses on hover) */}
+          <div
+            className="xl:col-span-8 relative flex items-center justify-center w-full"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             {/* Sharp Container with Shadow */}
             <div className="w-full max-w-[860px] overflow-hidden rounded-none bg-white border border-neutral-100 shadow-[0_25px_65px_-15px_rgba(0,0,0,0.12)] pb-14 sm:pb-20">
               
-              {/* Continuous Sliding Track */}
+              {/* Continuous Auto-Sliding Track */}
               <motion.div
                 animate={{ x: `-${index * 50}%` }}
                 transition={{
-                  duration: 0.6,
-                  ease: [0.2, 1, 0.3, 1],
+                  duration: 0.8,
+                  ease: [0.25, 1, 0.5, 1],
                 }}
-                onAnimationComplete={handleAnimationComplete}
                 className="flex w-full will-change-transform transform-gpu"
               >
                 {loopedItems.map((item, idx) => {
@@ -179,27 +159,6 @@ export default function PortfolioHighlights({ content = {} }) {
                 })}
               </motion.div>
             </div>
-
-            {/* 
-              CREATIVE DARK RIGHT ARROW BUTTON:
-              - High contrast deep charcoal background (#1F4015 / #111827)
-              - Magnetic hover shift with glowing ring
-              - Clean linear icon with hover arrow kick
-            */}
-            <button
-              onClick={nextCard}
-              disabled={isAnimating}
-              aria-label="Next lab"
-              className="group absolute -right-5 sm:-right-8 xl:-right-12 z-20 flex items-center justify-center h-14 w-14 bg-[#111827] text-white shadow-xl hover:bg-[#1F4015] hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-40"
-            >
-              <ArrowRight
-                size={22}
-                strokeWidth={2.4}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-              {/* Creative border accent */}
-              <span className="absolute inset-0 border border-white/20 pointer-events-none group-hover:border-[#9CCD62]/60 transition-colors" />
-            </button>
 
           </div>
 

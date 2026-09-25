@@ -130,22 +130,6 @@ export default function CapabilitiesSection({ content = {} }) {
           </svg>
         </div>
 
-        {/* 
-          GOLDEN-GREEN SPROUT / SEEDLING:
-          Positioned right at the center divider line.
-        */}
-        <div className="hidden md:block absolute top-10 sm:top-14 left-[50%] md:left-[49.5%] z-30 pointer-events-none">
-          <svg width="42" height="120" viewBox="0 0 40 120" fill="none" className="w-7 sm:w-8 xl:w-9 h-auto text-[#9CCD62]">
-            {/* Vertical Stem */}
-            <path d="M20 120 V25" stroke="#9CCD62" strokeWidth="2.2" strokeLinecap="round" />
-            <path d="M20 70 Q24 65 28 68" stroke="#9CCD62" strokeWidth="1.5" strokeLinecap="round" />
-            {/* Left Leaf */}
-            <path d="M20 25 C10 25 2 15 2 4 C12 4 20 15 20 25 Z" fill="#9CCD62" />
-            {/* Right Leaf */}
-            <path d="M20 20 C30 20 38 10 38 0 C28 0 20 10 20 20 Z" fill="#9CCD62" />
-          </svg>
-        </div>
-
         {/* ================= RIGHT MEDIA PANEL ================= */}
         <div className="w-full md:w-[50%] md:flex-1 relative h-[360px] sm:h-[450px] md:h-auto min-h-full overflow-hidden bg-[#0A261D]">
           

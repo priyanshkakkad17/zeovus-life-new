@@ -185,21 +185,22 @@ export default function CertificationsSection({ content = {} }) {
           transition={{ duration: 0.65, delay: 0.15 }}
           className="mt-16 sm:mt-20 lg:mt-24 w-full bg-white rounded-2xl sm:rounded-3xl border border-[#E6ECE2] shadow-[0_6px_30px_rgba(0,0,0,0.04)] overflow-hidden"
         >
-          <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 items-stretch">
             
-            {/* Left: Lab Scientist Image from /images/certification.png */}
-            <div className="md:col-span-5 lg:col-span-6 relative h-[220px] sm:h-[260px] md:h-[300px] w-full overflow-hidden bg-[#EDF3E8]">
+            {/* Left: Lab Scientist Image from /images/certification.png - flush to edges on all screens */}
+            <div className="md:col-span-5 lg:col-span-6 relative min-h-[260px] sm:min-h-[300px] md:min-h-[340px] w-full overflow-hidden bg-[#EDF3E8]">
               <Image
                 src="/images/certification.png"
                 alt="Scientist in laboratory examining test tube"
                 fill
+                priority
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center"
+                className="object-cover object-center w-full h-full"
               />
             </div>
 
             {/* Right: "Held to standards you can verify" + View Certifications button */}
-            <div className="md:col-span-7 lg:col-span-6 p-8 sm:p-10 lg:p-14 flex flex-col items-start justify-center">
+            <div className="md:col-span-7 lg:col-span-6 p-6 sm:p-10 lg:p-14 flex flex-col items-start justify-center">
               <h3 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-medium text-[#0B281E] leading-snug tracking-tight mb-3">
                 {content.footerHeading || 'Held to standards you can verify.'}
               </h3>

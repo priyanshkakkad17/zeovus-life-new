@@ -18,7 +18,10 @@ export default function Header({ site }) {
   const [isEnglish, setIsEnglish] = useState(true);
 
   const brand = site?.brand || {};
-  const navItems = (site?.nav?.items || []).filter((item) => item?.name);
+  // Exclude FAQ completely from desktop and mobile navigation
+  const navItems = (site?.nav?.items || [])
+    .filter((item) => item?.name)
+    .filter((item) => item?.href !== '/faq' && item?.name?.trim().toLowerCase() !== 'faq');
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 30);
@@ -95,7 +98,7 @@ export default function Header({ site }) {
       <div className="mx-auto flex h-[74px] sm:h-[84px] lg:h-[92px] w-full max-w-[1720px] items-center justify-between px-4 sm:px-6 lg:px-10">
         
         {/* Left: Brand Logo + Vertical Divider + Tagline */}
-        <div className="flex min-w-0 items-center">
+        <div className="flex items-center shrink-0">
           {/* Logo */}
           <Link
             href="/"
@@ -112,20 +115,20 @@ export default function Header({ site }) {
             />
           </Link>
 
-          {/* Vertical Separator Line */}
-          <div className="hidden sm:block h-8 sm:h-9 lg:h-10 w-[1.5px] bg-[#0B281E]/30 shrink-0 mx-2 sm:mx-3 lg:mx-4" />
+          {/* Vertical Separator Line (visible on large 2xl screens where ample space is available) */}
+          <div className="hidden 2xl:block h-8 sm:h-9 lg:h-10 w-[1.5px] bg-[#0B281E]/30 shrink-0 mx-2 sm:mx-3 lg:mx-4" />
 
-          {/* Tagline */}
+          {/* Tagline (visible on 2xl screens to prevent collision with nav menu items on laptop/xl viewports) */}
           <p
             translate="no"
-            className="notranslate hidden sm:block font-heading text-[13px] lg:text-[14px] font-semibold text-[#0B281E]/80 tracking-normal whitespace-nowrap"
+            className="notranslate hidden 2xl:block font-heading text-[13px] 2xl:text-[14px] font-semibold text-[#0B281E]/80 tracking-normal whitespace-nowrap"
           >
             {brand.tagline || 'Committed to better tomorrow'}
           </p>
         </div>
 
         {/* Center: Desktop Navigation Links */}
-        <nav className="hidden xl:flex items-center gap-1.5 2xl:gap-3">
+        <nav className="hidden xl:flex items-center gap-1 xl:gap-1.5 2xl:gap-3 shrink-0">
           {navItems.map((item) => {
             const active = isActive(item.href);
 
@@ -134,7 +137,7 @@ export default function Header({ site }) {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="px-3.5 py-1.5 rounded-md bg-[#1B3B2B] text-white font-heading text-[12px] 2xl:text-[13px] font-bold tracking-[0.08em] uppercase transition-colors shadow-sm"
+                  className="px-2.5 2xl:px-3.5 py-1.5 rounded-md bg-[#1B3B2B] text-white font-heading text-[11px] 2xl:text-[13px] font-bold tracking-[0.06em] 2xl:tracking-[0.08em] uppercase transition-colors shadow-sm whitespace-nowrap"
                 >
                   {item.name}
                 </Link>
@@ -145,7 +148,7 @@ export default function Header({ site }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-3 py-1.5 font-heading text-[12px] 2xl:text-[13px] font-bold tracking-[0.08em] uppercase text-[#0B281E] hover:text-[#15A859] transition-colors whitespace-nowrap inline-flex items-center gap-1"
+                className="px-2 2xl:px-3 py-1.5 font-heading text-[11px] 2xl:text-[13px] font-bold tracking-[0.06em] 2xl:tracking-[0.08em] uppercase text-[#0B281E] hover:text-[#15A859] transition-colors whitespace-nowrap inline-flex items-center gap-0.5 2xl:gap-1"
               >
                 <span>{item.name}</span>
                 {item.hasDropdown && (
@@ -157,7 +160,7 @@ export default function Header({ site }) {
         </nav>
 
         {/* Right: Search + Language Dropdown + Enquire Now Button */}
-        <div className="hidden lg:flex items-center gap-3.5 xl:gap-5 shrink-0">
+        <div className="hidden lg:flex items-center gap-2 xl:gap-3.5 2xl:gap-5 shrink-0">
           
           {/* Search Glass Icon */}
           <button
