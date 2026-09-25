@@ -3,27 +3,28 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView, animate } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 
 const CERT_LOGOS = [
-  { src: "/logo/gmp.png", alt: "GMP certification" },
-  { src: "/logo/ISO-Logo.png", alt: "ISO certification" },
-  { src: "/logo/haccp.png", alt: "HACCP certification" },
-  { src: "/logo/iso22000.png", alt: "FSSC 22000 certification" },
-  { src: "/logo/brcgs.png", alt: "BRCGS certification" },
-  { src: "/logo/ifs-logo.png", alt: "IFS certification" },
-  { src: "/logo/usfda.png", alt: "US FDA certification" },
-  { src: "/logo/iso 22716-2007.png", alt: "ISO 22716 certification" },
-  { src: "/logo/cosmos-standard.png", alt: "COSMOS standard" },
-  { src: "/logo/halal.png", alt: "Halal certification" },
-  { src: "/logo/kosher.png", alt: "Kosher certification" },
-  { src: "/logo/organic.png", alt: "Organic certification" },
-  { src: "/logo/non gmo project copy.jpg", alt: "Non-GMO Project" },
-  { src: "/logo/reach-compliant copy.png", alt: "REACH compliant" },
-  { src: "/logo/nsf.png", alt: "NSF certification" },
-  { src: "/logo/leaping_bunny.png", alt: "Leaping Bunny cruelty-free" },
-  { src: "/logo/vegan.webp", alt: "Vegan certification" },
-  { src: "/logo/fssai.png", alt: "FSSAI certification" },
+  { src: '/logo/gmp.png', alt: 'GMP certification' },
+  { src: '/logo/ISO-Logo.png', alt: 'ISO certification' },
+  { src: '/logo/haccp.png', alt: 'HACCP certification' },
+  { src: '/logo/fssai.png', alt: 'FSSAI certification' },
+  { src: '/logo/brcgs.png', alt: 'BRCGS certification' },
+  { src: '/logo/ifs-logo.png', alt: 'IFS certification' },
+  { src: '/logo/usfda.png', alt: 'US FDA certification' },
+  { src: '/logo/iso22000.png', alt: 'FSSC 22000 certification' },
+  { src: '/logo/iso 22716-2007.png', alt: 'ISO 22716 certification' },
+  { src: '/logo/cosmos-standard.png', alt: 'COSMOS standard' },
+  { src: '/logo/halal.png', alt: 'Halal certification' },
+  { src: '/logo/kosher.png', alt: 'Kosher certification' },
+  { src: '/logo/organic.png', alt: 'Organic certification' },
+  { src: '/logo/non gmo project copy.jpg', alt: 'Non-GMO Project' },
+  { src: '/logo/reach-compliant copy.png', alt: 'REACH compliant' },
+  { src: '/logo/nsf.png', alt: 'NSF certification' },
+  { src: '/logo/leaping_bunny.png', alt: 'Leaping Bunny cruelty-free' },
+  { src: '/logo/vegan.webp', alt: 'Vegan certification' },
 ];
 
 function useCountUp(target) {
@@ -35,10 +36,10 @@ function useCountUp(target) {
     if (inView) {
       const controls = animate(0, target, {
         duration: 2,
-        ease: "easeOut",
+        ease: 'easeOut',
         onUpdate(value) {
           setCount(Math.round(value));
-        }
+        },
       });
       return () => controls.stop();
     }
@@ -50,164 +51,176 @@ function useCountUp(target) {
 function Stat({ value, suffix, label }) {
   const [count, ref] = useCountUp(value);
   return (
-    <div ref={ref} className="text-center">
-      <div className="text-primary-dark font-bold text-5xl md:text-6xl leading-none tracking-tight">
+    <div ref={ref} className="text-left">
+      <div className="text-[#0B281E] font-heading font-extrabold text-4xl sm:text-5xl lg:text-[52px] leading-none tracking-tight">
         {count}
-        <span className="text-primary-light">{suffix}</span>
+        <span className="text-[#15A859]">{suffix}</span>
       </div>
-      <div className="mt-3 text-[13px] font-medium tracking-[0.12em] uppercase text-primary-dark/60">{label}</div>
+      <div className="mt-2 text-xs sm:text-[13px] font-sans font-medium text-[#4A5D54]">
+        {label}
+      </div>
     </div>
   );
 }
 
 export default function CertificationsSection({ content = {} }) {
-  const metrics = content.metrics || [];
-  const logos = [...CERT_LOGOS, ...CERT_LOGOS];
-
   if (content.enabled === false) return null;
 
+  // Stats matching reference screenshot
+  const defaultMetrics = [
+    { value: 12, suffix: '+', label: 'Years of Expertise' },
+    { value: 825, suffix: '+', label: 'Formulas Developed' },
+    { value: 3, suffix: 'x', label: 'Global Markets Served' },
+  ];
+
+  const incomingMetrics = content.metrics || [];
+  const metrics = defaultMetrics.map((dm, idx) => {
+    const m = incomingMetrics[idx];
+    return {
+      value: m?.value ? Number(m.value) : dm.value,
+      suffix: m?.suffix !== undefined ? m.suffix : dm.suffix,
+      label: m?.label || dm.label,
+    };
+  });
+
+  // Duplicate logos for seamless conveyor belt marquee
+  const logos = [...CERT_LOGOS, ...CERT_LOGOS];
+
   return (
-    <section id="quality" className="bg-[#F8F8F8] py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl"
-        >
-          {content.eyebrow && (
-            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-primary-light mb-4">
-              {content.eyebrow}
-            </p>
-          )}
-          <h2 className="text-primary-dark font-bold text-3xl sm:text-4xl md:text-5xl leading-[1.08] text-balance">
-            {content.headingLead}
-            <br />
-            {content.headingAccent && (
-              <span className="text-primary-light">{content.headingAccent}</span>
-            )}
-          </h2>
-          {content.intro && (
-            <p className="mt-6 text-primary-dark/70 text-base leading-relaxed">
-              {content.intro}
-            </p>
-          )}
-        </motion.div>
-
-        {/* Stats + seal */}
-        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
-          <div className="md:col-span-8 grid grid-cols-3 gap-4 md:gap-8">
-            {metrics.map((s, i) => (
-              <Stat key={i} value={Number(s.value) || 0} suffix={s.suffix} label={s.label} />
-            ))}
-          </div>
-          <div className="md:col-span-4 flex justify-center md:justify-end">
-            <motion.div
-              initial={{ opacity: 0, scale: 2.5, rotate: -24, filter: 'blur(4px)' }}
-              whileInView={{
-                opacity: [0, 1, 1, 1],
-                scale: [2.5, 0.8, 1.07, 1],
-                rotate: [-24, -13, -9, -8],
-                filter: ['blur(4px)', 'blur(0.4px)', 'blur(0px)', 'blur(0px)'],
-              }}
-              viewport={{ once: true }}
-              transition={{
-                delay: 0.3,
-                duration: 0.52,
-                times: [0, 0.55, 0.8, 1],
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
-              className="relative shrink-0"
-              style={{ transformOrigin: 'center' }}
-            >
-              {/* Ink bleed halo that appears on impact */}
-              <motion.span
-                aria-hidden="true"
-                initial={{ opacity: 0, scale: 0.7 }}
-                whileInView={{ opacity: [0, 0.4, 0], scale: [0.7, 1.15, 1.35] }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
-                className="absolute inset-0 rounded-full"
-                style={{ background: 'radial-gradient(circle, rgba(127,175,127,0.35) 0%, transparent 70%)' }}
-              />
-              <img
-                src={content.sealImage || "/zqa/seal5.png"}
-                alt={content.sealAlt || "Zeovus Quality Assurance Seal"}
-                loading="lazy"
-                draggable={false}
-                className="relative h-40 w-40 md:h-48 md:w-48 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)] select-none"
-              />
-            </motion.div>
-          </div>
-        </div>
-
-        {content.metricsFootnote && (
+    <section id="quality" className="bg-[#FAFCF8] py-16 sm:py-20 lg:py-24 overflow-hidden">
+      <div className="mx-auto max-w-[1500px] px-6 sm:px-10 lg:px-12">
+        
+        {/* ================= TOP ROW: 2-COLUMN SPLIT ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* LEFT COLUMN: Eyebrow + Serif Headline + Body Paragraph + Pill CTA Button */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 flex flex-col items-start max-w-xl"
           >
-            <p className="mt-8 text-[13px] text-primary-dark/55 italic border-l-2 border-primary-light/40 pl-4 max-w-2xl">
-              {content.metricsFootnote}
+            {/* Eyebrow */}
+            <p className="font-heading text-xs font-bold tracking-[0.2em] uppercase text-[#738C7B] mb-4 flex items-center gap-2">
+              <span className="w-5 h-[1.5px] bg-[#738C7B]" />
+              <span>{content.eyebrow || 'OUR COMMITMENT'}</span>
             </p>
-          </motion.div>
-        )}
-      </div>
 
-      {/* Certification logo carousel */}
-      {content.showCertifications !== false && (
-        <div className="mt-16 md:mt-20">
-          <div className="group relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#F8F8F8] to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#F8F8F8] to-transparent z-10" />
-            <div className="flex w-max animate-cert-scroll group-hover:[animation-play-state:paused]">
-              {logos.map((logo, i) => (
-                <div
-                  key={i}
-                  className="shrink-0 mx-3 sm:mx-5 flex items-center justify-center h-24 w-28 sm:h-28 sm:w-36"
-                  tabIndex={0}
-                >
-                  <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    loading="lazy"
-                    className="max-h-full max-w-full object-contain opacity-80 hover:opacity-100 transition-opacity"
-                    onError={(e) => { e.currentTarget.style.display = "none"; }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+            {/* Headline */}
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-normal leading-[1.14] text-[#0B281E] tracking-tight mb-5">
+              <span>{content.headingLead || 'Quality is not a department.'}</span>
+              <br />
+              <span className="text-[#15A859] font-medium">
+                {content.headingAccent || "It's our DNA."}
+              </span>
+            </h2>
 
-      {/* Footer strip */}
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 mt-14 md:mt-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-t border-primary-dark/10 pt-10">
-            <div className="max-w-xl">
-              <h3 className="text-primary-dark font-bold text-2xl md:text-3xl text-balance mb-3">
-                {content.footerHeading || 'Held to standards you can verify.'}
-              </h3>
-              <p className="text-primary-dark/70 text-base leading-relaxed">
-                {content.footerBody || 'Explore every certification, audit protocol, and compliance framework behind Zeovus manufacturing.'}
-              </p>
-            </div>
+            {/* Intro Body Copy */}
+            <p className="font-sans text-sm sm:text-base leading-relaxed text-[#4A5D54] mb-8 font-normal">
+              {content.intro ||
+                'Every product goes through rigorous testing and compliance to ensure safety, purity and consistency — because your brand deserves nothing less.'}
+            </p>
+
+            {/* Solid Pill CTA Button */}
             <Link
               href={content.footerCtaHref || '/capabilities'}
-              className="shrink-0 inline-flex items-center gap-2 h-12 px-7 rounded-full border-2 border-primary-dark text-primary-dark font-semibold text-sm hover:bg-primary-dark hover:text-white transition-colors"
+              className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#132E22] hover:bg-[#15A859] text-white font-heading font-semibold text-xs sm:text-sm tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
             >
-              {content.footerCtaLabel || 'View Manufacturing Standards'} <ArrowRight size={16} />
+              <span>{content.footerCtaLabel || 'Our Quality Standards'}</span>
+              <ArrowRight size={15} strokeWidth={2.4} />
             </Link>
+          </motion.div>
+
+          {/* RIGHT COLUMN: Stats Row + Rotating Conveyor Belt Logo Marquee */}
+          <div className="lg:col-span-6 flex flex-col justify-between h-full pt-2 lg:pt-4">
+            
+            {/* 3 Metric Stats Counter */}
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 pb-10 sm:pb-12 border-b border-[#E3EAE0]">
+              {metrics.map((s, i) => (
+                <Stat key={i} value={s.value} suffix={s.suffix} label={s.label} />
+              ))}
+            </div>
+
+            {/* Rotating Carousel Conveyor Belt */}
+            {content.showCertifications !== false && (
+              <div className="relative w-full pt-8 sm:pt-10 overflow-hidden">
+                <div className="group relative overflow-hidden w-full">
+                  {/* Left & Right Soft Fade Gradients */}
+                  <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-16 bg-gradient-to-r from-[#FAFCF8] to-transparent z-10" />
+                  <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-16 bg-gradient-to-l from-[#FAFCF8] to-transparent z-10" />
+                  
+                  {/* Continuously Scrolling Logo Marquee */}
+                  <div className="flex w-max items-center animate-cert-scroll group-hover:[animation-play-state:paused]">
+                    {logos.map((logo, i) => (
+                      <div
+                        key={i}
+                        className="shrink-0 mx-3 sm:mx-4 flex items-center justify-center h-16 w-24 sm:h-20 sm:w-28"
+                      >
+                        <img
+                          src={logo.src}
+                          alt={logo.alt}
+                          loading="lazy"
+                          className="max-h-full max-w-full object-contain opacity-85 hover:opacity-100 transition-opacity"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
+        {/* ================= BOTTOM ROW: SCIENTIST IMAGE + VERIFICATION CARD ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.65, delay: 0.15 }}
+          className="mt-16 sm:mt-20 lg:mt-24 w-full bg-white rounded-2xl sm:rounded-3xl border border-[#E6ECE2] shadow-[0_6px_30px_rgba(0,0,0,0.04)] overflow-hidden"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+            
+            {/* Left: Lab Scientist Image from /images/certification.png */}
+            <div className="md:col-span-5 lg:col-span-6 relative h-[220px] sm:h-[260px] md:h-[300px] w-full overflow-hidden bg-[#EDF3E8]">
+              <Image
+                src="/images/certification.png"
+                alt="Scientist in laboratory examining test tube"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-center"
+              />
+            </div>
+
+            {/* Right: "Held to standards you can verify" + View Certifications button */}
+            <div className="md:col-span-7 lg:col-span-6 p-8 sm:p-10 lg:p-14 flex flex-col items-start justify-center">
+              <h3 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-medium text-[#0B281E] leading-snug tracking-tight mb-3">
+                {content.footerHeading || 'Held to standards you can verify.'}
+              </h3>
+              
+              <p className="font-sans text-sm sm:text-base text-[#4A5D54] leading-relaxed mb-6 max-w-xl font-normal">
+                {content.footerBody ||
+                  'Explore our certifications, audit reports and compliance frameworks behind Zeovus manufacturing.'}
+              </p>
+
+              <Link
+                href={content.footerCtaHref || '/capabilities'}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#0B281E]/30 hover:border-[#15A859] hover:bg-[#15A859]/5 text-[#0B281E] hover:text-[#15A859] font-heading font-semibold text-xs sm:text-sm tracking-wide transition-all shadow-sm"
+              >
+                <span>View Certifications</span>
+                <ArrowRight size={15} strokeWidth={2.2} />
+              </Link>
+            </div>
+
           </div>
         </motion.div>
+
       </div>
     </section>
   );

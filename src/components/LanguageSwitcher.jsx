@@ -48,7 +48,6 @@ function Flag({ country, className = '' }) {
       return (
         <svg {...common} aria-hidden="true">
           <rect width="60" height="40" fill="#006c35" />
-          {/* Shahada script (stylised) */}
           <path
             d="M10 14 h34 M10 18 h30 M42 12 v8 M14 12 v6 M20 12 v6 M26 12 v6 M32 12 v6"
             stroke="#fff"
@@ -56,7 +55,6 @@ function Flag({ country, className = '' }) {
             strokeLinecap="round"
             fill="none"
           />
-          {/* Sword */}
           <path d="M9 27 h40" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
           <path d="M49 27 l4 -1.5 -4 -1.5 z" fill="#fff" />
         </svg>
@@ -81,7 +79,6 @@ function readCurrentLang() {
   if (typeof document === 'undefined') return 'en';
   const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
   if (!match) return 'en';
-  // Cookie format is "/en/fr" -> target lang is the last segment.
   const parts = decodeURIComponent(match[1]).split('/');
   const target = parts[parts.length - 1];
   return target || 'en';
@@ -90,7 +87,6 @@ function readCurrentLang() {
 function setLangCookie(code) {
   const value = `/en/${code}`;
   const domain = window.location.hostname;
-  // Set on both host and dot-domain so Google Translate reliably picks it up.
   document.cookie = `${COOKIE_NAME}=${value};path=/`;
   document.cookie = `${COOKIE_NAME}=${value};path=/;domain=${domain}`;
   if (domain.split('.').length > 1) {
@@ -132,17 +128,12 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
     setCurrent(code);
     setOpen(false);
 
-    // Back to English: Google can't reliably "un-translate" a live page by
-    // setting the combo to "". The dependable way is to clear the cookie and
-    // reload so no translation is applied at all.
     if (code === 'en') {
       clearLangCookie();
       window.location.reload();
       return;
     }
 
-    // Other languages: drive Google's own <select> so it translates in-place
-    // without a full reload. This is the most reliable trigger.
     setLangCookie(code);
     const combo = document.querySelector('select.goog-te-combo');
     if (combo) {
@@ -151,7 +142,6 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
       return;
     }
 
-    // Fallback: widget not ready yet — reload so Google picks up the cookie.
     window.location.reload();
   }, []);
 
@@ -159,8 +149,8 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
 
   if (variant === 'mobile') {
     return (
-      <div className="mt-2 border-t border-primary-light/20 px-4 pt-4">
-        <p className="mb-2 px-1 font-heading text-[10px] font-bold uppercase tracking-[1.5px] text-primary-dark/50">
+      <div className="mt-2 border-t border-[#0B281E]/10 px-4 pt-4">
+        <p className="mb-2 px-1 font-heading text-[10px] font-bold uppercase tracking-[1.5px] text-[#0B281E]/50">
           Language
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -172,7 +162,7 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
                 type="button"
                 onClick={() => changeLanguage(lang.code)}
                 className={`flex items-center gap-2 rounded-md px-3 py-2.5 font-heading text-[13px] font-medium transition-colors ${
-                  active ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]'
+                  active ? 'bg-[#1B3B2B] text-white' : 'text-[#0B281E] hover:bg-black/5'
                 }`}
               >
                 <Flag country={lang.flag} className="h-4 w-6 shrink-0 rounded-[2px] shadow-sm" />
@@ -190,19 +180,17 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`flex h-10 items-center gap-1.5 rounded-md px-2.5 font-heading text-[12px] font-semibold uppercase tracking-[0.5px] transition-colors ${
-          open ? 'bg-primary-dark text-[#e8f5ed]' : 'text-primary-dark hover:bg-[#d4ede0]/70'
-        }`}
+        className="flex h-9 items-center gap-1.5 rounded-md px-2 font-heading text-[12px] font-bold uppercase tracking-[0.5px] text-[#0B281E] hover:bg-black/5 transition-colors"
         aria-label="Select language"
         aria-expanded={open}
       >
-        <Flag country={activeLang.flag} className="h-4 w-6 shrink-0 rounded-[2px] shadow-sm" />
-        <span className="hidden xl:inline">{activeLang.short}</span>
-        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <Flag country={activeLang.flag} className="h-3.5 w-5 shrink-0 rounded-[1.5px] shadow-sm" />
+        <span className="inline-block text-[#0B281E] text-xs font-bold">{activeLang.short}</span>
+        <ChevronDown className={`h-3 w-3 text-[#0B281E]/70 transition-transform ${open ? 'rotate-180' : ''}`} strokeWidth={2.5} />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-lg border border-primary-dark/10 bg-white/95 py-1 shadow-xl backdrop-blur-lg">
+        <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-lg border border-[#0B281E]/10 bg-white/95 py-1 shadow-xl backdrop-blur-lg">
           {LANGUAGES.map((lang) => {
             const active = lang.code === current;
             return (
@@ -211,7 +199,7 @@ export default function LanguageSwitcher({ variant = 'desktop' }) {
                 type="button"
                 onClick={() => changeLanguage(lang.code)}
                 className={`flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left font-heading text-[13px] font-medium transition-colors ${
-                  active ? 'bg-[#e8f5ed] text-primary-dark' : 'text-primary-dark/80 hover:bg-[#f0f8f3]'
+                  active ? 'bg-[#EBF1EB] text-[#0B281E] font-bold' : 'text-[#0B281E]/80 hover:bg-[#F4F6F0]'
                 }`}
               >
                 <Flag country={lang.flag} className="h-4 w-6 shrink-0 rounded-[2px] shadow-sm" />

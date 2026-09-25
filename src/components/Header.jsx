@@ -21,14 +21,13 @@ export default function Header({ site }) {
   const navItems = (site?.nav?.items || []).filter((item) => item?.name);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 40);
+    const onScroll = () => setIsScrolled(window.scrollY > 30);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // The tagline only fits beside the English nav. Translated languages produce
-  // longer nav labels, so we hide the tagline whenever the page isn't English.
+  // Language check
   useEffect(() => {
     const readLang = () => {
       const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
@@ -84,200 +83,199 @@ export default function Header({ site }) {
     return pathname.startsWith(path);
   };
 
-  const solid = isScrolled || isMenuOpen || isSearchOpen;
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
-        solid
-          ? 'bg-[#F8F8F8]/95 backdrop-blur-md shadow-[0_1px_0_rgba(31,64,21,0.08)]'
-          : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-[#EBF1EB]/95 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.06)]'
+          : 'bg-[#EBF1EB]'
       }`}
     >
       {/* Main Navbar */}
-      <div className="mx-auto flex h-[72px] max-w-[1500px] items-center justify-between px-5 sm:px-8 sm:h-[80px] lg:h-[90px] lg:px-12">
-        {/* Left: Logo + Tagline */}
-        <div className="flex min-w-0 flex-1 items-center lg:flex-none">
+      <div className="mx-auto flex h-[74px] sm:h-[84px] lg:h-[92px] w-full max-w-[1720px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        
+        {/* Left: Brand Logo + Vertical Divider + Tagline */}
+        <div className="flex min-w-0 items-center">
           {/* Logo */}
           <Link
             href="/"
             onClick={() => setIsMenuOpen(false)}
-            className="flex shrink-0 items-center"
+            className="flex shrink-0 items-center mr-3 sm:mr-4 lg:mr-5"
           >
             <Image
               src="/navbar_logo.png"
               alt={brand.logoAlt || 'Zeovus Life'}
               width={220}
-              height={90}
+              height={70}
               priority
-              className={`h-[54px] w-auto max-w-[150px] object-contain sm:h-[68px] sm:max-w-[180px] lg:h-[80px] lg:max-w-[210px] transition-[filter] duration-500 ${solid ? '' : 'brightness-0 invert'}`}
+              className="h-[46px] sm:h-[54px] lg:h-[62px] w-auto object-contain"
             />
           </Link>
 
-          {brand.showTagline !== false && brand.tagline && (
-            <>
-              {/* Divider — pairs with the tagline. Visible on all phones, hidden
-                  through the lg–xl desktop range, and back at 2xl alongside the tagline. */}
-              <div className={`ml-2.5 block h-7 w-px shrink-0 transition-colors duration-500 sm:ml-4 sm:h-8 lg:hidden 2xl:ml-5 2xl:block 2xl:h-9 ${solid ? 'bg-primary-dark/25' : 'bg-white/25'}`} />
+          {/* Vertical Separator Line */}
+          <div className="hidden sm:block h-8 sm:h-9 lg:h-10 w-[1.5px] bg-[#0B281E]/30 shrink-0 mx-2 sm:mx-3 lg:mx-4" />
 
-              {/* Tagline: visible on all phones. Wraps to two lines on mobile so it
-                  never overflows, single line on tablet, hidden through lg–xl, and
-                  returns beside the nav at 2xl. */}
-              <p
-                translate="no"
-                className={`notranslate ml-2.5 block min-w-0 flex-1 font-heading text-[10px] font-bold leading-[1.2] tracking-[0.04em] transition-colors duration-500 sm:ml-4 sm:max-w-[180px] sm:flex-none sm:truncate sm:whitespace-nowrap sm:text-[11px] md:max-w-[220px] md:text-[12px] lg:hidden 2xl:ml-5 2xl:block 2xl:max-w-none 2xl:overflow-visible 2xl:text-[13px] ${solid ? 'text-primary-dark/75' : 'text-white/80'}`}
-              >
-                {brand.tagline}
-              </p>
-            </>
-          )}
+          {/* Tagline */}
+          <p
+            translate="no"
+            className="notranslate hidden sm:block font-heading text-[13px] lg:text-[14px] font-semibold text-[#0B281E]/80 tracking-normal whitespace-nowrap"
+          >
+            {brand.tagline || 'Committed to better tomorrow'}
+          </p>
         </div>
 
-        {/* Desktop Navigation — compact through the lg/xl range (1024–1535px, includes the
-            1280px target laptop), roomier only at 2xl (1536px+). */}
-        <nav
-          className={`hidden shrink-0 items-center lg:flex ${
-            isEnglish ? 'gap-2 xl:gap-4 2xl:gap-5' : 'gap-2 2xl:gap-3'
-          }`}
-        >
+        {/* Center: Desktop Navigation Links */}
+        <nav className="hidden xl:flex items-center gap-1.5 2xl:gap-3">
           {navItems.map((item) => {
             const active = isActive(item.href);
+
+            if (active) {
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="px-3.5 py-1.5 rounded-md bg-[#1B3B2B] text-white font-heading text-[12px] 2xl:text-[13px] font-bold tracking-[0.08em] uppercase transition-colors shadow-sm"
+                >
+                  {item.name}
+                </Link>
+              );
+            }
 
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`whitespace-nowrap font-heading uppercase transition-colors duration-200 ${
-                  isEnglish
-                    ? 'text-[12px] font-bold tracking-[1px] 2xl:text-[13px] 2xl:tracking-[1.5px]'
-                    : 'text-[11px] font-bold tracking-[0.5px] 2xl:text-[12px]'
-                } ${
-                  solid
-                    ? active ? 'text-primary-light' : 'text-primary-dark hover:text-primary-light'
-                    : active ? 'text-accent' : 'text-white/90 hover:text-accent'
-                }`}
+                className="px-3 py-1.5 font-heading text-[12px] 2xl:text-[13px] font-bold tracking-[0.08em] uppercase text-[#0B281E] hover:text-[#15A859] transition-colors whitespace-nowrap inline-flex items-center gap-1"
               >
-                {item.name}
+                <span>{item.name}</span>
                 {item.hasDropdown && (
-                  <ChevronDown className="ml-1 inline-block h-3 w-3" />
+                  <ChevronDown className="h-3.5 w-3.5 text-[#0B281E]/70" strokeWidth={2.5} />
                 )}
               </Link>
             );
           })}
         </nav>
 
-        {/* Desktop controls (Search, Language, CTA) */}
-        <div className="hidden items-center gap-3 lg:flex">
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => { setIsSearchOpen((open) => !open); setIsMenuOpen(false); }}
-              className={`flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
-                solid
-                  ? isSearchOpen ? 'text-primary-light' : 'text-primary-dark hover:text-primary-light'
-                  : isSearchOpen ? 'text-accent' : 'text-white/90 hover:text-accent'
-              }`}
-              aria-label="Search products"
-              aria-expanded={isSearchOpen}
-            >
-              <Search size={18} strokeWidth={2} />
-            </button>
-            <div className={`transition-opacity duration-500 ${solid ? 'opacity-100' : 'opacity-80'}`}>
-               <LanguageSwitcher variant="desktop" />
-            </div>
-          </div>
+        {/* Right: Search + Language Dropdown + Enquire Now Button */}
+        <div className="hidden lg:flex items-center gap-3.5 xl:gap-5 shrink-0">
           
+          {/* Search Glass Icon */}
+          <button
+            type="button"
+            onClick={() => {
+              setIsSearchOpen((open) => !open);
+              setIsMenuOpen(false);
+            }}
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[#0B281E] hover:text-[#15A859] hover:bg-black/5 transition-colors"
+            aria-label="Search products"
+          >
+            <Search size={19} strokeWidth={2.2} />
+          </button>
+
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+
+          {/* Enquire Now Pill Button */}
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center h-[42px] px-6 rounded-full bg-accent text-primary-dark font-heading text-[12px] font-bold uppercase tracking-[1px] hover:bg-[#ffdf97] transition-colors duration-200"
+            className="inline-flex items-center justify-center rounded-full bg-[#1B3B2B] hover:bg-[#15A859] text-white px-5 sm:px-6 py-2.5 sm:py-3 font-heading text-[12px] font-bold tracking-[0.1em] uppercase transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
           >
-            Enquire Now
+            <span>ENQUIRE NOW</span>
+            <span className="ml-1.5 font-sans text-sm leading-none">&rarr;</span>
           </Link>
         </div>
 
-        {/* Mobile controls */}
-        <div className="ml-3 flex shrink-0 items-center gap-1 lg:hidden">
+        {/* Mobile Controls (Search + Hamburger) */}
+        <div className="flex shrink-0 items-center gap-1 lg:hidden">
           <button
             type="button"
-            onClick={() => { setIsSearchOpen(true); setIsMenuOpen(false); }}
-            className={`flex h-11 w-11 items-center justify-center rounded-md transition-colors ${
-              solid
-                ? isSearchOpen ? 'text-primary-light' : 'text-primary-dark hover:bg-primary-dark/5'
-                : 'text-white hover:bg-white/10'
-            }`}
+            onClick={() => {
+              setIsSearchOpen(true);
+              setIsMenuOpen(false);
+            }}
+            className="flex h-10 w-10 items-center justify-center rounded-md text-[#0B281E] hover:bg-black/5 transition-colors"
             aria-label="Search products"
             aria-expanded={isSearchOpen}
           >
-            <Search size={21} strokeWidth={1.8} />
+            <Search size={20} strokeWidth={2} />
           </button>
           <button
             type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`flex h-11 w-11 shrink-0 items-center justify-center transition-colors ${
-              solid ? 'text-primary-dark' : 'text-white'
-            }`}
+            className="flex h-10 w-10 shrink-0 items-center justify-center text-[#0B281E] hover:bg-black/5 rounded-md transition-colors"
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
       </div>
 
       {/* Global product search panel */}
       {isSearchOpen && (
-        <div className="border-t border-primary-light/15 bg-[#F8F8F8]/95 shadow-lg backdrop-blur-lg">
+        <div className="border-t border-[#0B281E]/10 bg-[#EBF1EB]/95 shadow-lg backdrop-blur-lg">
           <div className="mx-auto max-w-[1500px] px-5 py-4 sm:px-8 lg:px-12">
             <div className="relative flex items-center">
-              <Search className="pointer-events-none absolute left-0 h-5 w-5 text-primary-light" strokeWidth={1.8} />
+              <Search className="pointer-events-none absolute left-0 h-5 w-5 text-[#15A859]" strokeWidth={2} />
               <input
                 type="search"
                 autoFocus
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 placeholder="Search Nutraceuticals and Cosmetics products..."
-                className="w-full border-b border-primary-dark/20 bg-transparent py-3 pl-8 pr-12 font-heading text-[15px] text-primary-dark outline-none placeholder:text-primary-dark/45 focus:border-primary-light"
+                className="w-full border-b border-[#0B281E]/20 bg-transparent py-3 pl-8 pr-12 font-heading text-[15px] text-[#0B281E] outline-none placeholder:text-[#0B281E]/45 focus:border-[#15A859]"
                 aria-label="Search Nutraceuticals and Cosmetics products"
               />
               <button
                 type="button"
                 onClick={closeSearch}
-                className="absolute right-0 flex h-9 w-9 items-center justify-center rounded-md text-primary-dark/60 transition-colors hover:bg-primary-dark/5 hover:text-primary-dark"
-                aria-label="Close product search"
+                className="absolute right-0 flex h-10 w-10 items-center justify-center text-[#0B281E]/70 transition-colors hover:text-[#0B281E]"
+                aria-label="Close search"
               >
-                <X size={19} strokeWidth={1.8} />
+                <X size={20} />
               </button>
             </div>
 
-            <div className="mt-3">
-              {searchTerm.trim().length < 2 && (
-                <p className="py-2 text-[12px] text-primary-dark/55">Type at least 2 characters to search all products.</p>
-              )}
-              {isSearching && (
-                <p className="py-2 text-[12px] text-primary-dark/55">Searching products...</p>
-              )}
-              {!isSearching && searchTerm.trim().length >= 2 && searchResults.length === 0 && (
-                <p className="py-2 text-[12px] text-primary-dark/55">No products found for “{searchTerm.trim()}”.</p>
-              )}
-              {!isSearching && searchResults.length > 0 && (
-                <div className="grid max-h-[330px] gap-2 overflow-y-auto sm:grid-cols-2 lg:grid-cols-4">
+            {/* Results list */}
+            <div className="mt-4 max-h-[60vh] overflow-y-auto">
+              {isSearching ? (
+                <div className="py-8 text-center font-heading text-sm text-[#0B281E]/60">
+                  Searching catalog...
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="py-8 text-center font-heading text-sm text-[#0B281E]/60">
+                  {searchTerm.trim().length >= 2
+                    ? 'No products found. Try a different search term.'
+                    : 'Type at least 2 characters to search'}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 py-2 sm:grid-cols-2 lg:grid-cols-4">
                   {searchResults.map((product) => {
-                    const productPath = product.division === 'cosmetics' ? '/cosmetics' : '/nutraceuticals';
-                    const divisionLabel = product.division === 'cosmetics' ? 'Cosmetics' : 'Nutraceuticals';
+                    const categorySlug = product.category?.toLowerCase() || 'general';
+                    const productHref = `/${categorySlug}?product=${product.id}`;
+
                     return (
                       <Link
                         key={product.id}
-                        href={`${productPath}/products/${product.id}`}
+                        href={productHref}
                         onClick={closeSearch}
-                        className="group rounded-md border border-primary-dark/10 bg-white/75 px-4 py-3 transition-colors hover:border-primary-light/40 hover:bg-white"
+                        className="group flex flex-col rounded-lg border border-[#0B281E]/10 bg-white p-4 transition-all hover:border-[#15A859] hover:shadow-md"
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className={`font-heading text-[9px] font-bold uppercase tracking-[1.2px] ${product.division === 'cosmetics' ? 'text-pink-700' : 'text-primary-light'}`}>
-                            {divisionLabel}
-                          </span>
-                          <span className="text-[10px] text-neutral-400">{product.category_name}</span>
+                        <div className="relative aspect-square w-full overflow-hidden rounded-md bg-neutral-100">
+                          {product.image ? (
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-xs text-neutral-400">
+                              No image
+                            </div>
+                          )}
                         </div>
-                        <p className="mt-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-primary-dark group-hover:text-primary-light">
+                        <p className="mt-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-[#0B281E] group-hover:text-[#15A859]">
                           {product.name}
                         </p>
                         {(product.primary_benefit || product.description || product.concerns_addressed) && (
@@ -297,11 +295,11 @@ export default function Header({ site }) {
 
       {/* Mobile Navigation */}
       <div
-        className={`bg-[#F8F8F8]/95 backdrop-blur-md transition-all duration-300 lg:hidden ${
+        className={`bg-[#EBF1EB]/98 backdrop-blur-md transition-all duration-300 lg:hidden ${
           isMenuOpen ? 'max-h-[85vh] overflow-y-auto' : 'max-h-0 overflow-hidden'
         }`}
       >
-        <div className="flex flex-col border-t border-primary-light/20 py-4">
+        <div className="flex flex-col border-t border-[#0B281E]/10 py-4">
           {navItems.map((item) => {
             const active = isActive(item.href);
 
@@ -310,10 +308,10 @@ export default function Header({ site }) {
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className={`mx-4 my-1 rounded-md px-5 py-4 font-heading text-[13px] font-bold uppercase tracking-[1px] transition-colors duration-300 ${
+                className={`mx-4 my-1 rounded-md px-5 py-3 font-heading text-[12px] font-bold uppercase tracking-[1px] transition-colors duration-200 ${
                   active
-                    ? 'bg-primary-dark text-[#F8F8F8]'
-                    : 'text-primary-dark hover:bg-primary-dark/5'
+                    ? 'bg-[#1B3B2B] text-white'
+                    : 'text-[#0B281E] hover:bg-black/5'
                 }`}
               >
                 {item.name}
@@ -321,14 +319,15 @@ export default function Header({ site }) {
             );
           })}
           
-          <div className="mx-4 mt-2 mb-4">
-             <Link
-                href="/contact"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center h-12 w-full rounded-full bg-accent text-primary-dark font-heading text-[13px] font-bold uppercase tracking-[1px] hover:bg-[#ffdf97]"
-              >
-                Enquire Now
-              </Link>
+          <div className="mx-4 mt-3 mb-3">
+            <Link
+              href="/contact"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center justify-center h-11 w-full rounded-full bg-[#1B3B2B] text-white font-heading text-[12px] font-bold uppercase tracking-[1.5px] hover:bg-[#15A859] transition-colors shadow-md"
+            >
+              <span>Enquire Now</span>
+              <span className="ml-1.5">&rarr;</span>
+            </Link>
           </div>
           
           <LanguageSwitcher variant="mobile" />
